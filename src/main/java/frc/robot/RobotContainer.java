@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.CMDDrive;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -48,6 +49,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 public class RobotContainer {
   // The robot's subsystems
   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+    public static final CMDDrive driveRobotCommand = new CMDDrive();
 
 SendableChooser<String> PathPlannerautoChooser = new SendableChooser<String>();
     SendableChooser<String> ChoreoautoChooser = new SendableChooser<String>();
@@ -128,13 +130,14 @@ for (int i = 0; i < listOfFiles.length; i++) {
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
+        /*new RunCommand(
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
-            m_robotDrive));
+            m_robotDrive));*/
+            driveRobotCommand);
   }
 
   /**
