@@ -4,41 +4,23 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.CMDDrive;
-import frc.robot.subsystems.DriveSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.CMDDrive;
+import frc.robot.subsystems.DriveSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -51,11 +33,8 @@ public class RobotContainer {
   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
     public static final CMDDrive driveRobotCommand = new CMDDrive();
 
-SendableChooser<String> PathPlannerautoChooser = new SendableChooser<String>();
-    SendableChooser<String> ChoreoautoChooser = new SendableChooser<String>();
   
     public static SendableChooser<Boolean> fieldOrientedChooser = new SendableChooser<Boolean>();
-    public static SendableChooser<String> pathChooser = new SendableChooser<String>();
   
     public static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
 
@@ -66,6 +45,8 @@ SendableChooser<String> PathPlannerautoChooser = new SendableChooser<String>();
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    
+
     AutoBuilder.configureHolonomic(
                 m_robotDrive::getPose, // Robot pose supplier
                 m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -104,28 +85,8 @@ SendableChooser<String> PathPlannerautoChooser = new SendableChooser<String>();
     SmartDashboard.putData("Field oriented",fieldOrientedChooser);
 
     configureButtonBindings();
-    try {
-   for (String option : AutoBuilder.getAllAutoNames()) {
-      // Assuming {String here} represents the same string, you can modify this part as needed
-      PathPlannerautoChooser.addOption(option.toString(), option.toString());
-  }
-    File deploy = Filesystem.getDeployDirectory();
-File pathfolder = new File(Path.of(deploy.getAbsolutePath(),"choreo").toString());
-File[] listOfFiles = pathfolder.listFiles();
-
-for (int i = 0; i < listOfFiles.length; i++) {
-  if (listOfFiles[i].isFile()) {
-    System.out.println("path:" + listOfFiles[i].getName());
-    ChoreoautoChooser.addOption(listOfFiles[i].getName().replace(".traj", ""), listOfFiles[i].getName().replace(".traj", ""));
-  }
-}
-    } finally {}
-    SmartDashboard.putData("Choreo path Chooser",ChoreoautoChooser);
-    SmartDashboard.putData("Path planner chooser", PathPlannerautoChooser);
-    pathChooser.setDefaultOption("Choreo", "choreo");
-    pathChooser.addOption("PathPlanner", "pathplanner");
-    pathChooser.addOption("No auto", "none");
-    SmartDashboard.putData("Path follower", pathChooser);
+   //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
+    //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -162,13 +123,6 @@ for (int i = 0; i < listOfFiles.length; i++) {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-          if (pathChooser.getSelected() == "choreo") {
-      PathPlannerPath ChoreoTraj = PathPlannerPath.fromChoreoTrajectory(ChoreoautoChooser.getSelected());
-      return AutoBuilder.followPath(ChoreoTraj);
-    } else if (pathChooser.getSelected() == "pathplanner") {
-      return AutoBuilder.buildAuto(PathPlannerautoChooser.getSelected());
+      return AutoBuilder.buildAuto("321");
     }
-    else return null;
-  }
 }
