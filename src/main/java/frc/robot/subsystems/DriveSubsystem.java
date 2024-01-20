@@ -232,7 +232,35 @@ public class DriveSubsystem extends SubsystemBase {
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees();
   }
+  public void resetGyro() {
+    m_gyro.reset();
+  }
+  public ChassisSpeeds getspeed() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getStates());
+  }
 
+  public SwerveModuleState[] getStates() {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[] {
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    };
+  
+    return moduleStates;
+  }
+  
+    public SwerveModulePosition[] getPosition() {
+      SwerveModulePosition[] modulepositions =
+          new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+          };
+  
+      return modulepositions;
+    }
   /**
    * Returns the turn rate of the robot.
    *
@@ -240,5 +268,14 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+  public void driveRobotRelative(ChassisSpeeds speeds) {
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 }

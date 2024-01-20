@@ -13,7 +13,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -23,7 +28,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,6 +49,14 @@ public class RobotContainer {
   // The robot's subsystems
   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
 
+SendableChooser<String> PathPlannerautoChooser = new SendableChooser<String>();
+    SendableChooser<String> ChoreoautoChooser = new SendableChooser<String>();
+  
+    public static SendableChooser<Boolean> fieldOrientedChooser = new SendableChooser<Boolean>();
+    public static SendableChooser<String> pathChooser = new SendableChooser<String>();
+  
+    public static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
+
   // The driver's controller
   static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -42,9 +64,66 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
+    AutoBuilder.configureHolonomic(
+                m_robotDrive::getPose, // Robot pose supplier
+                m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                m_robotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                m_robotDrive::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(12, 0.0, 0.0), // Rotation PID constants
+                        3, // Max module speed, in m/s
+                        Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                m_robotDrive // Reference to this subsystem to set requirements
+        );
+    // Configure the button bindings
+
+
+    fieldOrientedChooser.setDefaultOption("Field Oriented", true);
+    fieldOrientedChooser.addOption("Robot Oriented", false);
+
+    rateLimitChooser.setDefaultOption("False", false);
+    rateLimitChooser.addOption("True", true);
+
+    SmartDashboard.putData("Rate limit",rateLimitChooser);
+    SmartDashboard.putData("Field oriented",fieldOrientedChooser);
+
+    configureButtonBindings();
+    try {
+   for (String option : AutoBuilder.getAllAutoNames()) {
+      // Assuming {String here} represents the same string, you can modify this part as needed
+      PathPlannerautoChooser.addOption(option.toString(), option.toString());
+  }
+    File deploy = Filesystem.getDeployDirectory();
+File pathfolder = new File(Path.of(deploy.getAbsolutePath(),"choreo").toString());
+File[] listOfFiles = pathfolder.listFiles();
+
+for (int i = 0; i < listOfFiles.length; i++) {
+  if (listOfFiles[i].isFile()) {
+    System.out.println("path:" + listOfFiles[i].getName());
+    ChoreoautoChooser.addOption(listOfFiles[i].getName().replace(".traj", ""), listOfFiles[i].getName().replace(".traj", ""));
+  }
+}
+    } finally {}
+    SmartDashboard.putData("Choreo path Chooser",ChoreoautoChooser);
+    SmartDashboard.putData("Path planner chooser", PathPlannerautoChooser);
+    pathChooser.setDefaultOption("Choreo", "choreo");
+    pathChooser.addOption("PathPlanner", "pathplanner");
+    pathChooser.addOption("No auto", "none");
+    SmartDashboard.putData("Path follower", pathChooser);
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -81,42 +160,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+          if (pathChooser.getSelected() == "choreo") {
+      PathPlannerPath ChoreoTraj = PathPlannerPath.fromChoreoTrajectory(ChoreoautoChooser.getSelected());
+      return AutoBuilder.followPath(ChoreoTraj);
+    } else if (pathChooser.getSelected() == "pathplanner") {
+      return AutoBuilder.buildAuto(PathPlannerautoChooser.getSelected());
+    }
+    else return null;
   }
 }
