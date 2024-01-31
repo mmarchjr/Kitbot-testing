@@ -32,11 +32,11 @@ public class CMDDrive extends Command {
   /* controllers by displaying a form where you can enter new P, I,  */
   /* and D constants and test the mechanism.                         */
   
-  static final double kP = 0.1;
+  static final double kP = 0.015;
   static final double kI = 0.00;
   static final double kD = 0.00;
   static final double kF = 0.00;
-  static final double kToleranceDegrees = 2.0f;
+  static final double kToleranceDegrees = 5.0f;
   boolean rotateToAngle;
 
   CommandXboxController OIDriver1Controller = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -75,8 +75,8 @@ public void execute() {
   x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
   turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
 
-  // Determine if robot is at setpoint and needs to rotate to angle
-  boolean isAtSetpoint = turnController.atSetpoint();
+  /*/ Determine if robot is at setpoint and needs to rotate to angle
+  /boolean isAtSetpoint = turnController.atSetpoint();
   if (isAtSetpoint && rotateToAngle) {
     rotateToAngle = false;
   } else if (!isAtSetpoint && rotateToAngle) {
@@ -122,15 +122,16 @@ public void execute() {
   if (turn == 0) {
     currentRotationRate = MathUtil.clamp(turnController.calculate(RobotContainer.m_robotDrive.getHeading()), -1, 1);
   }
-
+*/
+double currentRotationRate = turn;
   // Drive the robot based on joystick input and rotation rate
-  if (y == 0 && x == 0 && turn == 0 && isAtSetpoint) {
+  if (y == 0 && x == 0 && turn == 0) {// && isAtSetpoint) {
     RobotContainer.m_robotDrive.setX();
   } else {
     RobotContainer.m_robotDrive.drive(
         -y / 2,
         -x / 2,
-        currentRotationRate / 2,
+        -currentRotationRate / 2,
         RobotContainer.fieldOrientedChooser.getSelected(),
         RobotContainer.rateLimitChooser.getSelected()
     );

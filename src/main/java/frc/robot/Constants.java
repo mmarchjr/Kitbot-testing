@@ -166,4 +166,22 @@ public final class Constants {
     private NeoMotorConstants(){}
     public static final double kFreeSpeedRpm = 5676;
   }
+  public static class LauncherConstants {
+    // PWM ports/CAN IDs for motor controllers
+    public static final int kFeederID = 9;
+    public static final int kLauncherID = 10;
+
+    // Current limit for launcher and feed wheels
+    public static final int kLauncherCurrentLimit = 80;
+    public static final int kFeedCurrentLimit = 80;
+
+    // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
+    // in reverse
+    public static final double kLauncherSpeed = 1;
+    public static final double kLaunchFeederSpeed = 1;
+    public static final double kIntakeLauncherSpeed = -1;
+    public static final double kIntakeFeederSpeed = -.2;
+
+    public static final double kLauncherDelay = 1.5;
+  }
 }
