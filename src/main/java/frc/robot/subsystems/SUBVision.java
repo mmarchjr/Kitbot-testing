@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.common.hardware.VisionLEDMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -27,6 +28,11 @@ public class SUBVision extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (camera.getLatestResult().hasTargets()) {
+      camera.setLED(VisionLEDMode.kOn);
+    }else {
+      camera.setLED(VisionLEDMode.kOff);
+    }
     // This method will be called once per scheduler run
   }/*
   public double getSkew() {

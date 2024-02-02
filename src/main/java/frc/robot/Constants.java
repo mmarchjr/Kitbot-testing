@@ -138,7 +138,9 @@ public final class Constants {
   public static final class OIConstants {
     private OIConstants(){}
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
+    public static final int kDriverControllerPort2 = 1;
+
+    public static final double kDriveDeadband = 0.1;
   }
 
   public static final class AutoConstants {
@@ -177,11 +179,14 @@ public final class Constants {
 
     // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
     // in reverse
-    public static final double kLauncherSpeed = 1;
+    public static final double kLauncherSpeed = 0.25;
     public static final double kLaunchFeederSpeed = 1;
     public static final double kIntakeLauncherSpeed = -1;
     public static final double kIntakeFeederSpeed = -.2;
 
     public static final double kLauncherDelay = 1.5;
+  }
+  public static class VisionConstants {
+    
   }
 }

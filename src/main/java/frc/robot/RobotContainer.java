@@ -9,6 +9,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
@@ -30,6 +31,8 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SUBShooter;
 import frc.robot.subsystems.SUBVision;
 import frc.robot.subsystems.SUBShooter.*;
+import frc.utils.RoaringUtils;
+import frc.utils.RoaringUtils.DeadzoneUtils;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -57,6 +60,7 @@ public class RobotContainer {
 
   // The driver's controller
   public static CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  public static CommandXboxController m_driverController2 = new CommandXboxController(OIConstants.kDriverControllerPort2);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -109,14 +113,16 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        /*new RunCommand(
+        /* 
+        new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -DeadzoneUtils.LinearDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -DeadzoneUtils.LinearDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -DeadzoneUtils.LinearDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));*/
-            m_CMDAlign);
+            driveRobotCommand);
+            
   }
 
   /**
@@ -136,16 +142,16 @@ public class RobotContainer {
 
 
 
-/*           m_driverController
-        .rightStick()
+           m_driverController
+        .rightBumper()
         .whileTrue(
             new PrepareLaunch(m_SUBShooter)
                 .withTimeout(LauncherConstants.kLauncherDelay)
                 .andThen(new LaunchNote(m_SUBShooter))
                 .handleInterrupt(() -> m_SUBShooter.stop()));
 
-    m_driverController.leftStick().whileTrue(m_SUBShooter.getIntakeCommand());
-*/
+    m_driverController.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
+
 m_driverController.rightStick().whileTrue(m_CMDAlign);
   }
 
