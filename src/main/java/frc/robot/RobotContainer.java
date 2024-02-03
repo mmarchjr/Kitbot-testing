@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.CMDDrive;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,7 +32,8 @@ public class RobotContainer {
   // The robot's subsystems
   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
     public static final CMDDrive driveRobotCommand = new CMDDrive();
-
+    public static final SUBlights m_lights = new SUBlights();
+    public static final CMDlights m_lightCommand = new CMDlights(m_lights);
   
     public static SendableChooser<Boolean> fieldOrientedChooser = new SendableChooser<Boolean>();
   
@@ -99,6 +100,7 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));*/
             driveRobotCommand);
+    m_lights.setDefaultCommand(m_lightCommand);
   }
 
   /**

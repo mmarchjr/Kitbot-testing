@@ -166,4 +166,12 @@ public final class Constants {
     private NeoMotorConstants(){}
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final int kstrandPort = 0;
+  public static final int kStrandLength = 30;
+  
+  //public static int[] kyellowRGB = {255, 150, 0};
+  public static int[] kyellowRGB = {64,38,0};
+  //public static int[] kblueRGB = {0,100,255};
+  public static int[] kblueRGB = {0,25,64};
 }
