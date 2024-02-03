@@ -29,7 +29,7 @@ public class SUBVision extends SubsystemBase {
   @Override
   public void periodic() {
     if (camera.getLatestResult().hasTargets()) {
-      camera.setLED(VisionLEDMode.kOn);
+      camera.setLED(VisionLEDMode.kOff);
     }else {
       camera.setLED(VisionLEDMode.kOff);
     }
