@@ -36,6 +36,7 @@ public class CMDlights extends Command {
     //int[] breatheRGB = getBreatheColor(Constants.yellowRGB, Constants.blueRGB, lightTimer.get());
     //subGlow.set_full_strand(breatheRGB[0], breatheRGB[1], breatheRGB[2]); //pass the color to the strand
     sweep( (int) (lightTimer.get()*Constants.kStrandLength/3) );
+    subGlow.update();
   }
 
   int[] getBreatheColor(int[] yellow, int[] blue, double time){
