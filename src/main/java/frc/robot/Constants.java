@@ -135,6 +135,45 @@ public final class Constants {
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
+  public static final class HookConstants {
+    public static final boolean kLeftHookEncoder = false;
+    public static final boolean kRightHookEncoder = false;
+
+    public static final double kLeftHookEncoderPositionFactor = (2 * Math.PI);
+    public static final double kRightHookEncoderPositionFactor = (2 * Math.PI);
+
+    public static final double kLeftHookEncoderPositionPIDMinInput = 0;
+    public static final double kLeftHookEncoderPositionPIDMaxInput = kLeftHookEncoderPositionFactor;
+    public static final double kRightHookEncoderPositionPIDMinInput = 0;
+    public static final double kRightHookEncoderPosiionPIDMaxInput = kRightHookEncoderPositionFactor;
+
+    public static final double kLeftHookEncoderP = 3.75;
+    public static final double kLeftHookEncoderI = 0;
+    public static final double kLeftHookEncoderD = 0;
+    public static final double kLeftHookEncoderFF = 0;
+    public static final double kLeftHookEncoderMinOutput = -1;
+    public static final double kLeftHookEncoderMaxOutput = 1;
+
+    public static final double kRightHookEncoderP = 3.75;
+    public static final double kRightHookEncoderI = 0;
+    public static final double kRightHookEncoderD = 0;
+    public static final double kRightHookEncoderFF = 0;
+    public static final double kRightHookEncoderMinOutput = -1;
+    public static final double kRightHookEncoderMaxOutput = 1;
+
+    public static final IdleMode kLeftHookEncoderIdleMode = IdleMode.kBrake;
+    public static final IdleMode kRightHookEncoderIdleMode = IdleMode.kBrake;
+
+    public static final int kLeftHookEncoderCurrentLimit = 50;
+    public static final int kRightHookEncoderCurrentLimit = 50;
+    
+    public static final double kRaisedHookPosition = 0;
+    public static final double kLowerHookPosition = 0;
+    public static final double kP = 0.1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+  }
+
   public static final class OIConstants {
     private OIConstants(){}
     public static final int kDriverControllerPort = 0;
