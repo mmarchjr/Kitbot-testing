@@ -27,9 +27,9 @@ public class SUBClimb extends SubsystemBase {
    
    PIDController pid = new PIDController(Constants.HookConstants.kP, Constants.HookConstants.kI, Constants.HookConstants.kD);
 
-    public SUBClimb(int LeftHookCANId, int RightHookCANId){
-        kLeftHook = new CANSparkMax(LeftHookCANId, MotorType.kBrushless);
-        kRightHook = new CANSparkMax(RightHookCANId, MotorType.kBrushless);
+    public SUBClimb(int LeftHookCanId, int RightHookCanId){
+        kLeftHook = new CANSparkMax(LeftHookCanId, MotorType.kBrushless);
+        kRightHook = new CANSparkMax(RightHookCanId, MotorType.kBrushless);
 
         kLeftHook.restoreFactoryDefaults();
         kRightHook.restoreFactoryDefaults();

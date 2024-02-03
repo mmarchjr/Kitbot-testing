@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.HookConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
  import frc.robot.commands.CMDAlign;
@@ -32,6 +33,7 @@ import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PrepareLaunch;
  import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SUBArm;
+import frc.robot.subsystems.SUBClimb;
 import frc.robot.subsystems.SUBShooter;
 import frc.robot.subsystems.SUBVision;
 import frc.robot.subsystems.SUBShooter.*;
@@ -53,6 +55,7 @@ public class RobotContainer {
     public static final SUBVision m_SUBVision = new SUBVision();
      public static final CMDAlign m_CMDAlign = new CMDAlign();
     public static final SUBArm m_SUBArm = new SUBArm();
+    public static final SUBClimb m_SUBClimb = new SUBClimb(Constants.HookConstants.kLeftHookCanId, Constants.HookConstants.kRightHookCanId);
 
 
 
@@ -165,8 +168,13 @@ public class RobotContainer {
     m_driverController.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
 
  m_driverController.rightStick().whileTrue(m_CMDAlign);
-//m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
-//m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
+ m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
+ m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
+
+ m_driverController.y().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(HookConstants.kRaisedHookPosition), m_SUBClimb));
+ m_driverController.a().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(HookConstants.kLowerHookPosition), m_SUBClimb));
+  m_driverController.y().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(HookConstants.kRaisedHookPosition), m_SUBClimb));
+ m_driverController.a().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(HookConstants.kLowerHookPosition), m_SUBClimb));
 
   }
 
