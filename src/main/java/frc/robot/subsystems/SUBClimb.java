@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
 
@@ -10,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.HookConstants;
-import com.revrobotics.AbsoluteEncoder;
 
 public class SUBClimb extends SubsystemBase {
     private final CANSparkMax kLeftHook;
@@ -80,6 +80,20 @@ public class SUBClimb extends SubsystemBase {
         rightHookSetPoint = rightHookPosition;
     }
 
+    public double getLeftHookPosition() {
+        return kLeftHookEncoder.getPosition();
+    }
+
+    public double getRightHookPosition() {
+        return kRightHookEncoder.getPosition();
+    }
+
+
+    public void raiseClimber() {
+
+    }
+
+
     @Override
     public void periodic() {
         SmartDashboard.setDefaultNumber("hookP", Constants.HookConstants.kP);
@@ -89,4 +103,6 @@ public class SUBClimb extends SubsystemBase {
         pid.setI(SmartDashboard.getNumber("hookI", 0));
         pid.setD(SmartDashboard.getNumber("hookD", 0));
     }
+
+
 }
