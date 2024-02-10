@@ -136,7 +136,7 @@ public final class Constants {
   }
 
   public static final class HookConstants {
-    public static final int kLeftHookCanId = 12;
+    public static final int kLeftHookCanId = 14;
     public static final int kRightHookCanId = 15;
 
     public static final boolean kLeftHookEncoder = false;
