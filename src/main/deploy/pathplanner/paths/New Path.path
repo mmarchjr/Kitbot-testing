@@ -3,41 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1623862961500528,
-        "y": 3.7595346747044127
+        "x": 0.9938347149421571,
+        "y": 4.067333225575543
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0609772649787947,
-        "y": 3.7595346747044127
+        "x": 2.318516637033274,
+        "y": 4.123305701156857
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.0,
-        "y": 5.0
+        "x": 3.6431985591243907,
+        "y": 5.074837786039208
       },
       "prevControl": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 2.528944512434479,
+        "y": 4.25411596277738
       },
       "nextControl": {
-        "x": 6.0,
-        "y": 4.0
+        "x": 4.781869479149689,
+        "y": 5.913544251907182
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.0,
-        "y": 1.0
+        "x": 2.598379014939848,
+        "y": 5.4479876232479745
       },
       "prevControl": {
-        "x": 6.75,
-        "y": 2.5
+        "x": 2.348379014939848,
+        "y": 6.947987623247975
+      },
+      "nextControl": {
+        "x": 2.8483790149398476,
+        "y": 3.9479876232479745
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.318516637033274,
+        "y": 6.959244463943474
+      },
+      "prevControl": {
+        "x": 4.389498233541909,
+        "y": 6.623409610455585
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +62,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": null
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

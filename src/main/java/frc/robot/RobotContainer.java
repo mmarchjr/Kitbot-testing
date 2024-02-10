@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -12,10 +14,13 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,10 +32,11 @@ import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
  import frc.robot.commands.CMDAlign;
  import frc.robot.commands.CMDDrive;
-import frc.robot.commands.CMDShooter;
+//import frc.robot.commands.CMDShooter;
 import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PrepareLaunch;
  import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.SUBArm;
 import frc.robot.subsystems.SUBShooter;
 import frc.robot.subsystems.SUBVision;
@@ -49,12 +55,12 @@ public class RobotContainer {
    public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
      public static final CMDDrive driveRobotCommand = new CMDDrive();
     public static final SUBShooter m_SUBShooter = new SUBShooter();
-    public static final CMDShooter m_CMDShooter = new CMDShooter();
+   // public static final CMDShooter m_CMDShooter = new CMDShooter();
     public static final SUBVision m_SUBVision = new SUBVision();
      public static final CMDAlign m_CMDAlign = new CMDAlign();
     public static final SUBArm m_SUBArm = new SUBArm();
 
-
+  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(new PhotonCamera("PiCam"), m_robotDrive);
 
 
 
@@ -74,6 +80,11 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    m_robotDrive.resetOdometry(new Pose2d(8.25,4.1, Rotation2d.fromDegrees(0)));
+    //m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("2 note auto").getPreviewStartingHolonomicPose());
+    
+
     AutoBuilder.configureHolonomic(
             m_robotDrive::getPose,  //Robot pose supplier
                  m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -104,7 +115,10 @@ public class RobotContainer {
      // Configure the button bindings
 
             NamedCommands.registerCommand("Intake", m_SUBShooter.getIntakeCommand().withTimeout(1));
- 
+            NamedCommands.registerCommand("Shoot", new PrepareLaunch(m_SUBShooter)
+            .withTimeout(LauncherConstants.kLauncherDelay)
+            .andThen(new LaunchNote(m_SUBShooter).withTimeout(LauncherConstants.kLauncherDelay)));
+
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
 
@@ -121,7 +135,7 @@ public class RobotContainer {
    //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
     //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
-    m_SUBShooter.setDefaultCommand(m_CMDShooter);
+    //m_SUBShooter.setDefaultCommand(m_CMDShooter);
      m_robotDrive.setDefaultCommand(
        //   The left stick controls translation of the robot.
        //   Turning is controlled by the X axis of the right stick.
@@ -154,7 +168,7 @@ public class RobotContainer {
 
 
 
-           m_driverController
+           m_driverController2
         .rightBumper()
         .whileTrue(
             new PrepareLaunch(m_SUBShooter)
@@ -162,11 +176,12 @@ public class RobotContainer {
                 .andThen(new LaunchNote(m_SUBShooter))
                 .handleInterrupt(() -> m_SUBShooter.stop()));
 
-    m_driverController.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
+    m_driverController2.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
 
- m_driverController.rightStick().whileTrue(m_CMDAlign);
-//m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
-//m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
+ m_driverController.rightTrigger().whileTrue(m_CMDAlign);
+m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
+m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
+//m_driverController2.x().whileFalse(AutoBuilder.pathfindToPose(new Pose2d))
 
   }
 
@@ -176,7 +191,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-        m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("Line").getPreviewStartingHolonomicPose());
-      return AutoBuilder.buildAuto("Line");
+        m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("box").getPreviewStartingHolonomicPose());
+      return AutoBuilder.buildAuto("box");
     }
 }

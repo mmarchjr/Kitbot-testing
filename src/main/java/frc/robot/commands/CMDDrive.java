@@ -71,10 +71,15 @@
    SmartDashboard.putNumber("gyro", RobotContainer.m_robotDrive.getHeading());
 
     //Get joystick input values and apply deadband
+    if (RobotContainer.controlChooser.getSelected()=="drone") {
    y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightY(), 0.15);
    x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
    turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
-
+    } else {
+      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftY(), 0.15);
+      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
+      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
+    }
    /*/ Determine if robot is at setpoint and needs to rotate to angle
    /boolean isAtSetpoint = turnController.atSetpoint();
    if (isAtSetpoint && rotateToAngle) {

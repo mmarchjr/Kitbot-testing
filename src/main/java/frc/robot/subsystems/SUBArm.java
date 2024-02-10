@@ -41,7 +41,10 @@ pid.setTolerance(1);
   public void setPosition(double position){
     setpoint = position; 
     //double motorPower = pid.calculate(encoder.getPosition(), setpoint);
-    //armMotor1.set(motorPower);
+   // armMotor1.set(motorPower);
+  }
+    public double getPosition(){
+      return setpoint;
   }
 
   @Override
@@ -55,7 +58,7 @@ pid.setTolerance(1);
     pid.setD(SmartDashboard.getNumber("armD", 0));
 
 
-    //double motorPower = pid.calculate(encoder.getPosition(), setpoint);
-    //armMotor1.set(motorPower);
+   // double motorPower = pid.calculate(encoder.getPosition(), setpoint);
+   // armMotor1.set(motorPower);
   }
 }

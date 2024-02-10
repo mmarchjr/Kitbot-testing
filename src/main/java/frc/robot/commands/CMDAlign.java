@@ -43,11 +43,12 @@
    @Override
    public void execute() {
      if (camera.getLatestResult().hasTargets()) {
-     double y = -translationPID.calculate(m_vision.getDistance(),2);
+     double y = translationPID.calculate(m_vision.getDistance(),1);
      //double x = translationPID.calculate(m_vision.getSkew(),0)
      double z = rotationPID.calculate(camera.getLatestResult().getBestTarget().getYaw(),0);
-     m_drive.driveRobotRelative(new ChassisSpeeds(y,0,z));
-     }
+     m_drive.driveRobotRelative(new ChassisSpeeds(-y,0,z));
+     } else {     m_drive.driveRobotRelative(new ChassisSpeeds(0,0,0));
+}
      if (camera.getLatestResult().hasTargets()) {
      SmartDashboard.putNumber("Distance",  PhotonUtils.calculateDistanceToTargetMeters(
                                  CAMERA_HEIGHT_METERS,
