@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,16 +12,28 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SUBlights;
 import edu.wpi.first.math.MathUtil;
+
 public class CMDlights extends Command {
   Timer lightTimer = new Timer();
 
   SUBlights subGlow;
+
+  //Notifier loadingNotifier;
 
   /** Creates a new CMDUnderglow. */
   public CMDlights(SUBlights subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     subGlow = subsystem;
     addRequirements(subGlow);
+    /*
+    loadingNotifier = //Based on https://github.com/Mechanical-Advantage/RobotCode2023/blob/f0c26dc20e0f324a2093a4c81c687d41a120a07d/src/main/java/org/littletonrobotics/frc2023/subsystems/leds/Leds.java#L90-L103
+        new Notifier(
+            () -> {
+              subGlow.set_full_strand((getBreatheColor(Constants.kblueRGB, Constants.kyellowRGB, System.currentTimeMillis()/1000)));
+            }
+        );
+    loadingNotifier.startPeriodic(0.02);
+*/
   }
 
   // Called when the command is initially scheduled.
@@ -33,9 +46,11 @@ public class CMDlights extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //loadingNotifier.stop(); //ensure the breath effect for early view stops when anything else is ready
+
     //int[] breatheRGB = getBreatheColor(Constants.yellowRGB, Constants.blueRGB, lightTimer.get());
     //subGlow.set_full_strand(breatheRGB[0], breatheRGB[1], breatheRGB[2]); //pass the color to the strand
-    sweep( (int) (lightTimer.get()*Constants.kStrandLength/3) );
+    sweep( (int) (lightTimer.get()*Constants.kStrandLength) );
     subGlow.update();
   }
 
@@ -43,8 +58,8 @@ public class CMDlights extends Command {
     double controlValue = Math.sin(time); 
     double yellowness = MathUtil.clamp(controlValue,0,1);
     double blueness = MathUtil.clamp(-controlValue,0,1);
-    SmartDashboard.putNumber("blueness",blueness);
-    SmartDashboard.putNumber("yellowness", yellowness);
+    //SmartDashboard.putNumber("blueness",blueness);
+    //SmartDashboard.putNumber("yellowness", yellowness);
 
     int[] ret = {0,0,0};
     
@@ -103,5 +118,10 @@ public class CMDlights extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  @Override 
+  public boolean runsWhenDisabled() {
+    return true;
   }
 }

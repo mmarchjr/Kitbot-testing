@@ -29,10 +29,11 @@ import frc.robot.subsystems.*;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  public static final SUBlights m_lights = new SUBlights();
   // The robot's subsystems
   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
     public static final CMDDrive driveRobotCommand = new CMDDrive();
-    public static final SUBlights m_lights = new SUBlights();
+    
     public static final CMDlights m_lightCommand = new CMDlights(m_lights);
   
     public static SendableChooser<Boolean> fieldOrientedChooser = new SendableChooser<Boolean>();
@@ -46,8 +47,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    
-
     AutoBuilder.configureHolonomic(
                 m_robotDrive::getPose, // Robot pose supplier
                 m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
