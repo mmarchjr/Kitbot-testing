@@ -177,15 +177,15 @@ public class RobotContainer {
  m_driverController.a().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(HookConstants.kLowerHookPosition), m_SUBClimb));
 
 
- m_driverController.leftBumper().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(729), m_SUBClimb));
- m_driverController.leftBumper().onFalse(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(m_SUBClimb.getLeftHookPosition()), m_SUBClimb));
- m_driverController.leftTrigger().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(-729), m_SUBClimb));
- m_driverController.leftTrigger().onFalse(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(m_SUBClimb.getLeftHookPosition()), m_SUBClimb));
 
+
+ m_driverController.leftBumper().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(0.1), m_SUBClimb));
+ m_driverController.leftTrigger().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(-0.1), m_SUBClimb));
+/*
  m_driverController.rightBumper().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(729), m_SUBClimb));
  m_driverController.rightBumper().onFalse(new RunCommand(()-> m_SUBClimb.setRightHookPosition(m_SUBClimb.getRightHookPosition()), m_SUBClimb));
  m_driverController.rightTrigger().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(-729), m_SUBClimb));
- m_driverController.rightTrigger().onFalse(new RunCommand(()-> m_SUBClimb.setRightHookPosition(m_SUBClimb.getRightHookPosition()), m_SUBClimb));
+ m_driverController.rightTrigger().onFalse(new RunCommand(()-> m_SUBClimb.setRightHookPosition(m_SUBClimb.getRightHookPosition()), m_SUBClimb));*/
   }
 
   /**

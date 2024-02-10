@@ -75,6 +75,7 @@ public class SUBClimb extends SubsystemBase {
 
     public void setLeftHookPosition(double leftHookPosition) {
         leftHookSetPoint = leftHookPosition;
+        kLeftHook.set(leftHookPosition);
     }
     public void setRightHookPosition(double rightHookPosition) {
         rightHookSetPoint = rightHookPosition;
@@ -102,7 +103,9 @@ public class SUBClimb extends SubsystemBase {
         pid.setP(SmartDashboard.getNumber("hookP", 0));
         pid.setI(SmartDashboard.getNumber("hookI", 0));
         pid.setD(SmartDashboard.getNumber("hookD", 0));
+
     }
+
 
 
 }
