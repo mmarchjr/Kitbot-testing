@@ -232,8 +232,8 @@ public final class Constants {
     
   }
   public static class ArmConstants {
-    public static final int kArmMotor1 = 6;
-    public static final int kArmMotor2 = 5;
+    public static final int kArmMotor1 = 9;
+    public static final int kArmMotor2 = 10;
     public static final double kRaisedPosition = 1.571;
     public static final double kLowerPosition = 0;
     public static final double kP = 0.1;
