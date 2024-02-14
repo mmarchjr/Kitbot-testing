@@ -25,7 +25,7 @@ public class SUBClimb extends SubsystemBase {
     double leftHookSetPoint = 0;
     double rightHookSetPoint = 0;
    
-   PIDController pid = new PIDController(Constants.HookConstants.kP, Constants.HookConstants.kI, Constants.HookConstants.kD);
+    PIDController pid = new PIDController(Constants.HookConstants.kP, Constants.HookConstants.kI, Constants.HookConstants.kD);
 
     public SUBClimb(int LeftHookCanId, int RightHookCanId){
         kLeftHook = new CANSparkMax(LeftHookCanId, MotorType.kBrushless);
@@ -74,11 +74,13 @@ public class SUBClimb extends SubsystemBase {
     }
 
     public void setLeftHookPosition(double leftHookPosition) {
-        leftHookSetPoint = leftHookPosition;
+        leftHookSetPoint += leftHookPosition;
         kLeftHook.set(leftHookPosition);
     }
+
     public void setRightHookPosition(double rightHookPosition) {
         rightHookSetPoint = rightHookPosition;
+        
     }
 
     public double getLeftHookPosition() {

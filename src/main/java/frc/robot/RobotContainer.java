@@ -26,12 +26,12 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.HookConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
- import frc.robot.commands.CMDAlign;
- import frc.robot.commands.CMDDrive;
+import frc.robot.commands.CMDAlign;
+import frc.robot.commands.CMDDrive;
 import frc.robot.commands.CMDShooter;
 import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PrepareLaunch;
- import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SUBArm;
 import frc.robot.subsystems.SUBClimb;
 import frc.robot.subsystems.SUBShooter;
@@ -47,29 +47,23 @@ import frc.utils.RoaringUtils.DeadzoneUtils;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-   //The robot's subsystems
-   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
-     public static final CMDDrive driveRobotCommand = new CMDDrive();
-    public static final SUBShooter m_SUBShooter = new SUBShooter();
-    public static final CMDShooter m_CMDShooter = new CMDShooter();
-    public static final SUBVision m_SUBVision = new SUBVision();
-     public static final CMDAlign m_CMDAlign = new CMDAlign();
-    public static final SUBArm m_SUBArm = new SUBArm();
-    public static final SUBClimb m_SUBClimb = new SUBClimb(Constants.HookConstants.kLeftHookCanId, Constants.HookConstants.kRightHookCanId);
+  //The robot's subsystems
+  public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public static final CMDDrive driveRobotCommand = new CMDDrive();
+  public static final SUBShooter m_SUBShooter = new SUBShooter();
+  public static final CMDShooter m_CMDShooter = new CMDShooter();
+  public static final SUBVision m_SUBVision = new SUBVision();
+  public static final CMDAlign m_CMDAlign = new CMDAlign();
+  public static final SUBArm m_SUBArm = new SUBArm();
+  public static final SUBClimb m_SUBClimb = new SUBClimb(Constants.HookConstants.kLeftHookCanId, Constants.HookConstants.kRightHookCanId);
 
-
-
-
-
+  public static SendableChooser<Boolean> fieldOrientedChooser = new SendableChooser<Boolean>();
+  public static SendableChooser<String> controlChooser = new SendableChooser<String>();
 
   
-    public static SendableChooser<Boolean> fieldOrientedChooser = new SendableChooser<Boolean>();
-    public static SendableChooser<String> controlChooser = new SendableChooser<String>();
+  public static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
 
-  
-    public static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
-
-   //The driver's controller
+  //The driver's controller
   public static CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   public static CommandXboxController m_driverController2 = new CommandXboxController(OIConstants.kDriverControllerPort2);
 
@@ -78,35 +72,34 @@ public class RobotContainer {
    */
   public RobotContainer() {
     AutoBuilder.configureHolonomic(
-            m_robotDrive::getPose,  //Robot pose supplier
-                 m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                 m_robotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                 m_robotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(12, 0.0, 0.0),//  Rotation PID constants
-                   3,//  Max module speed, in m/s
-                         Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
-                         new ReplanningConfig() // Default path replanning config. See the API for the options here
-                 ),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+      m_robotDrive::getPose,  //Robot pose supplier
+      m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+      m_robotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      m_robotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+        new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
+        new PIDConstants(12, 0.0, 0.0),//  Rotation PID constants
+        3,//  Max module speed, in m/s
+        Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
+        new ReplanningConfig() // Default path replanning config. See the API for the options here
+      ),
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            m_robotDrive // Reference to this subsystem to set requirements
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      m_robotDrive // Reference to this subsystem to set requirements
     );
 
+    // Configure the button bindings
 
-     // Configure the button bindings
-
-            NamedCommands.registerCommand("Intake", m_SUBShooter.getIntakeCommand().withTimeout(1));
+    NamedCommands.registerCommand("Intake", m_SUBShooter.getIntakeCommand().withTimeout(1));
  
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
@@ -121,23 +114,24 @@ public class RobotContainer {
     SmartDashboard.putData("Controls", controlChooser);
 
     configureButtonBindings();
-   //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
+    //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
     //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
     m_SUBShooter.setDefaultCommand(m_CMDShooter);
-     m_robotDrive.setDefaultCommand(
-       //   The left stick controls translation of the robot.
-       //   Turning is controlled by the X axis of the right stick.
-         /* 
-         new RunCommand(
-             () -> m_robotDrive.drive(
-                 -DeadzoneUtils.LinearDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                 -DeadzoneUtils.LinearDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                 -DeadzoneUtils.LinearDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                 true, true),
-             m_robotDrive));*/
-             driveRobotCommand);
-            
+    m_robotDrive.setDefaultCommand(
+      //   The left stick controls translation of the robot.
+      //   Turning is controlled by the X axis of the right stick.
+      /* 
+      new RunCommand(
+        () -> m_robotDrive.drive(
+            -DeadzoneUtils.LinearDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+            -DeadzoneUtils.LinearDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+            -DeadzoneUtils.LinearDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+            true, true),
+        m_robotDrive)
+    );*/
+      driveRobotCommand
+    );
   }
 
   /**
@@ -150,42 +144,37 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-         m_driverController.x()
-         .whileTrue(new RunCommand(
-             () -> m_robotDrive.setX(),
-             m_robotDrive));
+    m_driverController.x().whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
 
 
-
-           m_driverController2
-        .rightBumper()
-        .whileTrue(
-            new PrepareLaunch(m_SUBShooter)
-                .withTimeout(LauncherConstants.kLauncherDelay)
-                .andThen(new LaunchNote(m_SUBShooter))
-                .handleInterrupt(() -> m_SUBShooter.stop()));
+    m_driverController2.rightBumper().whileTrue(
+      new PrepareLaunch(m_SUBShooter)
+        .withTimeout(LauncherConstants.kLauncherDelay)
+        .andThen(new LaunchNote(m_SUBShooter))
+        .handleInterrupt(() -> m_SUBShooter.stop())
+    );
 
     m_driverController2.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
 
- m_driverController.rightStick().whileTrue(m_CMDAlign);
- m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
- m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
+    m_driverController.rightStick().whileTrue(m_CMDAlign);
+    m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
+    m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
 
- m_driverController.y().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(HookConstants.kRaisedHookPosition), m_SUBClimb));
- m_driverController.a().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(HookConstants.kLowerHookPosition), m_SUBClimb));
- m_driverController.y().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(HookConstants.kRaisedHookPosition), m_SUBClimb));
- m_driverController.a().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(HookConstants.kLowerHookPosition), m_SUBClimb));
+    m_driverController.y().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(HookConstants.kRaisedHookPosition), m_SUBClimb));
+    m_driverController.a().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(HookConstants.kLowerHookPosition), m_SUBClimb));
+    m_driverController.y().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(HookConstants.kRaisedHookPosition), m_SUBClimb));
+    m_driverController.a().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(HookConstants.kLowerHookPosition), m_SUBClimb));
  
 
 
 
- m_driverController.leftBumper().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(0.1), m_SUBClimb));
- m_driverController.leftTrigger().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(-0.1), m_SUBClimb));
-/*
- m_driverController.rightBumper().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(729), m_SUBClimb));
- m_driverController.rightBumper().onFalse(new RunCommand(()-> m_SUBClimb.setRightHookPosition(m_SUBClimb.getRightHookPosition()), m_SUBClimb));
- m_driverController.rightTrigger().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(-729), m_SUBClimb));
- m_driverController.rightTrigger().onFalse(new RunCommand(()-> m_SUBClimb.setRightHookPosition(m_SUBClimb.getRightHookPosition()), m_SUBClimb));*/
+    m_driverController.leftBumper().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(0.1), m_SUBClimb));
+    m_driverController.leftTrigger().onTrue(new RunCommand(()-> m_SUBClimb.setLeftHookPosition(-0.1), m_SUBClimb));
+    /*
+    m_driverController.rightBumper().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(729), m_SUBClimb));
+    m_driverController.rightBumper().onFalse(new RunCommand(()-> m_SUBClimb.setRightHookPosition(m_SUBClimb.getRightHookPosition()), m_SUBClimb));
+    m_driverController.rightTrigger().onTrue(new RunCommand(()-> m_SUBClimb.setRightHookPosition(-729), m_SUBClimb));
+    m_driverController.rightTrigger().onFalse(new RunCommand(()-> m_SUBClimb.setRightHookPosition(m_SUBClimb.getRightHookPosition()), m_SUBClimb));*/
   }
 
   /**
@@ -194,7 +183,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-        m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("Line").getPreviewStartingHolonomicPose());
+      m_robotDrive.resetOdometry(
+        PathPlannerPath.fromPathFile("Line").getPreviewStartingHolonomicPose()
+      );
       return AutoBuilder.buildAuto("Line");
     }
   }
