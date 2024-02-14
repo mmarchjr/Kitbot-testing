@@ -40,6 +40,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.SUBArm;
 import frc.robot.subsystems.SUBShooter;
 import frc.robot.subsystems.SUBVision;
+import frc.robot.subsystems.photonPose;
 import frc.robot.subsystems.SUBShooter.*;
 import frc.utils.RoaringUtils;
 import frc.utils.RoaringUtils.DeadzoneUtils;
@@ -59,6 +60,8 @@ public class RobotContainer {
     public static final SUBVision m_SUBVision = new SUBVision();
      public static final CMDAlign m_CMDAlign = new CMDAlign();
     public static final SUBArm m_SUBArm = new SUBArm();
+      //public static final photonPose m_subPhoton = new photonPose();
+
 
   private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(new PhotonCamera("PiCam"), m_robotDrive);
 

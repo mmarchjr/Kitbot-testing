@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
@@ -26,6 +28,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
@@ -57,6 +61,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final Field2d field2d = new Field2d();
 
   private double previousPipelineTimestamp = 0;
+  private PhotonPoseEstimator poseEstimator2;
 
   public PoseEstimatorSubsystem(PhotonCamera photonCamera, DriveSubsystem drivetrainSubsystem) {
     this.photonCamera = photonCamera;
@@ -65,8 +70,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     try {
       layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
       var alliance = DriverStation.getAlliance();
-      layout.setOrigin(alliance.get() == Alliance.Blue ?
-          OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
+      //layout.setOrigin(alliance.get() == Alliance.Blue ?
+      //    OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
     } catch(IOException e) {
       DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
       layout = null;
@@ -82,6 +87,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         new Pose2d(),
         stateStdDevs,
         visionMeasurementStdDevs);
+    this.poseEstimator2 = new PhotonPoseEstimator(layout, PoseStrategy.AVERAGE_BEST_TARGETS, photonCamera, Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT);
+
     
     tab.addString("Pose", this::getFomattedPose).withPosition(0, 0).withSize(2, 0);
     tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
@@ -89,27 +96,24 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Update pose estimator with the best visible target
-    var pipelineResult = photonCamera.getLatestResult();
-    var resultTimestamp = pipelineResult.getTimestampSeconds();
-    if (resultTimestamp != previousPipelineTimestamp && pipelineResult.hasTargets()) {
-      previousPipelineTimestamp = resultTimestamp;
-      var target = pipelineResult.getBestTarget();
-      var fiducialId = target.getFiducialId();
-      // Get the tag pose from field layout - consider that the layout will be null if it failed to load
-      Optional<Pose3d> tagPose = aprilTagFieldLayout == null ? Optional.empty() : aprilTagFieldLayout.getTagPose(fiducialId);
-      if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0 && tagPose.isPresent()) {
-        var targetPose = tagPose.get();
-        Transform3d camToTarget = target.getBestCameraToTarget();
-        Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
+    //Logger.recordOutput("guess pose", poseEstimator.getEstimatedPosition());
 
-        var visionMeasurement = camPose.transformBy(APRILTAG_CAMERA_TO_ROBOT);
-        poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultTimestamp);
+    // Update pose estimator with the best visible target
+    var res = photonCamera.getLatestResult();
+    if (res.hasTargets()) {
+        var imageCaptureTime = res.getTimestampSeconds();
+        var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
+        //var camPose = aprilTagFieldLayout.getTagPose(res.getBestTarget().getFiducialId()).get().getTranslation().transformBy(camToTargetTrans.inverse());
+        m_poseEstimator.addVisionMeasurement(
+                camPose.transformBy(Constants.kCameraToRobot).toPose2d(), imageCaptureTime);
+    }
+        poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(),resultTimestamp);
+
       }
     }
     // Update pose estimator with drivetrain sensors
     poseEstimator.update(
-      Rotation2d.fromDegrees(drivetrainSubsystem.getHeading()),
+      Rotation2d.fromDegrees(drivetrainSubsystem.m_gyro.getAngle()),
       drivetrainSubsystem.getPosition());
 
     field2d.setRobotPose(getCurrentPose());

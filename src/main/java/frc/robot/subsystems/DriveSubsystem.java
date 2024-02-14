@@ -4,7 +4,8 @@
 
  package frc.robot.subsystems;
 
- import edu.wpi.first.math.VecBuilder;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -87,7 +88,10 @@ import frc.utils.SwerveUtils;
 
    @Override
    public void periodic() {
+    //("measured pose", getPose());
+
     m_field.setRobotPose(m_odometry.getPoseMeters());
+
    /// m_poseEstimator.update(Rotation2d.fromDegrees(m_gyro.getAngle()), getPosition());
     //  Update the odometry in the periodic block
      m_odometry.update(
