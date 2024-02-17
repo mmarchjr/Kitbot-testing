@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SUBArm;
+import frc.utils.RoaringUtils.DeadzoneUtils;
 
 public class CMDArm extends Command {
   /** Creates a new CMDArm. */
-  CommandXboxController xbox = RobotContainer.m_driverController2;
+  double pos= 0;
+  CommandXboxController xbox = new CommandXboxController(1);
   SUBArm SUBArm;
   public CMDArm(SUBArm sub) {
     this.SUBArm = sub;
@@ -26,7 +28,7 @@ public class CMDArm extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SUBArm.setPosition(SUBArm.getPosition()+xbox.getRightY());
+    SUBArm.setPosition(0);
   }
 
   // Called once the command ends or is interrupted.
@@ -37,5 +39,8 @@ public class CMDArm extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  public void setpos(double pos) {
+    this.pos = pos;
   }
 }

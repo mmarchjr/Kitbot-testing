@@ -30,8 +30,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
- import frc.robot.commands.CMDAlign;
- import frc.robot.commands.CMDDrive;
+import frc.robot.commands.CMDAlign;
+//import frc.robot.commands.CMDAlign;
+import frc.robot.commands.CMDArm;
+import frc.robot.commands.CMDDrive;
+import frc.robot.commands.CMDShooter;
 //import frc.robot.commands.CMDShooter;
 import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PrepareLaunch;
@@ -40,7 +43,6 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.SUBArm;
 import frc.robot.subsystems.SUBShooter;
 import frc.robot.subsystems.SUBVision;
-import frc.robot.subsystems.photonPose;
 import frc.robot.subsystems.SUBShooter.*;
 import frc.utils.RoaringUtils;
 import frc.utils.RoaringUtils.DeadzoneUtils;
@@ -53,19 +55,19 @@ import frc.utils.RoaringUtils.DeadzoneUtils;
  */
 public class RobotContainer {
    //The robot's subsystems
-   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
-     public static final CMDDrive driveRobotCommand = new CMDDrive();
+   //public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+   //  public static final CMDDrive driveRobotCommand = new CMDDrive();
     public static final SUBShooter m_SUBShooter = new SUBShooter();
-   // public static final CMDShooter m_CMDShooter = new CMDShooter();
+    public static final CMDShooter m_CMDShooter = new CMDShooter();
     public static final SUBVision m_SUBVision = new SUBVision();
      public static final CMDAlign m_CMDAlign = new CMDAlign();
     public static final SUBArm m_SUBArm = new SUBArm();
+    public static final CMDArm m_CMDArm = new CMDArm(m_SUBArm);
+
       //public static final photonPose m_subPhoton = new photonPose();
 
 
-  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(new PhotonCamera("PiCam"), m_robotDrive);
-
-
+  //private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(new PhotonCamera("PiCam"), m_robotDrive);
 
 
   
@@ -84,35 +86,35 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_robotDrive.resetOdometry(new Pose2d(8.25,4.1, Rotation2d.fromDegrees(0)));
+   // m_robotDrive.resetOdometry(new Pose2d(8.25,4.1, Rotation2d.fromDegrees(0)));
     //m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("2 note auto").getPreviewStartingHolonomicPose());
     
 
-    AutoBuilder.configureHolonomic(
-            m_robotDrive::getPose,  //Robot pose supplier
-                 m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                 m_robotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                 m_robotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(12, 0.0, 0.0),//  Rotation PID constants
-                   3,//  Max module speed, in m/s
-                         Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
-                         new ReplanningConfig() // Default path replanning config. See the API for the options here
-                 ),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    // AutoBuilder.configureHolonomic(
+    //         m_robotDrive::getPose,  //Robot pose supplier
+    //              m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+    //              m_robotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    //              m_robotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+    //         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+    //                 new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
+    //                 new PIDConstants(12, 0.0, 0.0),//  Rotation PID constants
+    //                3,//  Max module speed, in m/s
+    //                      Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
+    //                      new ReplanningConfig() // Default path replanning config. See the API for the options here
+    //              ),
+    //         () -> {
+    //           // Boolean supplier that controls when the path will be mirrored for the red alliance
+    //           // This will flip the path being followed to the red side of the field.
+    //           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            m_robotDrive // Reference to this subsystem to set requirements
-    );
+    //           var alliance = DriverStation.getAlliance();
+    //           if (alliance.isPresent()) {
+    //             return alliance.get() == DriverStation.Alliance.Red;
+    //           }
+    //           return false;
+    //         },
+    //         m_robotDrive // Reference to this subsystem to set requirements
+    // );
 
 
      // Configure the button bindings
@@ -139,7 +141,7 @@ public class RobotContainer {
     //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
     //m_SUBShooter.setDefaultCommand(m_CMDShooter);
-     m_robotDrive.setDefaultCommand(
+    // m_robotDrive.setDefaultCommand(
        //   The left stick controls translation of the robot.
        //   Turning is controlled by the X axis of the right stick.
          /* 
@@ -150,8 +152,8 @@ public class RobotContainer {
                  -DeadzoneUtils.LinearDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                  true, true),
              m_robotDrive));*/
-             driveRobotCommand);
-            
+    //        driveRobotCommand);
+  m_SUBArm.setDefaultCommand(m_CMDArm);
   }
 
   /**
@@ -163,11 +165,11 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
-         m_driverController.x()
-         .whileTrue(new RunCommand(
-             () -> m_robotDrive.setX(),
-             m_robotDrive));
+   private void configureButtonBindings() {
+  //        m_driverController.x()
+  //        .whileTrue(new RunCommand(
+  //            () -> m_robotDrive.setX(),
+  //            m_robotDrive));
 
 
 
@@ -181,9 +183,9 @@ public class RobotContainer {
 
     m_driverController2.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
 
- m_driverController.rightTrigger().whileTrue(m_CMDAlign);
-m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
-m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
+ //m_driverController.rightTrigger().whileTrue(m_CMDAlign);
+m_driverController2.y().whileTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
+m_driverController2.a().whileTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
 //m_driverController2.x().whileFalse(AutoBuilder.pathfindToPose(new Pose2d))
 
   }
@@ -194,7 +196,7 @@ m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConst
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-        m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("box").getPreviewStartingHolonomicPose());
+     //   m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("box").getPreviewStartingHolonomicPose());
       return AutoBuilder.buildAuto("box");
     }
 }

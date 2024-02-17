@@ -5,6 +5,9 @@
 package frc.robot;
 
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,6 +22,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+   //CANSparkMax armMotor1 = new CANSparkMax(Constants.ArmConstants.kArmMotor1, MotorType.kBrushless);
+   //CANSparkMax armMotor2 = new CANSparkMax(Constants.ArmConstants.kArmMotor2, MotorType.kBrushless);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -26,6 +31,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    //armMotor2.follow(armMotor1);
 
 
    /* Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -137,7 +143,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
   public void testInit() {

@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.estimation.TargetModel;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
@@ -68,7 +70,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     AprilTagFieldLayout layout;
     try {
-      layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+      layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
       var alliance = DriverStation.getAlliance();
       //layout.setOrigin(alliance.get() == Alliance.Blue ?
       //    OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
@@ -89,34 +91,42 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         visionMeasurementStdDevs);
     this.poseEstimator2 = new PhotonPoseEstimator(layout, PoseStrategy.AVERAGE_BEST_TARGETS, photonCamera, Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT);
 
-    
+    poseEstimator2.setPrimaryStrategy(PoseStrategy.AVERAGE_BEST_TARGETS);
+    poseEstimator2.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_LAST_POSE);
+    poseEstimator2.setTagModel(TargetModel.kAprilTag36h11);
+    poseEstimator2.setFieldTags(aprilTagFieldLayout);
     tab.addString("Pose", this::getFomattedPose).withPosition(0, 0).withSize(2, 0);
     tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
-  }
+    if (DriverStation.getAlliance().isPresent()) {
+    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+    layout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
+  } else {
+    layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+      }
+    } else {layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);}
+  } 
 
   @Override
   public void periodic() {
     //Logger.recordOutput("guess pose", poseEstimator.getEstimatedPosition());
 
     // Update pose estimator with the best visible target
-    var res = photonCamera.getLatestResult();
-    if (res.hasTargets()) {
-        var imageCaptureTime = res.getTimestampSeconds();
-        var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
-        //var camPose = aprilTagFieldLayout.getTagPose(res.getBestTarget().getFiducialId()).get().getTranslation().transformBy(camToTargetTrans.inverse());
-        m_poseEstimator.addVisionMeasurement(
-                camPose.transformBy(Constants.kCameraToRobot).toPose2d(), imageCaptureTime);
-    }
-        poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(),resultTimestamp);
-
-      }
+    poseEstimator2.setLastPose(drivetrainSubsystem.getPose());
+    poseEstimator2.setReferencePose(drivetrainSubsystem.getPose());
+    var pipelineResult = photonCamera.getLatestResult();
+    var result = poseEstimator2.update(pipelineResult);
+    if (result.isPresent()) {
+      var measurement = result.get().estimatedPose.toPose2d();
+     Pose2d correctedMeasure = new Pose2d(measurement.getX(), measurement.getY(), measurement.getRotation());
+      double timestamp = result.get().timestampSeconds;
+    poseEstimator.addVisionMeasurement(correctedMeasure, timestamp);
     }
     // Update pose estimator with drivetrain sensors
     poseEstimator.update(
       Rotation2d.fromDegrees(drivetrainSubsystem.m_gyro.getAngle()),
       drivetrainSubsystem.getPosition());
 
-    field2d.setRobotPose(getCurrentPose());
+    field2d.setRobotPose(new Pose2d(getCurrentPose().getX(),getCurrentPose().getY(),getCurrentPose().getRotation()));
   }
 
   private String getFomattedPose() {

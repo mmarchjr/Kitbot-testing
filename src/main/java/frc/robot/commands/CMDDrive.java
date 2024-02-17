@@ -43,7 +43,7 @@
 
    public CMDDrive() {
       //Use addRequirements() here to declare subsystem dependencies.
-     addRequirements(RobotContainer.m_robotDrive);
+     //addRequirements(RobotContainer.m_robotDrive);
    }
     //Called when the command is initially scheduled.
    @Override
@@ -51,8 +51,8 @@
      turnController = new PIDController(kP, kI, kD);
      turnController.enableContinuousInput(-180.0f,  180.0f);
      turnController.setTolerance(kToleranceDegrees);
-     angle = RobotContainer.m_robotDrive.getHeading();
-     turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
+     //angle = RobotContainer.m_robotDrive.getHeading();
+     //turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
     
    }
 
@@ -68,7 +68,7 @@
    turn = 0;
 
     //Update gyro value on SmartDashboard
-   SmartDashboard.putNumber("gyro", RobotContainer.m_robotDrive.getHeading());
+ //  SmartDashboard.putNumber("gyro", RobotContainer.m_robotDrive.getHeading());
 
     //Get joystick input values and apply deadband
     if (RobotContainer.controlChooser.getSelected()=="drone") {
@@ -131,15 +131,15 @@
  double currentRotationRate = turn;
     //Drive the robot based on joystick input and rotation rate
    if (y == 0 && x == 0 && turn == 0) { //&& isAtSetpoint) {
-     RobotContainer.m_robotDrive.setX();
+   //  RobotContainer.m_robotDrive.setX();
    } else {
-     RobotContainer.m_robotDrive.drive(
-         -y / 2,
-         -x / 2,
-         -currentRotationRate / 2,
-         RobotContainer.fieldOrientedChooser.getSelected(),
-         RobotContainer.rateLimitChooser.getSelected()
-     );
+   //  RobotContainer.m_robotDrive.drive(
+   //      -y / 2,
+   //      -x / 2,
+   //      -currentRotationRate / 2,
+   //      RobotContainer.fieldOrientedChooser.getSelected(),
+   //      RobotContainer.rateLimitChooser.getSelected()
+   //  );
    }
 
     //Update past turn value
@@ -147,8 +147,8 @@
 
     //Reset gyro, adjust setpoint, and set rumble if "Y" button is pressed
    if (OIDriver1Controller.y().getAsBoolean()) {
-     RobotContainer.m_robotDrive.resetGyro();
-     turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
+    // RobotContainer.m_robotDrive.resetGyro();
+    // turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
      OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble, 0.5);
    } else {
      OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble,0);
