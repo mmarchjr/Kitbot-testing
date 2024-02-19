@@ -29,7 +29,7 @@ public class SUBArm extends SubsystemBase {
    public CANSparkMax armMotor1 = new CANSparkMax(Constants.ArmConstants.kArmMotor1, MotorType.kBrushless);
    CANSparkMax armMotor2 = new CANSparkMax(Constants.ArmConstants.kArmMotor2, MotorType.kBrushless);
    AbsoluteEncoder encoder = armMotor1.getAbsoluteEncoder(Type.kDutyCycle);
-   double setpoint = 0;
+   double setpoint = ArmConstants.kIntakePosition;
    SparkPIDController m_turningPIDController;
 
    PIDController pid = new PIDController(Constants.ArmConstants.kP, Constants.ArmConstants.kI, Constants.ArmConstants.kD);
@@ -39,10 +39,13 @@ public class SUBArm extends SubsystemBase {
 
 
     armMotor1.restoreFactoryDefaults();
+    armMotor1.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
+    armMotor2.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_turningPIDController = armMotor1.getPIDController();
     m_turningPIDController.setFeedbackDevice(encoder);
+    m_turningPIDController.setOutputRange(-0.2,0.2);
 
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,
@@ -54,15 +57,15 @@ public class SUBArm extends SubsystemBase {
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
-    encoder.setInverted(false);
+    encoder.setInverted(true);
 
     // Enable PID wrap around for the turning motor. This will allow the PID
     // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
     // to 10 degrees will go through 0 rather than the other direction which is a
     // longer route.
     m_turningPIDController.setPositionPIDWrappingEnabled(true);
-    m_turningPIDController.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
-    m_turningPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
+    m_turningPIDController.setPositionPIDWrappingMinInput(0);
+    m_turningPIDController.setPositionPIDWrappingMaxInput(1);
 
     // Set the PID gains for the driving motor. Note these are example gains, and you
     // may need to tune them for your own robot!
@@ -74,8 +77,6 @@ public class SUBArm extends SubsystemBase {
     m_turningPIDController.setI(ArmConstants.kI);
     m_turningPIDController.setD(ArmConstants.kD);
     m_turningPIDController.setFF(ModuleConstants.kTurningFF);
-    m_turningPIDController.setOutputRange(ModuleConstants.kTurningMinOutput,
-        ModuleConstants.kTurningMaxOutput);
 
     armMotor1.setIdleMode(ModuleConstants.kTurningMotorIdleMode);
     armMotor1.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
@@ -96,7 +97,7 @@ armMotor2.setIdleMode(IdleMode.kBrake);
     setpoint = position; 
     //double motorPower = pid.calculate(encoder.getPosition(), setpoint);
     m_turningPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
-    //armMotor1.set(position);
+    //armMotor1.set(-position);
   }
     public double getPosition(){
       return setpoint;
@@ -108,14 +109,7 @@ armMotor2.setIdleMode(IdleMode.kBrake);
     SmartDashboard.putNumber("armP", Constants.ArmConstants.kP);
     SmartDashboard.putNumber("armI", Constants.ArmConstants.kI);
     SmartDashboard.putNumber("armD", Constants.ArmConstants.kD);
-    pid.setP(SmartDashboard.getNumber("armP", 0));
-    pid.setI(SmartDashboard.getNumber("armI", 0));
-    pid.setD(SmartDashboard.getNumber("armD", 0));
     SmartDashboard.putNumber("pos", encoder.getPosition());
-    
-
-
-    //double motorPower = pid.calculate(encoder.getPosition(), setpoint);
-    SmartDashboard.putNumber("motor power", m_turningPIDController.getOutputMax());
+    m_turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
   }
 }

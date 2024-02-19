@@ -7,12 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.SUBArm;
 import frc.utils.RoaringUtils.DeadzoneUtils;
 
 public class CMDArm extends Command {
   /** Creates a new CMDArm. */
-  double pos= 0;
+  double pos= ArmConstants.kIntakePosition;
   CommandXboxController xbox = new CommandXboxController(1);
   SUBArm SUBArm;
   public CMDArm(SUBArm sub) {
@@ -28,7 +29,14 @@ public class CMDArm extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SUBArm.setPosition(0);
+if (xbox.povUp().getAsBoolean()) {
+      SUBArm.setPosition(SUBArm.getPosition()+ArmConstants.kIncrementAmount);
+    } else if (xbox.povDown().getAsBoolean()) {
+      SUBArm.setPosition(SUBArm.getPosition()-ArmConstants.kIncrementAmount);
+    } else {
+      SUBArm.setPosition(pos);
+    }
+
   }
 
   // Called once the command ends or is interrupted.
@@ -40,7 +48,7 @@ public class CMDArm extends Command {
   public boolean isFinished() {
     return false;
   }
-  public void setpos(double pos) {
+  public void setPosition(double pos) {
     this.pos = pos;
   }
 }

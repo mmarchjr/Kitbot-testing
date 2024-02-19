@@ -36,9 +36,9 @@ import frc.robot.Constants.VisionConstants;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
-  private final PhotonCamera photonCamera;
   private final DriveSubsystem drivetrainSubsystem;
   private final AprilTagFieldLayout aprilTagFieldLayout;
+  private final SUBVision subVision;
   
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
@@ -61,14 +61,15 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final SwerveDrivePoseEstimator poseEstimator;
 
   private final Field2d field2d = new Field2d();
+ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 
   private double previousPipelineTimestamp = 0;
   private PhotonPoseEstimator poseEstimator2;
 
-  public PoseEstimatorSubsystem(PhotonCamera photonCamera, DriveSubsystem drivetrainSubsystem) {
-    this.photonCamera = photonCamera;
+  public PoseEstimatorSubsystem( DriveSubsystem drivetrainSubsystem, SUBVision photonCamera) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     AprilTagFieldLayout layout;
+    this.subVision = photonCamera;
     try {
       layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
       var alliance = DriverStation.getAlliance();
@@ -80,7 +81,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     }
     this.aprilTagFieldLayout = layout;
 
-    ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 
     poseEstimator =  new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
@@ -89,43 +89,28 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         new Pose2d(),
         stateStdDevs,
         visionMeasurementStdDevs);
-    this.poseEstimator2 = new PhotonPoseEstimator(layout, PoseStrategy.AVERAGE_BEST_TARGETS, photonCamera, Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT);
-
-    poseEstimator2.setPrimaryStrategy(PoseStrategy.AVERAGE_BEST_TARGETS);
-    poseEstimator2.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_LAST_POSE);
-    poseEstimator2.setTagModel(TargetModel.kAprilTag36h11);
-    poseEstimator2.setFieldTags(aprilTagFieldLayout);
-    tab.addString("Pose", this::getFomattedPose).withPosition(0, 0).withSize(2, 0);
-    tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
+       tab.addString("Pose", this::getFomattedPose).withPosition(0, 0).withSize(2, 0);
+    
+        tab.addBoolean("Has Targets", subVision::HasTargets);
+   tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
     if (DriverStation.getAlliance().isPresent()) {
     if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
     layout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
   } else {
     layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
       }
-    } else {layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);}
-  } 
+    } else {layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+    }
+  }
 
   @Override
   public void periodic() {
-    //Logger.recordOutput("guess pose", poseEstimator.getEstimatedPosition());
-
-    // Update pose estimator with the best visible target
-    poseEstimator2.setLastPose(drivetrainSubsystem.getPose());
-    poseEstimator2.setReferencePose(drivetrainSubsystem.getPose());
-    var pipelineResult = photonCamera.getLatestResult();
-    var result = poseEstimator2.update(pipelineResult);
-    if (result.isPresent()) {
-      var measurement = result.get().estimatedPose.toPose2d();
-     Pose2d correctedMeasure = new Pose2d(measurement.getX(), measurement.getY(), measurement.getRotation());
-      double timestamp = result.get().timestampSeconds;
-    poseEstimator.addVisionMeasurement(correctedMeasure, timestamp);
+    var pose = subVision.getEstimatedGlobalPose();
+    if (pose.isPresent() && !pose.isEmpty()){
+      poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
     }
-    // Update pose estimator with drivetrain sensors
-    poseEstimator.update(
-      Rotation2d.fromDegrees(drivetrainSubsystem.m_gyro.getAngle()),
-      drivetrainSubsystem.getPosition());
-
+    poseEstimator.update(Rotation2d.fromDegrees(drivetrainSubsystem.getHeading()),drivetrainSubsystem.getPosition());
+    //Logger.recordOutput("guess pose", poseEstimator.getEstimatedPosition());
     field2d.setRobotPose(new Pose2d(getCurrentPose().getX(),getCurrentPose().getY(),getCurrentPose().getRotation()));
   }
 
@@ -138,6 +123,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   }
 
   public Pose2d getCurrentPose() {
+    
     return poseEstimator.getEstimatedPosition();
   }
 

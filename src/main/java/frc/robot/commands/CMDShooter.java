@@ -15,7 +15,7 @@
    public static CommandXboxController xbox = new CommandXboxController(OIConstants.kDriverControllerPort);
   /** Creates a new CMDShooter. */
    public CMDShooter() {
-     addRequirements(RobotContainer.m_SUBShooter);
+    // addRequirements(RobotContainer.m_SUBShooter);
      // Use addRequirements() here to declare subsystem dependencies.
    }
 

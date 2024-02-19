@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.CMDAlign;
 //import frc.robot.commands.CMDAlign;
 import frc.robot.commands.CMDArm;
 import frc.robot.commands.CMDDrive;
@@ -55,19 +54,18 @@ import frc.utils.RoaringUtils.DeadzoneUtils;
  */
 public class RobotContainer {
    //The robot's subsystems
-   //public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
-   //  public static final CMDDrive driveRobotCommand = new CMDDrive();
-    public static final SUBShooter m_SUBShooter = new SUBShooter();
-    public static final CMDShooter m_CMDShooter = new CMDShooter();
+   public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+    public static final CMDDrive driveRobotCommand = new CMDDrive();
+    //public static final SUBShooter m_SUBShooter = new SUBShooter();
+    //public static final CMDShooter m_CMDShooter = new CMDShooter();
     public static final SUBVision m_SUBVision = new SUBVision();
-     public static final CMDAlign m_CMDAlign = new CMDAlign();
     public static final SUBArm m_SUBArm = new SUBArm();
     public static final CMDArm m_CMDArm = new CMDArm(m_SUBArm);
 
       //public static final photonPose m_subPhoton = new photonPose();
 
 
-  //private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(new PhotonCamera("PiCam"), m_robotDrive);
+  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem( m_robotDrive,m_SUBVision);
 
 
   
@@ -119,10 +117,10 @@ public class RobotContainer {
 
      // Configure the button bindings
 
-            NamedCommands.registerCommand("Intake", m_SUBShooter.getIntakeCommand().withTimeout(1));
-            NamedCommands.registerCommand("Shoot", new PrepareLaunch(m_SUBShooter)
-            .withTimeout(LauncherConstants.kLauncherDelay)
-            .andThen(new LaunchNote(m_SUBShooter).withTimeout(LauncherConstants.kLauncherDelay)));
+ //           NamedCommands.registerCommand("Intake", m_SUBShooter.getIntakeCommand().withTimeout(1));
+  //          NamedCommands.registerCommand("Shoot", new PrepareLaunch(m_SUBShooter)
+   //         .withTimeout(LauncherConstants.kLauncherDelay)
+    //        .andThen(new LaunchNote(m_SUBShooter).withTimeout(LauncherConstants.kLauncherDelay)));
 
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
@@ -141,7 +139,7 @@ public class RobotContainer {
     //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
     //m_SUBShooter.setDefaultCommand(m_CMDShooter);
-    // m_robotDrive.setDefaultCommand(
+     m_robotDrive.setDefaultCommand(
        //   The left stick controls translation of the robot.
        //   Turning is controlled by the X axis of the right stick.
          /* 
@@ -152,7 +150,7 @@ public class RobotContainer {
                  -DeadzoneUtils.LinearDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                  true, true),
              m_robotDrive));*/
-    //        driveRobotCommand);
+            driveRobotCommand);
   m_SUBArm.setDefaultCommand(m_CMDArm);
   }
 
@@ -166,26 +164,26 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
    private void configureButtonBindings() {
-  //        m_driverController.x()
-  //        .whileTrue(new RunCommand(
-  //            () -> m_robotDrive.setX(),
-  //            m_robotDrive));
+          m_driverController.x()
+          .whileTrue(new RunCommand(
+              () -> m_robotDrive.setX(),
+              m_robotDrive));
 
 
 
-           m_driverController2
-        .rightBumper()
-        .whileTrue(
-            new PrepareLaunch(m_SUBShooter)
-                .withTimeout(LauncherConstants.kLauncherDelay)
-                .andThen(new LaunchNote(m_SUBShooter))
-                .handleInterrupt(() -> m_SUBShooter.stop()));
+      //     m_driverController2
+      //  .rightBumper()
+      //  .whileTrue(
+      //      new PrepareLaunch(m_SUBShooter)
+      //          .withTimeout(LauncherConstants.kLauncherDelay)
+      //          .andThen(new LaunchNote(m_SUBShooter))
+      //          .handleInterrupt(() -> m_SUBShooter.stop()));
 
-    m_driverController2.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
+  //  m_driverController2.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
 
  //m_driverController.rightTrigger().whileTrue(m_CMDAlign);
-m_driverController2.y().whileTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kRaisedPosition), m_SUBArm));
-m_driverController2.a().whileTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kLowerPosition), m_SUBArm));
+m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kAmpPosition), m_SUBArm));
+m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kIntakePosition), m_SUBArm));
 //m_driverController2.x().whileFalse(AutoBuilder.pathfindToPose(new Pose2d))
 
   }

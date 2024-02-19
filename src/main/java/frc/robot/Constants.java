@@ -6,11 +6,17 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -177,30 +183,38 @@ public final class Constants {
     public static final int kFeederID = 9;
     public static final int kLauncherID = 10;
 
-    // Current limit for launcher and feed wheels
     public static final int kLauncherCurrentLimit = 80;
     public static final int kFeedCurrentLimit = 80;
 
     // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
     // in reverse
-    public static final double kLauncherSpeed = 0.25;
-    public static final double kLaunchFeederSpeed = 1;
-    public static final double kIntakeLauncherSpeed = -1;
-    public static final double kIntakeFeederSpeed = -.2;
+    public static final double kLauncherSpeed = 0.9;
+    public static final double kLaunchFeederSpeed = 0.9;
+    public static final double kIntakeLauncherSpeed = -1.5;
+    public static final double kIntakeFeederSpeed = -.5;
 
-    public static final double kLauncherDelay = 1.5;
+    public static final double kLauncherDelay = 0.5;
   }
   public static class ArmConstants {
-    public static final int kArmMotor1 = 6;
-    public static final int kArmMotor2 = 7;
-    public static final double kRaisedPosition = 1;
-    public static final double kLowerPosition = -1;
-    public static final double kP = 0.1;
+    public static final int kArmMotor1 = 9;
+    public static final int kArmMotor2 = 10;
+    public static final double kAmpPosition = 0.25;
+    public static final double kIntakePosition = 0;
+    public static final double kIntakeUpPosition = kIntakePosition + 0.5;
+    public static final double kSpeakerPosition = 0.125;
+    public static final double kInsidePosition = 0.2;
+    public static final double kP = 1.5;
     public static final double kI = 0;
     public static final double kD = 0;
+    public static final int kMotorCurrentLimit = 40; // amps
+    public static final double kIncrementAmount = 0.5;
+
 
 
   }
+
+
+
     public static class VisionConstants {
 
     public static final String APRILTAG_CAMERA_NAME = "PiCam";
@@ -218,4 +232,18 @@ public static final Transform3d ROBOT_TO_CAMERA = APRILTAG_CAMERA_TO_ROBOT.inver
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
 
   }
+
+    public static class Vision {
+    public static final String kCameraName = VisionConstants.APRILTAG_CAMERA_NAME;
+    // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+    public static final Transform3d kRobotToCam = VisionConstants.APRILTAG_CAMERA_TO_ROBOT;
+    // The layout of the AprilTags on the field
+    public static final AprilTagFieldLayout kTagLayout =
+            AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+
+    // The standard deviations of our vision estimated poses, which affect correction rate
+    // (Fake values. Experiment and determine estimation noise on an actual robot.)
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+}
 }

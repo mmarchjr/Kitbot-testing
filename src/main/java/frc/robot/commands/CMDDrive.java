@@ -43,7 +43,7 @@
 
    public CMDDrive() {
       //Use addRequirements() here to declare subsystem dependencies.
-     //addRequirements(RobotContainer.m_robotDrive);
+     addRequirements(RobotContainer.m_robotDrive);
    }
     //Called when the command is initially scheduled.
    @Override
@@ -80,8 +80,8 @@
       x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
       turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
     }
-   /*/ Determine if robot is at setpoint and needs to rotate to angle
-   /boolean isAtSetpoint = turnController.atSetpoint();
+   // Determine if robot is at setpoint and needs to rotate to angle
+   boolean isAtSetpoint = turnController.atSetpoint();
    if (isAtSetpoint && rotateToAngle) {
      rotateToAngle = false;
    } else if (!isAtSetpoint && rotateToAngle) {
@@ -90,17 +90,17 @@
      rotateToAngle = false;
    }
 
-    Adjust setpoint if turn value changes
+    //Adjust setpoint if turn value changes
    if (turn != pastTurn) {
      turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
    }
 
-    Adjust setpoint if "B" button is pressed
+    //Adjust setpoint if "B" button is pressed
    if (OIDriver1Controller.b().getAsBoolean()) {
      turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
    }
 
-    Adjust setpoint based on POV input
+    //Adjust setpoint based on POV input
    if (OIDriver1Controller.povUp().getAsBoolean()) {
      turnController.setSetpoint(0.0f);
      rotateToAngle = true;
@@ -115,7 +115,7 @@
      rotateToAngle = true;
    }
 
-    Calculate rotation rate based on setpoint and joystick input
+   // Calculate rotation rate based on setpoint and joystick input
    double currentRotationRate;
    if (rotateToAngle) {
      currentRotationRate = MathUtil.clamp(turnController.calculate(RobotContainer.m_robotDrive.getHeading()), -1, 1);
@@ -123,23 +123,23 @@
      currentRotationRate = -turn;
    }
 
-    Calculate rotation rate if turn value is 0
+    //Calculate rotation rate if turn value is 0
    if (turn == 0) {
      currentRotationRate = MathUtil.clamp(turnController.calculate(RobotContainer.m_robotDrive.getHeading()), -1, 1);
    }
- */
- double currentRotationRate = turn;
+ 
+ // currentRotationRate = turn;
     //Drive the robot based on joystick input and rotation rate
    if (y == 0 && x == 0 && turn == 0) { //&& isAtSetpoint) {
-   //  RobotContainer.m_robotDrive.setX();
+     RobotContainer.m_robotDrive.setX();
    } else {
-   //  RobotContainer.m_robotDrive.drive(
-   //      -y / 2,
-   //      -x / 2,
-   //      -currentRotationRate / 2,
-   //      RobotContainer.fieldOrientedChooser.getSelected(),
-   //      RobotContainer.rateLimitChooser.getSelected()
-   //  );
+     RobotContainer.m_robotDrive.drive(
+         -y / 2,
+         -x / 2,
+         currentRotationRate / 2,
+         RobotContainer.fieldOrientedChooser.getSelected(),
+         RobotContainer.rateLimitChooser.getSelected()
+     );
    }
 
     //Update past turn value
@@ -147,8 +147,8 @@
 
     //Reset gyro, adjust setpoint, and set rumble if "Y" button is pressed
    if (OIDriver1Controller.y().getAsBoolean()) {
-    // RobotContainer.m_robotDrive.resetGyro();
-    // turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
+     RobotContainer.m_robotDrive.resetGyro();
+     turnController.setSetpoint(RobotContainer.m_robotDrive.getHeading());
      OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble, 0.5);
    } else {
      OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble,0);
