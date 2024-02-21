@@ -6,6 +6,7 @@ import static frc.robot.Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -91,7 +92,6 @@ ShuffleboardTab tab = Shuffleboard.getTab("Vision");
         visionMeasurementStdDevs);
        tab.addString("Pose", this::getFomattedPose).withPosition(0, 0).withSize(2, 0);
     
-        tab.addBoolean("Has Targets", subVision::HasTargets);
    tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
     if (DriverStation.getAlliance().isPresent()) {
     if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
@@ -105,13 +105,12 @@ ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 
   @Override
   public void periodic() {
-    var pose = subVision.getEstimatedGlobalPose();
-    if (pose.isPresent() && !pose.isEmpty()){
-      poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
-    }
-    poseEstimator.update(Rotation2d.fromDegrees(drivetrainSubsystem.getHeading()),drivetrainSubsystem.getPosition());
-    //Logger.recordOutput("guess pose", poseEstimator.getEstimatedPosition());
-    field2d.setRobotPose(new Pose2d(getCurrentPose().getX(),getCurrentPose().getY(),getCurrentPose().getRotation()));
+     var pose = subVision.getEstimatedGlobalPose();
+     if (pose.isPresent() && !pose.isEmpty()){
+     poseEstimator.addVisionMeasurement(pose.get().estimatedPose.toPose2d(), pose.get().timestampSeconds);
+     }
+     poseEstimator.update(Rotation2d.fromDegrees(drivetrainSubsystem.getHeading()), drivetrainSubsystem.getPosition());
+     field2d.setRobotPose(getCurrentPose());
   }
 
   private String getFomattedPose() {

@@ -11,12 +11,14 @@
  import frc.robot.subsystems.SUBShooter;
 
  public class CMDShooter extends Command {
-   SUBShooter m_SubShooter = new SUBShooter();
+   SUBShooter m_SubShooter;
    public static CommandXboxController xbox = new CommandXboxController(OIConstants.kDriverControllerPort);
   /** Creates a new CMDShooter. */
-   public CMDShooter() {
+   public CMDShooter(SUBShooter sub) {
     // addRequirements(RobotContainer.m_SUBShooter);
-     // Use addRequirements() here to declare subsystem dependencies.
+     // Use addRequirements() here to declare subsystem dependencies.\
+     addRequirements(sub);
+     this.m_SubShooter = sub;
    }
 
    // Called when the command is initially scheduled.

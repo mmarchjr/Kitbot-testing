@@ -8,21 +8,29 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.LauncherConstants.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SUBShooter extends SubsystemBase {
-  WPI_TalonSRX m_launchWheel;
-  WPI_TalonSRX m_feedWheel;
+  CANSparkMax m_launchWheel1;
+  CANSparkMax m_launchWheel2;
+
+  CANSparkMax m_feedWheel;
 
   /** Creates a new Launcher. */
   public SUBShooter() {
-    m_launchWheel = new WPI_TalonSRX(kLauncherID);
-    m_feedWheel = new WPI_TalonSRX(kFeederID);
+    m_launchWheel1 = new CANSparkMax(kLauncherID1,MotorType.kBrushless);
+    m_launchWheel2 = new CANSparkMax(kLauncherID2,MotorType.kBrushless);
 
-    m_launchWheel.configContinuousCurrentLimit(kLauncherCurrentLimit);
-    m_feedWheel.configContinuousCurrentLimit(kFeedCurrentLimit);
+    m_feedWheel = new CANSparkMax(kFeederID,MotorType.kBrushless);
+
+    m_launchWheel1.setSmartCurrentLimit(kLauncherCurrentLimit);
+    m_feedWheel.setSmartCurrentLimit(kFeedCurrentLimit);
+    m_launchWheel2.follow(m_launchWheel1);
+    m_launchWheel2.setInverted(false);
   }
 
   /**
@@ -62,7 +70,7 @@ public class SUBShooter extends SubsystemBase {
   }
   // An accessor method to set the speed (technically the output percentage) of the launch wheel
   public void setLaunchWheel(double speed) {
-    m_launchWheel.set(speed);
+    m_launchWheel1.set(speed);
   }
 
   // An accessor method to set the speed (technically the output percentage) of the feed wheel
@@ -73,7 +81,7 @@ public class SUBShooter extends SubsystemBase {
   // A helper method to stop both wheels. You could skip having a method like this and call the
   // individual accessors with speed = 0 instead
   public void stop() {
-    m_launchWheel.set(0);
+    m_launchWheel1.set(0);
     m_feedWheel.set(0);
   }
 }

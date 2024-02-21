@@ -8,6 +8,7 @@ import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -56,11 +57,12 @@ public class RobotContainer {
    //The robot's subsystems
    public final static DriveSubsystem m_robotDrive = new DriveSubsystem();
     public static final CMDDrive driveRobotCommand = new CMDDrive();
-    //public static final SUBShooter m_SUBShooter = new SUBShooter();
-    //public static final CMDShooter m_CMDShooter = new CMDShooter();
+    public static final SUBShooter m_SUBShooter = new SUBShooter();
+    public static final CMDShooter m_CMDShooter = new CMDShooter(m_SUBShooter);
     public static final SUBVision m_SUBVision = new SUBVision();
     public static final SUBArm m_SUBArm = new SUBArm();
     public static final CMDArm m_CMDArm = new CMDArm(m_SUBArm);
+    public static final PathConstraints pathconstraints = new PathConstraints(5, 3, 360, 15);
 
       //public static final photonPose m_subPhoton = new photonPose();
 
@@ -88,31 +90,31 @@ public class RobotContainer {
     //m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("2 note auto").getPreviewStartingHolonomicPose());
     
 
-    // AutoBuilder.configureHolonomic(
-    //         m_robotDrive::getPose,  //Robot pose supplier
-    //              m_robotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-    //              m_robotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //              m_robotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    //         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-    //                 new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-    //                 new PIDConstants(12, 0.0, 0.0),//  Rotation PID constants
-    //                3,//  Max module speed, in m/s
-    //                      Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
-    //                      new ReplanningConfig() // Default path replanning config. See the API for the options here
-    //              ),
-    //         () -> {
-    //           // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //           // This will flip the path being followed to the red side of the field.
-    //           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+     AutoBuilder.configureHolonomic(
+             poseEstimator::getCurrentPose,  //Robot pose supplier
+                  poseEstimator::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                  m_robotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                  m_robotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                     new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
+                     new PIDConstants(12, 0.0, 0.0),//  Rotation PID constants
+                    3,//  Max module speed, in m/s
+                          Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
+                          new ReplanningConfig() // Default path replanning config. See the API for the options here
+                  ),
+             () -> {
+               // Boolean supplier that controls when the path will be mirrored for the red alliance
+               // This will flip the path being followed to the red side of the field.
+               // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //           var alliance = DriverStation.getAlliance();
-    //           if (alliance.isPresent()) {
-    //             return alliance.get() == DriverStation.Alliance.Red;
-    //           }
-    //           return false;
-    //         },
-    //         m_robotDrive // Reference to this subsystem to set requirements
-    // );
+               var alliance = DriverStation.getAlliance();
+               if (alliance.isPresent()) {
+                 return alliance.get() == DriverStation.Alliance.Red;
+               }
+              return false;
+             },
+             m_robotDrive // Reference to this subsystem to set requirements
+     );
 
 
      // Configure the button bindings
@@ -138,7 +140,7 @@ public class RobotContainer {
    //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
     //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
-    //m_SUBShooter.setDefaultCommand(m_CMDShooter);
+    m_SUBShooter.setDefaultCommand(m_CMDShooter);
      m_robotDrive.setDefaultCommand(
        //   The left stick controls translation of the robot.
        //   Turning is controlled by the X axis of the right stick.
@@ -152,6 +154,10 @@ public class RobotContainer {
              m_robotDrive));*/
             driveRobotCommand);
   m_SUBArm.setDefaultCommand(m_CMDArm);
+  poseEstimator.register();
+  m_SUBVision.register();
+  m_SUBVision.periodic();
+  poseEstimator.periodic();
   }
 
   /**
@@ -171,17 +177,20 @@ public class RobotContainer {
 
 
 
-      //     m_driverController2
-      //  .rightBumper()
-      //  .whileTrue(
-      //      new PrepareLaunch(m_SUBShooter)
-      //          .withTimeout(LauncherConstants.kLauncherDelay)
-      //          .andThen(new LaunchNote(m_SUBShooter))
-      //          .handleInterrupt(() -> m_SUBShooter.stop()));
+ //          m_driverController2
+ //       .rightBumper()
+ //       .whileTrue(
+ //           new PrepareLaunch(m_SUBShooter)
+ //               .withTimeout(LauncherConstants.kLauncherDelay)
+ //               .andThen(new LaunchNote(m_SUBShooter))
+ //               .handleInterrupt(() -> m_SUBShooter.stop()));
 
-  //  m_driverController2.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
+  //m_driverController2.leftBumper().whileTrue(new RunCommand(()->m_SUBShooter.setFeedWheel(-0.1),m_SUBShooter));
+  //m_driverController2.leftTrigger().whileTrue(new RunCommand(()->m_SUBShooter.setFeedWheel(0.1),m_SUBShooter));
+  //m_driverController2.rightBumper().whileTrue(new RunCommand(()->m_SUBShooter.setLaunchWheel(-1),m_SUBShooter));
+  //m_driverController2.rightTrigger().whileTrue(new RunCommand(()->m_SUBShooter.setLaunchWheel(1),m_SUBShooter));
 
- //m_driverController.rightTrigger().whileTrue(m_CMDAlign);
+ m_driverController.rightTrigger(0.1).whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), pathconstraints));
 m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kAmpPosition), m_SUBArm));
 m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kIntakePosition), m_SUBArm));
 //m_driverController2.x().whileFalse(AutoBuilder.pathfindToPose(new Pose2d))
@@ -195,6 +204,6 @@ m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConst
    */
   public Command getAutonomousCommand() {
      //   m_robotDrive.resetOdometry(PathPlannerPath.fromPathFile("box").getPreviewStartingHolonomicPose());
-      return AutoBuilder.buildAuto("box");
+      return AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), pathconstraints);
     }
 }

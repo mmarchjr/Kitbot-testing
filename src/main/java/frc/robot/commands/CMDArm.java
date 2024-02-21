@@ -30,11 +30,14 @@ public class CMDArm extends Command {
   @Override
   public void execute() {
 if (xbox.povUp().getAsBoolean()) {
-      SUBArm.setPosition(SUBArm.getPosition()+ArmConstants.kIncrementAmount);
+      SUBArm.changePosition(1);
+      //SUBArm.setPosition(SUBArm.getPosition()+ArmConstants.kIncrementAmount);
     } else if (xbox.povDown().getAsBoolean()) {
-      SUBArm.setPosition(SUBArm.getPosition()-ArmConstants.kIncrementAmount);
+            SUBArm.changePosition(-1);
+      //SUBArm.setPosition(SUBArm.getPosition()-ArmConstants.kIncrementAmount);
     } else {
-      SUBArm.setPosition(pos);
+      //SUBArm.setPosition(pos);
+      SUBArm.changePosition(0);
     }
 
   }

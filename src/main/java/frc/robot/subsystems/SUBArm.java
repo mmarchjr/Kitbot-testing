@@ -99,6 +99,12 @@ armMotor2.setIdleMode(IdleMode.kBrake);
     m_turningPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     //armMotor1.set(-position);
   }
+   public void changePosition(double position){
+    //setpoint = position; 
+    //double motorPower = pid.calculate(encoder.getPosition(), setpoint);
+    //m_turningPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
+    armMotor1.set(position);
+  }
     public double getPosition(){
       return setpoint;
   }
