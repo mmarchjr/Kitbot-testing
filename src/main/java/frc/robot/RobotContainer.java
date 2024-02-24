@@ -207,7 +207,9 @@ public class RobotContainer {
  //m_driverController.rightTrigger(0.1).whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), pathconstraints));
 m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kAmpPosition), m_SUBArm));
 m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kIntakePosition), m_SUBArm));
-m_driverController2.b().whileTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kSpeakerPosition),m_SUBArm).withTimeout(1).andThen(m_SUBShooter.getLaunchCommand()));
+//m_driverController2.b().whileTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kSpeakerPosition),m_SUBArm).withTimeout(1).andThen(m_SUBShooter.getLaunchCommand()).withTimeout(1));
+m_driverController2.x().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kHoldPosition), m_SUBArm));
+m_driverController2.b().onTrue(new RunCommand(()-> m_SUBArm.setPosition(Units.degreesToRotations(55)), m_SUBArm));
 
   }
 

@@ -203,12 +203,13 @@ public final class Constants {
     public static final double kAmpPosition = Units.degreesToRotations(75);//80 is top
     public static final double kIntakePosition = Units.degreesToRotations(-3);
     public static final double kIntakeUpPosition = kIntakePosition + 0.5;
-    public static final double kSpeakerPosition = Units.degreesToRotations(45/2);
+    public static final double kSpeakerPosition = Units.degreesToRotations(20);
     public static final double kInsidePosition = 0.2;
+    public static final double kHoldPosition = Units.degreesToRotations(10);
     public static final double kP = 4.1;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final int kMotorCurrentLimit = 40; // amps
+    public static final int kMotorCurrentLimit = 30; // amps
     public static final double kIncrementAmount = 0.5;
 
 

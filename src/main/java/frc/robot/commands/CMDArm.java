@@ -29,16 +29,17 @@ public class CMDArm extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-if (xbox.povUp().getAsBoolean()) {
-      SUBArm.changePosition(1);
-      //SUBArm.setPosition(SUBArm.getPosition()+ArmConstants.kIncrementAmount);
-    } else if (xbox.povDown().getAsBoolean()) {
-            SUBArm.changePosition(-1);
-      //SUBArm.setPosition(SUBArm.getPosition()-ArmConstants.kIncrementAmount);
-    } else {
-      //SUBArm.setPosition(pos);
-      SUBArm.changePosition(0);
-    }
+// if (xbox.povUp().getAsBoolean()) {
+//       SUBArm.changePosition(1);
+//       //SUBArm.setPosition(SUBArm.getPosition()+ArmConstants.kIncrementAmount);
+//     } else if (xbox.povDown().getAsBoolean()) {
+//             SUBArm.changePosition(-1);
+//       //SUBArm.setPosition(SUBArm.getPosition()-ArmConstants.kIncrementAmount);
+//     } else {
+//       //SUBArm.setPosition(pos);
+//       SUBArm.changePosition(0);
+//     }
+//SUBArm.setPosition(ArmConstants.kHoldPosition);
 
   }
 

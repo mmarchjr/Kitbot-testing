@@ -32,8 +32,8 @@
     double launchvalue= 0;
     if (xbox.leftTrigger().getAsBoolean()) {feedvalue=0.5;}
     if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5;}
-    if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.25;}
-    if (xbox.rightBumper().getAsBoolean()) {launchvalue=-0.25;}
+   // if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.25;}
+   // if (xbox.rightBumper().getAsBoolean()) {launchvalue=-0.25;}
 
      m_SubShooter.setLaunchWheel(launchvalue);
      m_SubShooter.setFeedWheel(feedvalue);
