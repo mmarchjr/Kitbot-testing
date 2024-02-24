@@ -200,12 +200,12 @@ public final class Constants {
   public static class ArmConstants {
     public static final int kArmMotor1 = 9;
     public static final int kArmMotor2 = 10;
-    public static final double kAmpPosition = 0.25;
-    public static final double kIntakePosition = 0;
+    public static final double kAmpPosition = Units.degreesToRotations(75);//80 is top
+    public static final double kIntakePosition = Units.degreesToRotations(-3);
     public static final double kIntakeUpPosition = kIntakePosition + 0.5;
-    public static final double kSpeakerPosition = 0.125;
+    public static final double kSpeakerPosition = Units.degreesToRotations(45/2);
     public static final double kInsidePosition = 0.2;
-    public static final double kP = 1.5;
+    public static final double kP = 4.1;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final int kMotorCurrentLimit = 40; // amps
@@ -223,8 +223,8 @@ public final class Constants {
 
     /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
-        new Translation3d(0,0,0),//Units.inchesToMeters(17.5)),
-        new Rotation3d(0.0, 0, 0));
+        new Translation3d(Units.inchesToMeters(14),0,Units.inchesToMeters(10)),//Units.inchesToMeters(17.5)),
+        new Rotation3d(0.0, 15, 0));
     
     public static final double FIELD_LENGTH_METERS = 16.54175;
     public static final double FIELD_WIDTH_METERS = 8.0137;

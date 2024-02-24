@@ -73,6 +73,10 @@ public class RobotContainer {
   
     public static SendableChooser<Boolean> fieldOrientedChooser = new SendableChooser<Boolean>();
     public static SendableChooser<String> controlChooser = new SendableChooser<String>();
+    public enum RobotMode {
+      KitBot, CompBot
+    }
+    public static SendableChooser<RobotMode> robotChooser = new SendableChooser<RobotMode>();
 
   
     public static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
@@ -131,12 +135,16 @@ public class RobotContainer {
     rateLimitChooser.addOption("True", true);
     controlChooser.setDefaultOption("Drone", "drone");
     controlChooser.addOption("Game", "game");
+    robotChooser.setDefaultOption("Main Comp", RobotMode.CompBot);
+    robotChooser.addOption("KitBot", RobotMode.KitBot);
 
     SmartDashboard.putData("Rate limit",rateLimitChooser);
     SmartDashboard.putData("Field oriented",fieldOrientedChooser);
     SmartDashboard.putData("Controls", controlChooser);
+    SmartDashboard.putData("Robot Select", robotChooser);
+    m_SUBShooter.init();
 
-    configureButtonBindings();
+
    //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
     //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
@@ -158,6 +166,8 @@ public class RobotContainer {
   m_SUBVision.register();
   m_SUBVision.periodic();
   poseEstimator.periodic();
+  configureButtonBindings();
+
   }
 
   /**
@@ -176,24 +186,28 @@ public class RobotContainer {
               m_robotDrive));
 
 
+//if (robotChooser.getSelected() == RobotMode.KitBot) {
+      //        m_driverController2
+      //  .rightBumper()
+      //   .whileTrue(
+      //       new PrepareLaunch(m_SUBShooter)
+      //           .withTimeout(LauncherConstants.kLauncherDelay)
+      //           .andThen(new LaunchNote(m_SUBShooter))
+      //           .handleInterrupt(() -> m_SUBShooter.stop()));
+      //           m_driverController2.leftBumper().whileTrue(m_SUBShooter.getIntakeCommand());
 
- //          m_driverController2
- //       .rightBumper()
- //       .whileTrue(
- //           new PrepareLaunch(m_SUBShooter)
- //               .withTimeout(LauncherConstants.kLauncherDelay)
- //               .andThen(new LaunchNote(m_SUBShooter))
- //               .handleInterrupt(() -> m_SUBShooter.stop()));
+//}
 
-  //m_driverController2.leftBumper().whileTrue(new RunCommand(()->m_SUBShooter.setFeedWheel(-0.1),m_SUBShooter));
-  //m_driverController2.leftTrigger().whileTrue(new RunCommand(()->m_SUBShooter.setFeedWheel(0.1),m_SUBShooter));
-  //m_driverController2.rightBumper().whileTrue(new RunCommand(()->m_SUBShooter.setLaunchWheel(-1),m_SUBShooter));
-  //m_driverController2.rightTrigger().whileTrue(new RunCommand(()->m_SUBShooter.setLaunchWheel(1),m_SUBShooter));
 
- m_driverController.rightTrigger(0.1).whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), pathconstraints));
+ // m_driverController2.leftBumper().whileTrue(new RunCommand(()->m_SUBShooter.setFeedWheel(-0.5),m_SUBShooter));
+ // m_driverController2.leftTrigger().whileTrue(new RunCommand(()->m_SUBShooter.setFeedWheel(0.5),m_SUBShooter));
+  //m_driverController2.rightBumper().whileTrue(new RunCommand(()->m_SUBShooter.setLaunchWheel(-0.25),m_SUBShooter));
+  //m_driverController2.rightTrigger().whileTrue(new RunCommand(()->m_SUBShooter.setLaunchWheel(0.25),m_SUBShooter));
+
+ //m_driverController.rightTrigger(0.1).whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), pathconstraints));
 m_driverController2.y().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kAmpPosition), m_SUBArm));
 m_driverController2.a().onTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kIntakePosition), m_SUBArm));
-//m_driverController2.x().whileFalse(AutoBuilder.pathfindToPose(new Pose2d))
+m_driverController2.b().whileTrue(new RunCommand(()-> m_SUBArm.setPosition(ArmConstants.kSpeakerPosition),m_SUBArm).withTimeout(1).andThen(m_SUBShooter.getLaunchCommand()));
 
   }
 

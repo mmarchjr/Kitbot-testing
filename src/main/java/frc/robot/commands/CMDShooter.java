@@ -12,7 +12,7 @@
 
  public class CMDShooter extends Command {
    SUBShooter m_SubShooter;
-   public static CommandXboxController xbox = new CommandXboxController(OIConstants.kDriverControllerPort);
+   public static CommandXboxController xbox = new CommandXboxController(OIConstants.kDriverControllerPort2);
   /** Creates a new CMDShooter. */
    public CMDShooter(SUBShooter sub) {
     // addRequirements(RobotContainer.m_SUBShooter);
@@ -29,10 +29,13 @@
    @Override
   public void execute() {
     double feedvalue = 0;
-    if (xbox.getHID().getRightBumper()) {feedvalue=feedvalue+0.2;}
-     if (xbox.getHID().getLeftBumper()) {feedvalue=feedvalue-0.2;}
+    double launchvalue= 0;
+    if (xbox.leftTrigger().getAsBoolean()) {feedvalue=0.5;}
+    if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5;}
+    if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.25;}
+    if (xbox.rightBumper().getAsBoolean()) {launchvalue=-0.25;}
 
-     m_SubShooter.setLaunchWheel(xbox.getRightTriggerAxis()-xbox.getLeftTriggerAxis());
+     m_SubShooter.setLaunchWheel(launchvalue);
      m_SubShooter.setFeedWheel(feedvalue);
   }
 

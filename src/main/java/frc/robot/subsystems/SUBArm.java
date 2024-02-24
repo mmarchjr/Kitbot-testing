@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.utils.UniMotor;
+import frc.utils.UniMotor.UniMotorType;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
@@ -26,9 +28,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 public class SUBArm extends SubsystemBase {
   
   /** Creates a new SUBArm. */
-   public CANSparkMax armMotor1 = new CANSparkMax(Constants.ArmConstants.kArmMotor1, MotorType.kBrushless);
-   CANSparkMax armMotor2 = new CANSparkMax(Constants.ArmConstants.kArmMotor2, MotorType.kBrushless);
-   AbsoluteEncoder encoder = armMotor1.getAbsoluteEncoder(Type.kDutyCycle);
+   public UniMotor armMotor1 = new UniMotor(Constants.ArmConstants.kArmMotor1, UniMotorType.SparkMAX);
+   UniMotor armMotor2 = new UniMotor(Constants.ArmConstants.kArmMotor2, UniMotorType.SparkMAX);
+   AbsoluteEncoder encoder = armMotor1.sparkMax.getAbsoluteEncoder(Type.kDutyCycle);
    double setpoint = ArmConstants.kIntakePosition;
    SparkPIDController m_turningPIDController;
 
@@ -38,14 +40,14 @@ public class SUBArm extends SubsystemBase {
   ) {
 
 
-    armMotor1.restoreFactoryDefaults();
+    armMotor1.sparkMax.restoreFactoryDefaults();
     armMotor1.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
     armMotor2.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
-    m_turningPIDController = armMotor1.getPIDController();
+    m_turningPIDController = armMotor1.sparkMax.getPIDController();
     m_turningPIDController.setFeedbackDevice(encoder);
-    m_turningPIDController.setOutputRange(-0.2,0.2);
+    m_turningPIDController.setOutputRange(-1,1);
 
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,
@@ -78,17 +80,17 @@ public class SUBArm extends SubsystemBase {
     m_turningPIDController.setD(ArmConstants.kD);
     m_turningPIDController.setFF(ModuleConstants.kTurningFF);
 
-    armMotor1.setIdleMode(ModuleConstants.kTurningMotorIdleMode);
+    armMotor1.sparkMax.setIdleMode(ModuleConstants.kTurningMotorIdleMode);
     armMotor1.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
 
     // Save the SPARK MAX configurations. If a SPARK MAX browns out during
     // operation, it will maintain the above configurations.
-    armMotor1.burnFlash();
+    armMotor1.sparkMax.burnFlash();
 
 
 armMotor2.follow(armMotor1);
-armMotor1.setIdleMode(IdleMode.kBrake);
-armMotor2.setIdleMode(IdleMode.kBrake);
+armMotor1.sparkMax.setIdleMode(IdleMode.kBrake);
+armMotor2.sparkMax.setIdleMode(IdleMode.kBrake);
 
 
   }

@@ -134,9 +134,9 @@
      RobotContainer.m_robotDrive.setX();
    } else {
      RobotContainer.m_robotDrive.drive(
-         -y / 2,
-         -x / 2,
-         currentRotationRate / 2,
+         -y *0.8,
+         -x * 0.8,
+         currentRotationRate *0.8,
          RobotContainer.fieldOrientedChooser.getSelected(),
          RobotContainer.rateLimitChooser.getSelected()
      );
