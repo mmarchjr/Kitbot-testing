@@ -35,9 +35,9 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 
-public class PoseEstimatorSubsystem extends SubsystemBase {
+public class SUBPoseEstimator extends SubsystemBase {
 
-  private final DriveSubsystem drivetrainSubsystem;
+  private final SUBDrive drivetrainSubsystem;
   private final AprilTagFieldLayout aprilTagFieldLayout;
   private final SUBVision subVision;
   
@@ -67,7 +67,7 @@ ShuffleboardTab tab = Shuffleboard.getTab("Vision");
   private double previousPipelineTimestamp = 0;
   private PhotonPoseEstimator poseEstimator2;
 
-  public PoseEstimatorSubsystem( DriveSubsystem drivetrainSubsystem, SUBVision photonCamera) {
+  public SUBPoseEstimator( SUBDrive drivetrainSubsystem, SUBVision photonCamera) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     AprilTagFieldLayout layout;
     this.subVision = photonCamera;

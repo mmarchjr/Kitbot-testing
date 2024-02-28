@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.PoseEstimatorSubsystem;
+import frc.robot.subsystems.SUBPoseEstimator;
 import frc.robot.subsystems.SUBVision;
 
 public class CMDAlign extends Command {
   /** Creates a new CMDAlign. */
-  PoseEstimatorSubsystem pose;
-  public CMDAlign(PoseEstimatorSubsystem pose) {
+  SUBPoseEstimator pose;
+  public CMDAlign(SUBPoseEstimator pose) {
     this.pose = pose;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(pose);

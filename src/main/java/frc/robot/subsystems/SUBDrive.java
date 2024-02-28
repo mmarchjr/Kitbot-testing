@@ -29,28 +29,28 @@ import frc.utils.SwerveUtils;
 
  
 
- public class DriveSubsystem extends SubsystemBase {
+ public class SUBDrive extends SubsystemBase {
    // Create MAXSwerveModules
    public final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
 
  
-   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+   private final SUBMAXSwerveModule m_frontLeft = new SUBMAXSwerveModule(
        DriveConstants.kFrontLeftDrivingCanId,
        DriveConstants.kFrontLeftTurningCanId,
        DriveConstants.kFrontLeftChassisAngularOffset);
 
-   private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+   private final SUBMAXSwerveModule m_frontRight = new SUBMAXSwerveModule(
        DriveConstants.kFrontRightDrivingCanId,
        DriveConstants.kFrontRightTurningCanId,
        DriveConstants.kFrontRightChassisAngularOffset);
 
-   private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
+   private final SUBMAXSwerveModule m_rearLeft = new SUBMAXSwerveModule(
        DriveConstants.kRearLeftDrivingCanId,
        DriveConstants.kRearLeftTurningCanId,
        DriveConstants.kBackLeftChassisAngularOffset);
 
-   private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
+   private final SUBMAXSwerveModule m_rearRight = new SUBMAXSwerveModule(
        DriveConstants.kRearRightDrivingCanId,
        DriveConstants.kRearRightTurningCanId,
        DriveConstants.kBackRightChassisAngularOffset);
@@ -81,7 +81,7 @@ import frc.utils.SwerveUtils;
         private Field2d m_field = new Field2d();
 
    /** Creates a new DriveSubsystem. */
-   public DriveSubsystem() {
+   public SUBDrive() {
         SmartDashboard.putData("Field", m_field);
 
    }

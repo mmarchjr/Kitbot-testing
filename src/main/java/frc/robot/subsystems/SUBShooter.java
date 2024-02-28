@@ -7,10 +7,6 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.LauncherConstants.*;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -27,17 +23,14 @@ public class SUBShooter extends SubsystemBase {
   UniMotor m_feedWheel;
 
   /** Creates a new Launcher. */
-  public SUBShooter() {
+  public SUBShooter() {}
 
-
-  }
   public void init () {
-        if (RobotContainer.robotChooser.getSelected() == RobotMode.CompBot) {
-        m_launchWheel1 = new UniMotor(kLauncherID1,UniMotorType.SparkMAX);
-        m_launchWheel2 = new UniMotor(kLauncherID2,UniMotorType.SparkMAX);
-        m_feedWheel = new UniMotor(kFeederID,UniMotorType.SparkMAX);
-
-    } else if (RobotContainer.robotChooser.getSelected() == RobotMode.KitBot) {
+    if (RobotContainer.getRobotMode() == RobotMode.CompBot) {
+      m_launchWheel1 = new UniMotor(kLauncherID1,UniMotorType.SparkMAX);
+      m_launchWheel2 = new UniMotor(kLauncherID2,UniMotorType.SparkMAX);
+      m_feedWheel = new UniMotor(kFeederID,UniMotorType.SparkMAX);
+    } else if (RobotContainer.getRobotMode() == RobotMode.KitBot) {
       m_launchWheel1 = new UniMotor(kLauncherID1, UniMotorType.TalonSRX);
       m_launchWheel2 = new UniMotor(kLauncherID2,UniMotorType.TalonSRX);
       m_feedWheel = new UniMotor(kFeederID,UniMotorType.TalonSRX);
@@ -64,45 +57,48 @@ public class SUBShooter extends SubsystemBase {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
     return this.startEnd(
-        // When the command is initialized, set the wheels to the intake speed values
-        () -> {
-          setFeedWheel(kIntakeFeederSpeed);
-          setLaunchWheel(kIntakeLauncherSpeed);
-        },
-        // When the command stops, stop the wheels
-        () -> {
-          stop();
-        });
+      // When the command is initialized, set the wheels to the intake speed values
+      () -> {
+        setFeedWheel(kIntakeFeederSpeed);
+        setLaunchWheel(kIntakeLauncherSpeed);
+      },
+      // When the command stops, stop the wheels
+      () -> {
+        stop();
+      }
+    );
   }
 
 public Command getIdleCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
     return this.startEnd(
-        // When the command is initialized, set the wheels to the intake speed values
-        () -> {
-          setFeedWheel(kIntakeFeederSpeed);
-          setLaunchWheel(kIntakeLauncherSpeed);
-        },
-        // When the command stops, stop the wheels
-        () -> {
-          stop();
-        });
+      // When the command is initialized, set the wheels to the intake speed values
+      () -> {
+        setFeedWheel(kIntakeFeederSpeed);
+        setLaunchWheel(kIntakeLauncherSpeed);
+      },
+      // When the command stops, stop the wheels
+      () -> {
+        stop();
+      }
+    );
   }
 
   public Command getLaunchCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
     return this.startEnd(
-        // When the command is initialized, set the wheels to the intake speed values
-        () -> {
-          setFeedWheel(0);
-          setLaunchWheel(0);
-        },
-        // When the command stops, stop the wheels
-        () -> {
-          stop();
-        });
+      // When the command is initialized, set the wheels to the intake speed values
+      () -> {
+        setFeedWheel(0);
+        setLaunchWheel(0);
+      },
+      // When the command stops, stop the wheels
+      () -> {
+        stop();
+      }
+    );
   }
   // An accessor method to set the speed (technically the output percentage) of the launch wheel
   public void setLaunchWheel(double speed) {

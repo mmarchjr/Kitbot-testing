@@ -50,7 +50,7 @@ public final class Constants {
     }
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8;
+    public static final double kMaxSpeedMetersPerSecond = 4.6;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -62,12 +62,12 @@ public final class Constants {
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(25.5);
     // Distance between front and back wheels on robot
-    public static final SwerveDriveKinematics kDriveKinematics =
-        new SwerveDriveKinematics(
-            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+      new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+      new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+      new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+      new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
+    );
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = Units.degreesToRadians(-90);
@@ -105,23 +105,20 @@ public final class Constants {
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the
     // bevel pinion
-    public static final double kDrivingMotorReduction =
-        (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
-    public static final double kDriveWheelFreeSpeedRps =
-        (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) / kDrivingMotorReduction;
+    public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
+    public static final double kDriveWheelFreeSpeedRps = 
+      (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) / kDrivingMotorReduction;
 
-    public static final double kDrivingEncoderPositionFactor =
-        (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
+    public static final double kDrivingEncoderPositionFactor = 
+      (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
     public static final double kDrivingEncoderVelocityFactor =
-        ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction) / 60.0; // meters per second
+      ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction) / 60.0; // meters per second
 
     public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
-    public static final double kTurningEncoderVelocityFactor =
-        (2 * Math.PI) / 60.0; // radians per second
+    public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
 
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
-    public static final double kTurningEncoderPositionPIDMaxInput =
-        kTurningEncoderPositionFactor; // radians
+    public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
     public static final double kDrivingP = 0.04;
     public static final double kDrivingI = 0;
@@ -141,7 +138,7 @@ public final class Constants {
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
     //setting the driving motor current limit will be an in-season project, for now 50A is an ok default
-    public static final int kDrivingMotorCurrentLimit = 50; // amps
+    public static final int kDrivingMotorCurrentLimit = 45; // amps
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
@@ -149,7 +146,6 @@ public final class Constants {
     private OIConstants(){}
     public static final int kDriverControllerPort = 0;
     public static final int kDriverControllerPort2 = 1;
-
     public static final double kDriveDeadband = 0.1;
   }
 
@@ -170,8 +166,9 @@ public final class Constants {
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-        new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+      new TrapezoidProfile.Constraints(
+        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
+      );
   }
 
   public static final class NeoMotorConstants {
@@ -183,8 +180,6 @@ public final class Constants {
     public static final int kFeederID = 11;
     public static final int kLauncherID1 = 12;
     public static final int kLauncherID2 = 13;
-
-
     public static final int kLauncherCurrentLimit = 80;
     public static final int kFeedCurrentLimit = 80;
 
@@ -194,9 +189,9 @@ public final class Constants {
     public static final double kLaunchFeederSpeed = 0.9;
     public static final double kIntakeLauncherSpeed = -1.5;
     public static final double kIntakeFeederSpeed = -.5;
-
     public static final double kLauncherDelay = 0.5;
   }
+
   public static class ArmConstants {
     public static final int kArmMotor1 = 9;
     public static final int kArmMotor2 = 10;
@@ -211,42 +206,38 @@ public final class Constants {
     public static final double kD = 0;
     public static final int kMotorCurrentLimit = 30; // amps
     public static final double kIncrementAmount = 0.5;
-
-
-
   }
 
 
 
-    public static class VisionConstants {
+  public static class VisionConstants {
 
     public static final String APRILTAG_CAMERA_NAME = "PiCam";
 
     /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
-        new Translation3d(Units.inchesToMeters(14),0,Units.inchesToMeters(10)),//Units.inchesToMeters(17.5)),
-        new Rotation3d(0.0, 15, 0));
+      new Translation3d(Units.inchesToMeters(14),0,Units.inchesToMeters(10)),//Units.inchesToMeters(17.5)),
+      new Rotation3d(0.0, 20, 0)
+    );
     
     public static final double FIELD_LENGTH_METERS = 16.54175;
     public static final double FIELD_WIDTH_METERS = 8.0137;
-public static final Transform3d ROBOT_TO_CAMERA = APRILTAG_CAMERA_TO_ROBOT.inverse();
+    public static final Transform3d ROBOT_TO_CAMERA = APRILTAG_CAMERA_TO_ROBOT.inverse();
 
     /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
-
   }
 
-    public static class Vision {
+  public static class Vision {
     public static final String kCameraName = VisionConstants.APRILTAG_CAMERA_NAME;
     // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d kRobotToCam = VisionConstants.APRILTAG_CAMERA_TO_ROBOT;
     // The layout of the AprilTags on the field
-    public static final AprilTagFieldLayout kTagLayout =
-            AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+    public static final AprilTagFieldLayout kTagLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-}
+  }
 }

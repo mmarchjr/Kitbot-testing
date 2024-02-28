@@ -25,14 +25,14 @@ import edu.wpi.first.wpilibj.RobotState;
 /**
  * Runnable that gets AprilTag data from PhotonVision.
  */
-public class PhotonRunnable implements Runnable {
+public class SUBPhotonRunnable implements Runnable {
 
   private final PhotonPoseEstimator photonPoseEstimator;
   private final BiConsumer<Pose2d, Double> poseConsumer;
   private final RawSubscriber rawBytesSubscriber;
   private final Packet packet = new Packet(1);
 
-  public PhotonRunnable(String cameraName, BiConsumer<Pose2d, Double> poseConsumer) {
+  public SUBPhotonRunnable(String cameraName, BiConsumer<Pose2d, Double> poseConsumer) {
     this.poseConsumer = poseConsumer;
     var cameraTable = NetworkTableInstance.getDefault().getTable("photonvision").getSubTable(cameraName);
     rawBytesSubscriber = cameraTable.getRawTopic("rawBytes")
