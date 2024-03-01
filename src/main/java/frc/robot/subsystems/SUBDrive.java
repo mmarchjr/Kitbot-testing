@@ -4,7 +4,11 @@
 
  package frc.robot.subsystems;
 
- import edu.wpi.first.math.filter.SlewRateLimiter;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
  import edu.wpi.first.math.geometry.Pose2d;
  import edu.wpi.first.math.geometry.Rotation2d;
  import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -15,34 +19,43 @@
  import edu.wpi.first.util.WPIUtilJNI;
  import edu.wpi.first.wpilibj.ADIS16470_IMU;
  import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
- import frc.robot.Constants.DriveConstants;
- import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.utils.SwerveUtils;
  import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
- public class DriveSubsystem extends SubsystemBase {
+ 
+
+ public class SUBDrive extends SubsystemBase {
    // Create MAXSwerveModules
-   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+   public final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+
+
+ 
+   private final SUBMAXSwerveModule m_frontLeft = new SUBMAXSwerveModule(
        DriveConstants.kFrontLeftDrivingCanId,
        DriveConstants.kFrontLeftTurningCanId,
        DriveConstants.kFrontLeftChassisAngularOffset);
 
-   private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+   private final SUBMAXSwerveModule m_frontRight = new SUBMAXSwerveModule(
        DriveConstants.kFrontRightDrivingCanId,
        DriveConstants.kFrontRightTurningCanId,
        DriveConstants.kFrontRightChassisAngularOffset);
 
-   private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
+   private final SUBMAXSwerveModule m_rearLeft = new SUBMAXSwerveModule(
        DriveConstants.kRearLeftDrivingCanId,
        DriveConstants.kRearLeftTurningCanId,
        DriveConstants.kBackLeftChassisAngularOffset);
 
-   private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
+   private final SUBMAXSwerveModule m_rearRight = new SUBMAXSwerveModule(
        DriveConstants.kRearRightDrivingCanId,
        DriveConstants.kRearRightTurningCanId,
        DriveConstants.kBackRightChassisAngularOffset);
 
    // The gyro sensor
-   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
    // Slew rate filter variables for controlling lateral acceleration
    private double m_currentRotation = 0.0;
@@ -52,9 +65,11 @@
    private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
    private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
    private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+// public final SwerveDrivePoseEstimator m_poseEstimator =
+ //     new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, Rotation2d.fromDegrees(m_gyro.getAngle()), getPosition(), getPose());
 
    // Odometry class for tracking robot pose
-   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+   public SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
        DriveConstants.kDriveKinematics,
        Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
        new SwerveModulePosition[] {
@@ -63,13 +78,21 @@
            m_rearLeft.getPosition(),
            m_rearRight.getPosition()
        });
+        private Field2d m_field = new Field2d();
 
    /** Creates a new DriveSubsystem. */
-   public DriveSubsystem() {
+   public SUBDrive() {
+        SmartDashboard.putData("Field", m_field);
+
    }
 
    @Override
    public void periodic() {
+    //("measured pose", getPose());
+
+    m_field.setRobotPose(m_odometry.getPoseMeters());
+
+   /// m_poseEstimator.update(Rotation2d.fromDegrees(m_gyro.getAngle()), getPosition());
     //  Update the odometry in the periodic block
      m_odometry.update(
          Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),

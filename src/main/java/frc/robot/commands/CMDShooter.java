@@ -6,17 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.OIConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SUBShooter;
 
 public class CMDShooter extends Command {
-  SUBShooter m_SubShooter = new SUBShooter();
-  public static CommandXboxController xbox = new CommandXboxController(OIConstants.kDriverControllerPort);
+  private SUBShooter subShooter;
+  private static CommandXboxController xbox = new CommandXboxController(1);
   /** Creates a new CMDShooter. */
-  public CMDShooter() {
-    addRequirements(RobotContainer.m_SUBShooter);
-    // Use addRequirements() here to declare subsystem dependencies.
+  public CMDShooter(SUBShooter sub) {
+    // addRequirements(RobotContainer.m_SUBShooter);
+    // Use addRequirements() here to declare subsystem dependencies.\
+    addRequirements(sub);
+    this.subShooter = sub;
   }
 
   // Called when the command is initially scheduled.
@@ -27,20 +28,35 @@ public class CMDShooter extends Command {
   @Override
   public void execute() {
     double feedvalue = 0;
-    if (xbox.getHID().getRightBumper()) {feedvalue=feedvalue+0.2;}
-    if (xbox.getHID().getLeftBumper()) {feedvalue=feedvalue-0.2;}
+    double launchvalue= 0;
+    if (xbox.leftTrigger().getAsBoolean()) {feedvalue=0.5;}
+    if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5;}
+    // if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.25;}
+    // if (xbox.rightBumper().getAsBoolean()) {launchvalue=-0.25;}
 
-    m_SubShooter.setLaunchWheel(xbox.getRightTriggerAxis()-xbox.getLeftTriggerAxis());
-    m_SubShooter.setFeedWheel(feedvalue);
+    subShooter.setLaunchWheel(launchvalue);
+    subShooter.setFeedWheel(feedvalue);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+      return false;
+    }
+ }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
-}
+  //  if (robotChooser.getSelected() == RobotMode.KitBot) {
+    //  OIDriverController2
+    //  .rightBumper()
+    //  .whileTrue(
+    //    new PrepareLaunch(kSUBShooter)
+    //    .withTimeout(LauncherConstants.kLauncherDelay)
+    //    .andThen(new LaunchNote(kSUBShooter))
+    //    .handleInterrupt(() -> kSUBShooter.stop())
+    //  );
+    //  OIDriverController2.leftBumper().whileTrue(kSUBShooter.getIntakeCommand());
+
+  //  }

@@ -7,22 +7,43 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.LauncherConstants.*;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.RobotContainer.RobotMode;
+import frc.utils.UniMotor;
+import frc.utils.UniMotor.UniMotorMode;
+import frc.utils.UniMotor.UniMotorType;
 
 public class SUBShooter extends SubsystemBase {
-  WPI_TalonSRX m_launchWheel;
-  WPI_TalonSRX m_feedWheel;
+
+  UniMotor m_launchWheel1;
+  UniMotor m_launchWheel2;
+
+  UniMotor m_feedWheel;
 
   /** Creates a new Launcher. */
-  public SUBShooter() {
-    m_launchWheel = new WPI_TalonSRX(kLauncherID);
-    m_feedWheel = new WPI_TalonSRX(kFeederID);
+  public SUBShooter() {}
 
-    m_launchWheel.configContinuousCurrentLimit(kLauncherCurrentLimit);
-    m_feedWheel.configContinuousCurrentLimit(kFeedCurrentLimit);
+  public void init () {
+    if (RobotContainer.getRobotMode() == RobotMode.CompBot) {
+      m_launchWheel1 = new UniMotor(kLauncherID1,UniMotorType.SparkMAX);
+      m_launchWheel2 = new UniMotor(kLauncherID2,UniMotorType.SparkMAX);
+      m_feedWheel = new UniMotor(kFeederID,UniMotorType.SparkMAX);
+    } else if (RobotContainer.getRobotMode() == RobotMode.KitBot) {
+      m_launchWheel1 = new UniMotor(kLauncherID1, UniMotorType.TalonSRX);
+      m_launchWheel2 = new UniMotor(kLauncherID2,UniMotorType.TalonSRX);
+      m_feedWheel = new UniMotor(kFeederID,UniMotorType.TalonSRX);
+    }
+
+    //m_launchWheel2.follow(m_launchWheel1);
+    m_launchWheel2.setInverted(false);
+    m_launchWheel1.setSmartCurrentLimit(kLauncherCurrentLimit);
+    m_launchWheel2.setSmartCurrentLimit(kLauncherCurrentLimit);
+    m_feedWheel.setSmartCurrentLimit(kFeedCurrentLimit);
+    m_feedWheel.setIdleMode(UniMotorMode.Brake);
+    m_launchWheel1.setIdleMode(UniMotorMode.Coast);
+    m_launchWheel2.setIdleMode(UniMotorMode.Coast);
   }
 
   /**
@@ -36,33 +57,54 @@ public class SUBShooter extends SubsystemBase {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
     return this.startEnd(
-        // When the command is initialized, set the wheels to the intake speed values
-        () -> {
-          setFeedWheel(kIntakeFeederSpeed);
-          setLaunchWheel(kIntakeLauncherSpeed);
-        },
-        // When the command stops, stop the wheels
-        () -> {
-          stop();
-        });
+      // When the command is initialized, set the wheels to the intake speed values
+      () -> {
+        setFeedWheel(kIntakeFeederSpeed);
+        setLaunchWheel(kIntakeLauncherSpeed);
+      },
+      // When the command stops, stop the wheels
+      () -> {
+        stop();
+      }
+    );
   }
+
+public Command getIdleCommand() {
+    // The startEnd helper method takes a method to call when the command is initialized and one to
+    // call when it ends
+    return this.startEnd(
+      // When the command is initialized, set the wheels to the intake speed values
+      () -> {
+        setFeedWheel(kIntakeFeederSpeed);
+        setLaunchWheel(kIntakeLauncherSpeed);
+      },
+      // When the command stops, stop the wheels
+      () -> {
+        stop();
+      }
+    );
+  }
+
   public Command getLaunchCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
     return this.startEnd(
-        // When the command is initialized, set the wheels to the intake speed values
-        () -> {
-          setFeedWheel(kLaunchFeederSpeed);
-          setLaunchWheel(kLauncherSpeed);
-        },
-        // When the command stops, stop the wheels
-        () -> {
-          stop();
-        });
+      // When the command is initialized, set the wheels to the intake speed values
+      () -> {
+        setFeedWheel(0);
+        setLaunchWheel(0);
+      },
+      // When the command stops, stop the wheels
+      () -> {
+        stop();
+      }
+    );
   }
   // An accessor method to set the speed (technically the output percentage) of the launch wheel
   public void setLaunchWheel(double speed) {
-    m_launchWheel.set(speed);
+    m_launchWheel1.set(speed);
+    m_launchWheel2.set(speed);
+    //m_launchWheel1.setVelocitySpark(2000);
   }
 
   // An accessor method to set the speed (technically the output percentage) of the feed wheel
@@ -73,7 +115,7 @@ public class SUBShooter extends SubsystemBase {
   // A helper method to stop both wheels. You could skip having a method like this and call the
   // individual accessors with speed = 0 instead
   public void stop() {
-    m_launchWheel.set(0);
+    m_launchWheel1.set(0);
     m_feedWheel.set(0);
   }
 }
