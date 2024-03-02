@@ -166,10 +166,10 @@ public class RobotContainer {
     OIDriverController2.x().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm));
     OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(Units.degreesToRotations(55)), kSUBArm));
 
-    OIDriverController1.leftBumper().onTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(0.1), kSUBClimb));
-    OIDriverController1.leftTrigger().onTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(-0.1), kSUBClimb));
-    OIDriverController1.rightBumper().onTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(0.1), kSUBClimb));
-    OIDriverController1.rightTrigger().onTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(-0.1), kSUBClimb));
+    OIDriverController1.leftBumper().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(0.1), kSUBClimb));
+    OIDriverController1.leftTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(-0.1), kSUBClimb));
+    OIDriverController1.rightBumper().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(0.1), kSUBClimb));
+    OIDriverController1.rightTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(-0.1), kSUBClimb));
   }
 
   /**

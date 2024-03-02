@@ -74,12 +74,12 @@ public class SUBClimb extends SubsystemBase {
     }
 
     public void setLeftHookPosition(double leftHookPosition) {
-        //leftHookSetPoint += leftHookPosition;
+        leftHookSetPoint = leftHookPosition;
         kLeftHook.set(leftHookPosition);
     }
 
     public void setRightHookPosition(double rightHookPosition) {
-        //rightHookSetPoint = rightHookPosition;
+        rightHookSetPoint = rightHookPosition;
         kRightHook.set(rightHookPosition);
     }
 
