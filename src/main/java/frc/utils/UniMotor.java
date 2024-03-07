@@ -78,7 +78,7 @@ public class UniMotor {
 
   private void killMotor() {
     if (type == UniMotorType.TalonSRX) {
-      sparkMax.close();
+      //sparkMax.close();
     } 
   }
 

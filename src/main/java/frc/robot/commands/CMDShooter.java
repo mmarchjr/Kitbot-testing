@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
@@ -11,7 +12,7 @@ import frc.robot.subsystems.SUBShooter;
 
 public class CMDShooter extends Command {
   private SUBShooter subShooter;
-  private static CommandXboxController xbox = new CommandXboxController(1);
+  private static CommandXboxController xbox = RobotContainer.getDriverController2();
   /** Creates a new CMDShooter. */
   public CMDShooter(SUBShooter sub) {
     // addRequirements(RobotContainer.m_SUBShooter);
@@ -30,12 +31,13 @@ public class CMDShooter extends Command {
     double feedvalue = 0;
     double launchvalue= 0;
     if (xbox.leftTrigger().getAsBoolean()) {feedvalue=0.5;}
-    if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5;}
-    // if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.25;}
-    // if (xbox.rightBumper().getAsBoolean()) {launchvalue=-0.25;}
-
+    if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5; launchvalue =-.25;}
+    //if (xbox.rightTrigger().getAsBoolean()) {launchvalue=1;}
+    if (xbox.rightBumper().getAsBoolean()) {launchvalue=-0.5;} else {
+    launchvalue = xbox.getRightTriggerAxis();}
     subShooter.setLaunchWheel(launchvalue);
     subShooter.setFeedWheel(feedvalue);
+    SmartDashboard.putNumber("shooter speed", subShooter.getRPM());
   }
 
   // Called once the command ends or is interrupted.

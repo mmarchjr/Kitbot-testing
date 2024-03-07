@@ -91,6 +91,7 @@ public class SUBArm extends SubsystemBase {
 armMotor2.follow(armMotor1);
 armMotor1.sparkMax.setIdleMode(IdleMode.kBrake);
 armMotor2.sparkMax.setIdleMode(IdleMode.kBrake);
+m_turningPIDController.setReference(encoder.getPosition(), CANSparkMax.ControlType.kPosition);
 
 
   }
@@ -121,5 +122,6 @@ armMotor2.sparkMax.setIdleMode(IdleMode.kBrake);
     SmartDashboard.putNumber("armD", Constants.ArmConstants.kD);
     SmartDashboard.putNumber("pos", encoder.getPosition());
     m_turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
+
   }
 }

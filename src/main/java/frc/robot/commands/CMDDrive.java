@@ -38,7 +38,7 @@ public class CMDDrive extends Command {
   private static final double kToleranceDegrees = 5.0f;
   private boolean rotateToAngle;
 
-  private CommandXboxController OIDriver1Controller = new CommandXboxController(0);
+  private CommandXboxController OIDriver1Controller = RobotContainer.getDriverController1();
   private final SUBDrive kSubDrive; 
 
   public CMDDrive(SUBDrive robotDrive) {
@@ -69,13 +69,13 @@ public class CMDDrive extends Command {
 
     //Get joystick input values and apply deadband
     if (RobotContainer.getControlMode() == ControlMode.Drone) {
-      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightY(), 0.15);
-      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
-      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
+      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightY(), 0.1);
+      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.1);
+      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.1);
     } else {
-      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftY(), 0.15);
-      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
-      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
+      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftY(), 0.1);
+      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.1);
+      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.1);
     }
 
     // Determine if robot is at setpoint and needs to rotate to angle
@@ -132,9 +132,9 @@ public class CMDDrive extends Command {
       kSubDrive.setX();
     } else {
       kSubDrive.drive(
-        -y *0.8,
-        -x * 0.8,
-        currentRotationRate *0.8,
+        -y *0.5,
+        -x * 0.5,
+        currentRotationRate *0.5,
         RobotContainer.isFieldOriented(),
         RobotContainer.isRateLimited()
       );

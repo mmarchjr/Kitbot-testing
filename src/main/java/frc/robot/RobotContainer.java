@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -26,8 +27,11 @@ import frc.robot.Constants.HookConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.CMDArm;
+import frc.robot.commands.CMDClimb;
 import frc.robot.commands.CMDDrive;
 import frc.robot.commands.CMDShooter;
+import frc.robot.commands.LaunchNote;
+import frc.robot.commands.PrepareLaunch;
 import frc.robot.subsystems.SUBArm;
 import frc.robot.subsystems.SUBClimb;
 import frc.robot.subsystems.SUBDrive;
@@ -51,7 +55,7 @@ public class RobotContainer {
   private static final SUBArm kSUBArm = new SUBArm();
   private static final CMDArm kCMDArm = new CMDArm(kSUBArm);
   private static final SUBClimb kSUBClimb = new SUBClimb();
-
+  private static final CMDClimb kCMDClimb = new CMDClimb(kSUBClimb);
 
   private static final PathConstraints kPathconstraints = new PathConstraints(5, 3, 360, 15);
   private final SUBPoseEstimator kPoseEstimator = new SUBPoseEstimator( kRobotDrive,kSUBVision);
@@ -65,6 +69,7 @@ public class RobotContainer {
   private static SendableChooser<ControlMode> controlChooser = new SendableChooser<ControlMode>();
   private static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
   private static SendableChooser<RobotMode> robotChooser = new SendableChooser<RobotMode>();
+  private static SendableChooser<Command> autoChooser;
   
 
   //The driver's controller
@@ -108,10 +113,10 @@ public class RobotContainer {
 
     // Configure the button bindings
 
-    // NamedCommands.registerCommand("Intake", kSUBShooter.getIntakeCommand().withTimeout(1));
-    // NamedCommands.registerCommand("Shoot", new PrepareLaunch(kSUBShooter)
-    //  .withTimeout(LauncherConstants.kLauncherDelay)
-    //  .andThen(new LaunchNote(kSUBShooter).withTimeout(LauncherConstants.kLauncherDelay)));
+     NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().withTimeout(1));
+     NamedCommands.registerCommand("Shoot Note", kSUBShooter.getIdleCommand()
+      .withTimeout(LauncherConstants.kLauncherDelay)
+      .andThen(kSUBShooter.getLaunchCommand().withTimeout(LauncherConstants.kLauncherDelay)));
 
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
@@ -127,7 +132,7 @@ public class RobotContainer {
     SmartDashboard.putData("Field oriented",fieldOrientedChooser);
     SmartDashboard.putData("Controls", controlChooser);
     SmartDashboard.putData("Robot Select", robotChooser);
-    kSUBShooter.init();
+    
 
     //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
     //SmartDashboard.putData("Path follower", autoPathChooser);
@@ -139,6 +144,11 @@ public class RobotContainer {
     kSUBVision.register();
     kSUBVision.periodic();
     kPoseEstimator.periodic();
+    kSUBClimb.setDefaultCommand(kCMDClimb);
+
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("auto", autoChooser);
     
     configureButtonBindings();
   }
@@ -158,18 +168,18 @@ public class RobotContainer {
       kRobotDrive
     ));
 
-    OIDriverController1.rightTrigger(0.1)
-      .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathconstraints));
+    //OIDriverController1.rightTrigger(0.1)
+    //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathconstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));
-    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm));
+    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
     //OIDriverController2.b().whileTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition),kSUBArm).withTimeout(1).andThen(kSUBShooter.getLaunchCommand()).withTimeout(1));
     OIDriverController2.x().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm));
-    OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(Units.degreesToRotations(55)), kSUBArm));
+    OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm));
 
-    OIDriverController1.leftBumper().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(0.1), kSUBClimb));
-    OIDriverController1.leftTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(-0.1), kSUBClimb));
-    OIDriverController1.rightBumper().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(0.1), kSUBClimb));
-    OIDriverController1.rightTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(-0.1), kSUBClimb));
+    // OIDriverController1.leftBumper().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(0.1), kSUBClimb));
+    // OIDriverController1.leftTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(-0.1), kSUBClimb));
+    // OIDriverController1.rightBumper().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(0.1), kSUBClimb));
+    // OIDriverController1.rightTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(-0.1), kSUBClimb));
   }
 
   /**
@@ -178,15 +188,15 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathconstraints);
+    return autoChooser.getSelected();
   }
 
   public static CommandXboxController getDriverController1() {
-    return OIDriverController1;
+    return new CommandXboxController(OIConstants.kDriverControllerPort);
   }
 
   public static CommandXboxController getDriverController2() {
-    return OIDriverController2;
+    return new CommandXboxController(OIConstants.kDriverControllerPort2);
   }
 
   public static RobotMode getRobotMode() {

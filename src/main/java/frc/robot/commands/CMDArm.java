@@ -14,7 +14,7 @@ import frc.utils.RoaringUtils.DeadzoneUtils;
 public class CMDArm extends Command {
   /** Creates a new CMDArm. */
   double pos= ArmConstants.kIntakePosition;
-  CommandXboxController xbox = new CommandXboxController(1);
+  CommandXboxController xbox = RobotContainer.getDriverController2();
   SUBArm SUBArm;
   public CMDArm(SUBArm sub) {
     this.SUBArm = sub;
