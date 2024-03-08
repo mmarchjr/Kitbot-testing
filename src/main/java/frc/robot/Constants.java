@@ -174,8 +174,8 @@ public final class Constants {
     public static final IdleMode kLeftHookEncoderIdleMode = IdleMode.kBrake;
     public static final IdleMode kRightHookEncoderIdleMode = IdleMode.kBrake;
 
-    public static final int kLeftHookEncoderCurrentLimit = 50;
-    public static final int kRightHookEncoderCurrentLimit = 50;
+    public static final int kLeftHookEncoderCurrentLimit = 45;
+    public static final int kRightHookEncoderCurrentLimit = 45;
     
     public static final double kRaisedHookPosition = 0;
     public static final double kLowerHookPosition = 0;
