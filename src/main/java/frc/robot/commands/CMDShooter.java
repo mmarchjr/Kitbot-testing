@@ -33,8 +33,8 @@ public class CMDShooter extends Command {
     if (xbox.leftTrigger().getAsBoolean()) {feedvalue=0.7;}
     if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5; launchvalue =-.25;}
     //if (xbox.rightTrigger().getAsBoolean()) {launchvalue=1;}
-    if (xbox.rightBumper().getAsBoolean()) {launchvalue=0.7;} else {
-    launchvalue = xbox.getRightTriggerAxis();}
+    if (xbox.rightBumper().getAsBoolean()) {launchvalue=0.25;} else {
+    launchvalue = xbox.rightTrigger().getAsBoolean() ? 1 : 0;}
     subShooter.setLaunchWheel(launchvalue);
     subShooter.setFeedWheel(feedvalue);
     SmartDashboard.putNumber("shooter speed", subShooter.getRPM());
