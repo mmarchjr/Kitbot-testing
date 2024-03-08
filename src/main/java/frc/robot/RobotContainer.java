@@ -121,8 +121,9 @@ public class RobotContainer {
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
 
-    rateLimitChooser.setDefaultOption("False", false);
-    rateLimitChooser.addOption("True", true);
+    rateLimitChooser.setDefaultOption("True", true);
+    rateLimitChooser.addOption("False", false);
+    
     controlChooser.setDefaultOption("Drone", ControlMode.Drone);
     controlChooser.addOption("Game", ControlMode.Game);
     robotChooser.setDefaultOption("Main Comp", RobotMode.CompBot);
