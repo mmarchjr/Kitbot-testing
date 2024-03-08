@@ -10,6 +10,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -53,9 +54,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.6;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 1.2; // radians per second
-    public static final double kMagnitudeSlewRate = 1.5; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 3; // radians per second
+    public static final double kMagnitudeSlewRate = 3; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 3.0; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26);
@@ -264,8 +265,9 @@ public final class Constants {
 
     /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
-      new Translation3d(Units.inchesToMeters(14),0,Units.inchesToMeters(10)),//Units.inchesToMeters(17.5)),
-      new Rotation3d(0.0, 20, 0)
+      new Translation3d(Units.inchesToMeters(14),0,Units.inchesToMeters(13.5)),//Units.inchesToMeters(17.5)),
+      new Rotation3d(0.0, Units.degreesToRadians(20), Units.degreesToRadians(180))
+      
     );
     
     public static final double FIELD_LENGTH_METERS = 16.54175;
