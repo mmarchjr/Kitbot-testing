@@ -127,7 +127,7 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 3.75;
+    public static final double kTurningP = 3.74;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
     public static final double kTurningFF = 0;
@@ -140,6 +140,48 @@ public final class Constants {
     //setting the driving motor current limit will be an in-season project, for now 50A is an ok default
     public static final int kDrivingMotorCurrentLimit = 45; // amps
     public static final int kTurningMotorCurrentLimit = 20; // amps
+  }
+
+  public static final class HookConstants {
+    public static final int kLeftHookCanId = 14;
+    public static final int kRightHookCanId = 15;
+
+    public static final boolean kLeftHookEncoder = false;
+    public static final boolean kRightHookEncoder = false;
+
+    public static final double kLeftHookEncoderPositionFactor = (2 * Math.PI);
+    public static final double kRightHookEncoderPositionFactor = (2 * Math.PI);
+
+    public static final double kLeftHookEncoderPositionPIDMinInput = 0;
+    public static final double kLeftHookEncoderPositionPIDMaxInput = kLeftHookEncoderPositionFactor;
+    public static final double kRightHookEncoderPositionPIDMinInput = 0;
+    public static final double kRightHookEncoderPosiionPIDMaxInput = kRightHookEncoderPositionFactor;
+
+    public static final double kLeftHookEncoderP = 3.75;
+    public static final double kLeftHookEncoderI = 0;
+    public static final double kLeftHookEncoderD = 0;
+    public static final double kLeftHookEncoderFF = 0;
+    public static final double kLeftHookEncoderMinOutput = -1;
+    public static final double kLeftHookEncoderMaxOutput = 1;
+
+    public static final double kRightHookEncoderP = 3.75;
+    public static final double kRightHookEncoderI = 0;
+    public static final double kRightHookEncoderD = 0;
+    public static final double kRightHookEncoderFF = 0;
+    public static final double kRightHookEncoderMinOutput = -1;
+    public static final double kRightHookEncoderMaxOutput = 1;
+
+    public static final IdleMode kLeftHookEncoderIdleMode = IdleMode.kBrake;
+    public static final IdleMode kRightHookEncoderIdleMode = IdleMode.kBrake;
+
+    public static final int kLeftHookEncoderCurrentLimit = 45;
+    public static final int kRightHookEncoderCurrentLimit = 45;
+    
+    public static final double kRaisedHookPosition = 0;
+    public static final double kLowerHookPosition = 0;
+    public static final double kP = 0.1;
+    public static final double kI = 0;
+    public static final double kD = 0;
   }
 
   public static final class OIConstants {
@@ -180,28 +222,34 @@ public final class Constants {
     public static final int kFeederID = 11;
     public static final int kLauncherID1 = 12;
     public static final int kLauncherID2 = 13;
-    public static final int kLauncherCurrentLimit = 80;
-    public static final int kFeedCurrentLimit = 80;
+    public static final int kLauncherCurrentLimit = 30;
+    public static final int kFeedCurrentLimit = 30;
 
     // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
     // in reverse
-    public static final double kLauncherSpeed = 0.9;
-    public static final double kLaunchFeederSpeed = 0.9;
+    public static final double kLauncherSpeed = 0.5;
+    public static final double kLaunchFeederSpeed = 0.4;
     public static final double kIntakeLauncherSpeed = -1.5;
     public static final double kIntakeFeederSpeed = -.5;
     public static final double kLauncherDelay = 0.5;
+    public static final double kP = 1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+
+
   }
 
   public static class ArmConstants {
     public static final int kArmMotor1 = 9;
     public static final int kArmMotor2 = 10;
-    public static final double kAmpPosition = Units.degreesToRotations(75);//80 is top
+    public static final double kAmpPosition = Units.degreesToRotations(78);//80 is top
     public static final double kIntakePosition = Units.degreesToRotations(-3);
-    public static final double kIntakeUpPosition = kIntakePosition + 0.5;
+    public static final double kIntakeUpPosition = kIntakePosition + Units.degreesToRotations(5);
     public static final double kSpeakerPosition = Units.degreesToRotations(20);
     public static final double kInsidePosition = 0.2;
-    public static final double kHoldPosition = Units.degreesToRotations(10);
-    public static final double kP = 4.1;
+    public static final double kHoldPosition = Units.degreesToRotations(6.5);
+    public static final double kP = 2.7;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final int kMotorCurrentLimit = 30; // amps

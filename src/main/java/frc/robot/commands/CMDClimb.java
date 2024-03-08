@@ -7,19 +7,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.SUBArm;
+import frc.robot.subsystems.SUBClimb;
 import frc.utils.RoaringUtils.DeadzoneUtils;
 
-public class CMDArm extends Command {
-  /** Creates a new CMDArm. */
-  double pos= ArmConstants.kIntakePosition;
-  CommandXboxController xbox = RobotContainer.getDriverController2();
-  SUBArm SUBArm;
-  public CMDArm(SUBArm sub) {
-    this.SUBArm = sub;
+public class CMDClimb extends Command {
+  /** Creates a new CMDClimb. */
+  CommandXboxController xbox = RobotContainer.getDriverController1();
+  SUBClimb climb;
+  public CMDClimb(SUBClimb climb) {
+  this.climb = climb;
+  addRequirements(climb);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(sub);
   }
 
   // Called when the command is initially scheduled.
@@ -29,17 +27,8 @@ public class CMDArm extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-// if (xbox.povUp().getAsBoolean()) {
-//       SUBArm.changePosition(1);
-//       //SUBArm.setPosition(SUBArm.getPosition()+ArmConstants.kIncrementAmount);
-//     } else if (xbox.povDown().getAsBoolean()) {
-//             SUBArm.changePosition(-1);
-//       //SUBArm.setPosition(SUBArm.getPosition()-ArmConstants.kIncrementAmount);
-//     } else {
-//       //SUBArm.setPosition(pos);
-//       SUBArm.changePosition(0);
-//     }
-//SUBArm.setPosition(ArmConstants.kHoldPosition);
+    climb.changeLeftHookPosition(-((xbox.leftBumper().getAsBoolean() ? 0.5 : 0)-(xbox.leftTrigger().getAsBoolean() ? 0.5 : 0)));
+    climb.changeRightHookPosition(-((xbox.rightBumper().getAsBoolean() ? 0.5 : 0)-(xbox.rightTrigger().getAsBoolean() ? 0.5 : 0)));
 
   }
 
@@ -51,8 +40,5 @@ public class CMDArm extends Command {
   @Override
   public boolean isFinished() {
     return false;
-  }
-  public void setPosition(double pos) {
-    this.pos = pos;
   }
 }
