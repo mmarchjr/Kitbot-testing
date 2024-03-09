@@ -3,12 +3,9 @@ package frc.robot.subsystems;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -77,12 +74,10 @@ public class SUBClimb extends SubsystemBase {
 
     public void setLeftHookPosition(double leftHookPosition) {
         leftHookSetPoint = leftHookPosition;
-        //kLeftHook.set(leftHookPosition);
     }
 
     public void setRightHookPosition(double rightHookPosition) {
         rightHookSetPoint = rightHookPosition;
-        //kRightHook.set(rightHookPosition);
     }
 
         public void changeLeftHookPosition(double leftHookPosition) {
@@ -114,13 +109,6 @@ public class SUBClimb extends SubsystemBase {
         SmartDashboard.setDefaultNumber("hookP", Constants.HookConstants.kP);
         SmartDashboard.setDefaultNumber("hookI", Constants.HookConstants.kI);
         SmartDashboard.setDefaultNumber("hookD", Constants.HookConstants.kD);
-        //pid.setP(SmartDashboard.getNumber("hookP", 0));
-        //pid.setI(SmartDashboard.getNumber("hookI", 0));
-        //pid.setD(SmartDashboard.getNumber("hookD", 0));
-        //kRightHookPIDController.setReference(rightHookSetPoint, ControlType.kPosition);
-        //kLeftHookPIDController.setReference(leftHookSetPoint, ControlType.kPosition);
-
-
     }
 
 

@@ -11,8 +11,6 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
@@ -23,15 +21,11 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.HookConstants;
-import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.CMDArm;
 import frc.robot.commands.CMDClimb;
 import frc.robot.commands.CMDDrive;
 import frc.robot.commands.CMDShooter;
-import frc.robot.commands.LaunchNote;
-import frc.robot.commands.PrepareLaunch;
 import frc.robot.subsystems.SUBArm;
 import frc.robot.subsystems.SUBClimb;
 import frc.robot.subsystems.SUBDrive;
@@ -57,7 +51,7 @@ public class RobotContainer {
   private static final SUBClimb kSUBClimb = new SUBClimb();
   private static final CMDClimb kCMDClimb = new CMDClimb(kSUBClimb);
 
-  private static final PathConstraints kPathconstraints = new PathConstraints(5, 3, 360, 15);
+  private static final PathConstraints kPathConstraints = new PathConstraints(5, 3, 360, 15);
   private final SUBPoseEstimator kPoseEstimator = new SUBPoseEstimator( kRobotDrive,kSUBVision);
   public enum RobotMode {
     KitBot, CompBot
@@ -70,7 +64,6 @@ public class RobotContainer {
   private static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
   private static SendableChooser<RobotMode> robotChooser = new SendableChooser<RobotMode>();
   private static SendableChooser<Command> autoChooser;
-  
 
   //The driver's controller
   private static CommandXboxController OIDriverController1 = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -113,12 +106,12 @@ public class RobotContainer {
 
     // Configure the button bindings
 
-     NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().withTimeout(1));
-     NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
-     NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
-     NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
-     NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
-     NamedCommands.registerCommand("Speaker Note", new RunCommand(
+    NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().withTimeout(1));
+    NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
+    NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
+    NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
+    NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
+    NamedCommands.registerCommand("Speaker Note", new RunCommand(
       ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>5000))
       .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0),kSUBShooter).repeatedly().withTimeout(1)));
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
@@ -136,10 +129,7 @@ public class RobotContainer {
     SmartDashboard.putData("Field oriented",fieldOrientedChooser);
     SmartDashboard.putData("Controls", controlChooser);
     SmartDashboard.putData("Robot Select", robotChooser);
-    
 
-    //SendableChooser<Command> autoPathChooser = AutoBuilder.buildAutoChooser();
-    //SmartDashboard.putData("Path follower", autoPathChooser);
     // Configure default commands
     kSUBShooter.setDefaultCommand(kCMDShooter);
     kRobotDrive.setDefaultCommand(kDriveRobotCommand);
@@ -149,7 +139,6 @@ public class RobotContainer {
     kSUBVision.periodic();
     kPoseEstimator.periodic();
     kSUBClimb.setDefaultCommand(kCMDClimb);
-
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("auto", autoChooser);
@@ -176,18 +165,12 @@ public class RobotContainer {
       ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM() >5000)).withTimeout(2)
       .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0)).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
-    //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathconstraints));
+    //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));
     OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
-    //OIDriverController2.b().whileTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition),kSUBArm).withTimeout(1).andThen(kSUBShooter.getLaunchCommand()).withTimeout(1));
     OIDriverController2.x().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm));
     OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm));
     OIDriverController1.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kInsidePosition), kSUBArm));
-
-    // OIDriverController1.leftBumper().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(0.1), kSUBClimb));
-    // OIDriverController1.leftTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(-0.1), kSUBClimb));
-    // OIDriverController1.rightBumper().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(0.1), kSUBClimb));
-    // OIDriverController1.rightTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setRightHookPosition(-0.1), kSUBClimb));
   }
 
   /**
