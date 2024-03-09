@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -34,7 +35,7 @@ public class SUBShooter extends SubsystemBase {
   CANSparkMax m_launchWheel2;
 
   CANSparkMax m_feedWheel;
-  SparkPIDController pid;
+  PIDController pid = new PIDController(LauncherConstants.kP, LauncherConstants.kI, LauncherConstants.kD);
   RelativeEncoder encoder;
   Double velocity;
 
@@ -43,15 +44,17 @@ public class SUBShooter extends SubsystemBase {
     m_launchWheel1 = new CANSparkMax(kLauncherID1, MotorType.kBrushless);
       m_launchWheel2 = new CANSparkMax(kLauncherID2, MotorType.kBrushless);
       m_feedWheel = new CANSparkMax(kFeederID, MotorType.kBrushless);
-      pid = m_launchWheel1.getPIDController();
+      //pid = m_launchWheel1.getPIDController();
       pid.setP(LauncherConstants.kP);
       pid.setI(LauncherConstants.kI);
       pid.setD(LauncherConstants.kD);
+      
       encoder = m_launchWheel1.getEncoder();
-      pid.setPositionPIDWrappingMaxInput(1);
-      pid.setPositionPIDWrappingMaxInput(-1);
-      pid.setPositionPIDWrappingEnabled(true);
-      pid.setFeedbackDevice(encoder);
+      
+      //pid.setPositionPIDWrappingMaxInput(1);
+      //pid.setPositionPIDWrappingMaxInput(-1);
+      //pid.setPositionPIDWrappingEnabled(true);
+      //pid.setFeedbackDevice(encoder);
       
   }
 
@@ -73,9 +76,9 @@ public class SUBShooter extends SubsystemBase {
     m_launchWheel1.setIdleMode(IdleMode.kCoast);
     m_launchWheel2.setIdleMode(IdleMode.kCoast);
      encoder = m_launchWheel1.getEncoder();
-     pid.setFeedbackDevice(encoder);
+     //pid.setFeedbackDevice(encoder);
 
-     pid.setSmartMotionAllowedClosedLoopError(100,0);
+     //pid.setSmartMotionAllowedClosedLoopError(100,0);
   }
 
   /**
@@ -136,7 +139,8 @@ public Command getIdleCommand() {
   public void setLaunchWheel(double speed) {
     m_launchWheel1.set(speed);
     m_launchWheel2.set(speed);
-    velocity = 5000* speed;
+    //velocity = 5000* speed;
+    //m_launchWheel1.set(pid.calculate(getRPM(),velocity));
     //pid.setReference(velocity, ControlType.);
     //m_launchWheel2.set(speed);
     //m_launchWheel1.setVelocitySpark(2000);
