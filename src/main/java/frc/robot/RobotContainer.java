@@ -180,6 +180,7 @@ public class RobotContainer {
     //OIDriverController2.b().whileTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition),kSUBArm).withTimeout(1).andThen(kSUBShooter.getLaunchCommand()).withTimeout(1));
     OIDriverController2.x().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm));
     OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm));
+    OIDriverController1.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kInsidePosition), kSUBArm));
 
     // OIDriverController1.leftBumper().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(0.1), kSUBClimb));
     // OIDriverController1.leftTrigger().whileTrue(new RunCommand(()-> kSUBClimb.setLeftHookPosition(-0.1), kSUBClimb));
