@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4107523041410366,
+      "y": 7.279182522966815
+    },
+    "rotation": -90.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Leave"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

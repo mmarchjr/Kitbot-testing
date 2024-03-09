@@ -114,13 +114,16 @@ public class RobotContainer {
     // Configure the button bindings
 
      NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().withTimeout(1));
-     NamedCommands.registerCommand("Shoot Note", kSUBShooter.getIdleCommand()
-      .withTimeout(LauncherConstants.kLauncherDelay)
-      .andThen(kSUBShooter.getLaunchCommand().withTimeout(LauncherConstants.kLauncherDelay)));
-
+     NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
+     NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
+     NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
+     NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
+     NamedCommands.registerCommand("Speaker Note", new RunCommand(
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>5000))
+      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0),kSUBShooter).repeatedly().withTimeout(1)));
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
-
+    NamedCommands.registerCommand("Arm Up", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm).withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
     rateLimitChooser.setDefaultOption("True", true);
     rateLimitChooser.addOption("False", false);
     
@@ -168,7 +171,10 @@ public class RobotContainer {
       () -> kRobotDrive.setX(),
       kRobotDrive
     ));
-
+      
+    OIDriverController2.rightBumper().whileTrue(new RunCommand(
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM() >5000)).withTimeout(2)
+      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0)).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathconstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));

@@ -150,6 +150,10 @@ public Command getIdleCommand() {
   public void setFeedWheel(double speed) {
     m_feedWheel.set(speed);
   }
+  public void setWheels(Double feed, Double Launch) {
+    setFeedWheel(feed);
+    setLaunchWheel(Launch);
+  }
 
   // A helper method to stop both wheels. You could skip having a method like this and call the
   // individual accessors with speed = 0 instead

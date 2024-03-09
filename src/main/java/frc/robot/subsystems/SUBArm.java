@@ -39,7 +39,7 @@ public class SUBArm extends SubsystemBase {
   public SUBArm(
   ) {
 
-
+    pid.setTolerance(Units.degreesToRotations(2));
     armMotor1.sparkMax.restoreFactoryDefaults();
     armMotor1.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
     armMotor2.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
@@ -123,5 +123,8 @@ m_turningPIDController.setReference(encoder.getPosition(), CANSparkMax.ControlTy
     SmartDashboard.putNumber("pos", encoder.getPosition());
     m_turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
 
+  }
+  public boolean isAtSetpoint() {
+    return pid.atSetpoint();
   }
 }
