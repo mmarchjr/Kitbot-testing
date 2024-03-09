@@ -4,29 +4,23 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.LauncherConstants.kFeedCurrentLimit;
+import static frc.robot.Constants.LauncherConstants.kFeederID;
+import static frc.robot.Constants.LauncherConstants.kIntakeFeederSpeed;
+import static frc.robot.Constants.LauncherConstants.kIntakeLauncherSpeed;
+import static frc.robot.Constants.LauncherConstants.kLauncherCurrentLimit;
+import static frc.robot.Constants.LauncherConstants.kLauncherID1;
+import static frc.robot.Constants.LauncherConstants.kLauncherID2;
 
-import static frc.robot.Constants.LauncherConstants.*;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
-import com.revrobotics.MotorFeedbackSensor;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder.Type;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.SparkRelativeEncoder;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.LauncherConstants;
-import frc.robot.RobotContainer.RobotMode;
-import frc.utils.UniMotor;
-import frc.utils.UniMotor.UniMotorMode;
-import frc.utils.UniMotor.UniMotorType;
-import com.revrobotics.CANSparkLowLevel.MotorType.*;
 
 public class SUBShooter extends SubsystemBase {
 
@@ -34,48 +28,31 @@ public class SUBShooter extends SubsystemBase {
   CANSparkMax m_launchWheel2;
 
   CANSparkMax m_feedWheel;
-  SparkPIDController pid;
+  PIDController pid = new PIDController(LauncherConstants.kP, LauncherConstants.kI, LauncherConstants.kD);
   RelativeEncoder encoder;
   Double velocity;
 
   /** Creates a new Launcher. */
   public SUBShooter() {
     m_launchWheel1 = new CANSparkMax(kLauncherID1, MotorType.kBrushless);
-      m_launchWheel2 = new CANSparkMax(kLauncherID2, MotorType.kBrushless);
-      m_feedWheel = new CANSparkMax(kFeederID, MotorType.kBrushless);
-      pid = m_launchWheel1.getPIDController();
-      pid.setP(LauncherConstants.kP);
-      pid.setI(LauncherConstants.kI);
-      pid.setD(LauncherConstants.kD);
-      encoder = m_launchWheel1.getEncoder();
-      pid.setPositionPIDWrappingMaxInput(1);
-      pid.setPositionPIDWrappingMaxInput(-1);
-      pid.setPositionPIDWrappingEnabled(true);
-      pid.setFeedbackDevice(encoder);
+    m_launchWheel2 = new CANSparkMax(kLauncherID2, MotorType.kBrushless);
+    m_feedWheel = new CANSparkMax(kFeederID, MotorType.kBrushless);
+
+    pid.setP(LauncherConstants.kP);
+    pid.setI(LauncherConstants.kI);
+    pid.setD(LauncherConstants.kD);
+    
+    encoder = m_launchWheel1.getEncoder();
       
   }
 
   public void init () {
-   // if (RobotContainer.getRobotMode() == RobotMode.CompBot) {
-   //   m_launchWheel1 = new UniMotor(kLauncherID1,UniMotorType.SparkMAX);
-   //   m_launchWheel2 = new UniMotor(kLauncherID2,UniMotorType.SparkMAX);
-   //   m_feedWheel = new UniMotor(kFeederID,UniMotorType.SparkMAX);
-   // } else if (RobotContainer.getRobotMode() == RobotMode.KitBot) {
-      
-   // }
-
-    //m_launchWheel2.follow(m_launchWheel1);
-    //m_launchWheel2.setInverted(false);
     m_launchWheel1.setSmartCurrentLimit(kLauncherCurrentLimit);
-    //m_launchWheel2.setSmartCurrentLimit(kLauncherCurrentLimit);
     m_feedWheel.setSmartCurrentLimit(kFeedCurrentLimit);
     m_feedWheel.setIdleMode(IdleMode.kBrake);
     m_launchWheel1.setIdleMode(IdleMode.kCoast);
     m_launchWheel2.setIdleMode(IdleMode.kCoast);
-     encoder = m_launchWheel1.getEncoder();
-     pid.setFeedbackDevice(encoder);
-
-     pid.setSmartMotionAllowedClosedLoopError(100,0);
+    encoder = m_launchWheel1.getEncoder();
   }
 
   /**
@@ -136,15 +113,15 @@ public Command getIdleCommand() {
   public void setLaunchWheel(double speed) {
     m_launchWheel1.set(speed);
     m_launchWheel2.set(speed);
-    velocity = 5000* speed;
-    //pid.setReference(velocity, ControlType.);
-    //m_launchWheel2.set(speed);
-    //m_launchWheel1.setVelocitySpark(2000);
   }
 
   // An accessor method to set the speed (technically the output percentage) of the feed wheel
   public void setFeedWheel(double speed) {
     m_feedWheel.set(speed);
+  }
+  public void setWheels(Double feed, Double Launch) {
+    setFeedWheel(feed);
+    setLaunchWheel(Launch);
   }
 
   // A helper method to stop both wheels. You could skip having a method like this and call the
