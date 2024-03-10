@@ -10,7 +10,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -255,8 +254,8 @@ public final class Constants {
     public static final double kAmpPosition = Units.degreesToRotations(78);//80 is top
     public static final double kIntakePosition = Units.degreesToRotations(-3);
     public static final double kIntakeUpPosition = kIntakePosition + Units.degreesToRotations(5);
-    public static final double kSpeakerPosition = Units.degreesToRotations(20);
-    public static final double kInsidePosition = 0.2;
+    public static final double kSpeakerPosition = Units.degreesToRotations(13);
+    public static final double kInsidePosition = Units.degreesToRotations(65);
     public static final double kHoldPosition = Units.degreesToRotations(6.5);
     public static final double kP = 2.7;
     public static final double kI = 0;
