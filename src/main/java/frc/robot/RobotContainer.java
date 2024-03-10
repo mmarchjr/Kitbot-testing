@@ -39,7 +39,7 @@ import frc.robot.subsystems.SUBDrive;
 import frc.robot.subsystems.SUBPoseEstimator;
 import frc.robot.subsystems.SUBShooter;
 import frc.robot.subsystems.SUBVision;
-import frc.robot.subsystems.Sublights
+import frc.robot.subsystems.SUBlights;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -53,7 +53,7 @@ public class RobotContainer {
   //The robot's subsystems
   private static final SUBDrive kRobotDrive = new SUBDrive();
   private static final CMDDrive kDriveRobotCommand = new CMDDrive(kRobotDrive);
-  private static final SUBShooter kSUBShooter = new SUBShooter();
+  public static final SUBShooter kSUBShooter = new SUBShooter();
   private static final CMDShooter kCMDShooter = new CMDShooter(kSUBShooter);
   private static final SUBVision kSUBVision = new SUBVision();
   private static final SUBArm kSUBArm = new SUBArm();
@@ -74,7 +74,6 @@ public class RobotContainer {
   private static SendableChooser<Boolean> rateLimitChooser = new SendableChooser<Boolean>();
   private static SendableChooser<RobotMode> robotChooser = new SendableChooser<RobotMode>();
   private static SendableChooser<Command> autoChooser;
-  
 
   //The driver's controller
   private static CommandXboxController OIDriverController1 = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -133,6 +132,8 @@ public class RobotContainer {
     robotChooser.setDefaultOption("Main Comp", RobotMode.CompBot);
     robotChooser.addOption("KitBot", RobotMode.KitBot);
 
+   
+
     SmartDashboard.putData("Rate limit",rateLimitChooser);
     SmartDashboard.putData("Field oriented",fieldOrientedChooser);
     SmartDashboard.putData("Controls", controlChooser);
@@ -150,6 +151,7 @@ public class RobotContainer {
     kSUBVision.periodic();
     kPoseEstimator.periodic();
     kSUBClimb.setDefaultCommand(kCMDClimb);
+    m_lights.setDefaultCommand(m_lightCommand);
 
 
     autoChooser = AutoBuilder.buildAutoChooser();

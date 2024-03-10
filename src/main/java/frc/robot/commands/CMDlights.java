@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -18,22 +19,24 @@ public class CMDlights extends Command {
 
   SUBlights subGlow;
 
-  //Notifier loadingNotifier;
+  private static SendableChooser<Boolean> ShooterLightChooser = new SendableChooser<Boolean>();
+  Notifier loadingNotifier;
 
   /** Creates a new CMDUnderglow. */
   public CMDlights(SUBlights subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     subGlow = subsystem;
     addRequirements(subGlow);
-    /*
+
     loadingNotifier = //Based on https://github.com/Mechanical-Advantage/RobotCode2023/blob/f0c26dc20e0f324a2093a4c81c687d41a120a07d/src/main/java/org/littletonrobotics/frc2023/subsystems/leds/Leds.java#L90-L103
         new Notifier(
             () -> {
-              subGlow.set_full_strand((getBreatheColor(Constants.kblueRGB, Constants.kyellowRGB, System.currentTimeMillis()/1000)));
+              //subGlow.set_full_strand((getBreatheColor(Constants.kblueRGB, Constants.kyellowRGB, System.currentTimeMillis()/1000)));
+              subGlow.set_full_strand(getBlinkColor(1.5, 1));
             }
         );
     loadingNotifier.startPeriodic(0.02);
-*/
+
   }
 
   // Called when the command is initially scheduled.
@@ -41,6 +44,10 @@ public class CMDlights extends Command {
   public void initialize() {
     lightTimer.reset();
     lightTimer.start();
+
+    ShooterLightChooser.setDefaultOption("Light", true);
+    ShooterLightChooser.addOption("no light", false);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,9 +55,12 @@ public class CMDlights extends Command {
   public void execute() {
     //loadingNotifier.stop(); //ensure the breath effect for early view stops when anything else is ready
 
-    //int[] breatheRGB = getBreatheColor(Constants.yellowRGB, Constants.blueRGB, lightTimer.get());
-    //subGlow.set_full_strand(breatheRGB[0], breatheRGB[1], breatheRGB[2]); //pass the color to the strand
-    sweep( (int) (lightTimer.get()*Constants.kStrandLength) );
+    int[] breatheRGB = getBreatheColor(Constants.kyellowRGB, Constants.kblueRGB, lightTimer.get());
+    subGlow.set_full_strand(breatheRGB[0], breatheRGB[1], breatheRGB[2]); //pass the color to the strand
+    //sweep( (int) (lightTimer.get()*Constants.kStrandLength) );
+    if(RobotContainer.kSUBShooter.getRPM() > 5000 && ShooterLightChooser.getSelected()){
+      subGlow.set_full_strand(0,255,0);
+    }
     subGlow.update();
   }
 
@@ -68,6 +78,15 @@ public class CMDlights extends Command {
     }
 
     return ret;
+  }
+
+  int[] getBlinkColor(double speed,double time){
+    if(Math.signum(Math.sin(time*speed))>0){
+      return Constants.kblueRGB;
+    }
+    else{
+      return Constants.kyellowRGB;
+    }
   }
 
   public void sweep(int position){ //not fully understood, result of trial and error
