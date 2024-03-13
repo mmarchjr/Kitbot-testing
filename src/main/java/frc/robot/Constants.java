@@ -48,6 +48,7 @@ public final class Constants {
     private DriveConstants() {
 
     }
+
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.6;
@@ -235,9 +236,6 @@ public final class Constants {
     public static final double kP = 1;
     public static final double kI = 0;
     public static final double kD = 0;
-
-
-
   }
 
   public static class ArmConstants {
@@ -256,8 +254,6 @@ public final class Constants {
     public static final double kIncrementAmount = 0.5;
   }
 
-
-
   public static class VisionConstants {
 
     public static final String APRILTAG_CAMERA_NAME = "PiCam";
@@ -266,7 +262,6 @@ public final class Constants {
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT = new Transform3d(
       new Translation3d(Units.inchesToMeters(14),0,Units.inchesToMeters(13.5)),//Units.inchesToMeters(17.5)),
       new Rotation3d(0.0, Units.degreesToRadians(20), Units.degreesToRadians(180))
-      
     );
     
     public static final double FIELD_LENGTH_METERS = 16.54175;

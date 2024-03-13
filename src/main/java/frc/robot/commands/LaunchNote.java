@@ -4,9 +4,6 @@
 
 package frc.robot.commands;
 
-import static frc.robot.Constants.LauncherConstants.kLaunchFeederSpeed;
-import static frc.robot.Constants.LauncherConstants.kLauncherSpeed;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SUBShooter;
 
@@ -16,31 +13,31 @@ import frc.robot.subsystems.SUBShooter;
  * will override.
  */
 public class LaunchNote extends Command {
-  SUBShooter m_launcher;
+  private SUBShooter subShooter;
 
-  // CANLauncher m_launcher;
+  // CANLauncher subShooter;
 
   /** Creates a new LaunchNote. */
   public LaunchNote(SUBShooter launcher) {
     // save the launcher system internally
-    m_launcher = launcher;
+    subShooter = launcher;
 
     // indicate that this command requires the launcher system
-    addRequirements(m_launcher);
+    addRequirements(subShooter);
   }
 
   // The initialize method is called when the command is initially scheduled.
   @Override
   public void initialize() {
     // Set the wheels to launching speed
-    //m_launcher.setLaunchWheel(kLauncherSpeed);
-    //m_launcher.setFeedWheel(kLaunchFeederSpeed);
+    //subShooter.setLaunchWheel(kLauncherSpeed);
+    //subShooter.setFeedWheel(kLaunchFeederSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.getLaunchCommand().execute();
+    subShooter.getLaunchCommand().execute();
     // There is nothing we need this command to do on each iteration. You could remove this method
     // and the default blank method
     // of the base class will run.
@@ -58,6 +55,6 @@ public class LaunchNote extends Command {
   @Override
   public void end(boolean interrupted) {
     // Stop the wheels when the command ends.
-    m_launcher.stop();
+    subShooter.stop();
   }
 }

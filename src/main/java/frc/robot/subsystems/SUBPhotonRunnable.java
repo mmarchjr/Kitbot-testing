@@ -35,15 +35,16 @@ public class SUBPhotonRunnable implements Runnable {
   public SUBPhotonRunnable(String cameraName, BiConsumer<Pose2d, Double> poseConsumer) {
     this.poseConsumer = poseConsumer;
     var cameraTable = NetworkTableInstance.getDefault().getTable("photonvision").getSubTable(cameraName);
-    rawBytesSubscriber = cameraTable.getRawTopic("rawBytes")
-        .subscribe(
-            "rawBytes", new byte[] {}, PubSubOption.periodic(0.01), PubSubOption.sendAll(true));
+    rawBytesSubscriber = cameraTable.getRawTopic("rawBytes").subscribe(
+      "rawBytes", new byte[] {}, PubSubOption.periodic(0.01), PubSubOption.sendAll(true)
+    );
 
     var layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     // Origin will always be blue
     layout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
     photonPoseEstimator = new PhotonPoseEstimator(
-        layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new PhotonCamera(cameraName), APRILTAG_CAMERA_TO_ROBOT.inverse());
+      layout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new PhotonCamera(cameraName), APRILTAG_CAMERA_TO_ROBOT.inverse()
+    );
   }
 
   @Override
@@ -60,15 +61,16 @@ public class SUBPhotonRunnable implements Runnable {
         // Get AprilTag data
         var photonResults = getLatestResult();
         if (photonResults.hasTargets() 
-            && (photonResults.targets.size() > 1 || photonResults.targets.get(0).getPoseAmbiguity() < APRILTAG_AMBIGUITY_THRESHOLD)) {
-          photonPoseEstimator.update(photonResults).ifPresent(estimatedRobotPose -> {
-            var estimatedPose = estimatedRobotPose.estimatedPose;
-            // Make sure the measurement is on the field
-            if (estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FIELD_LENGTH_METERS
-                && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FIELD_WIDTH_METERS) {
-                  poseConsumer.accept(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
-            }
-          });
+          && (photonResults.targets.size() > 1 
+          || photonResults.targets.get(0).getPoseAmbiguity() < APRILTAG_AMBIGUITY_THRESHOLD)) {
+            photonPoseEstimator.update(photonResults).ifPresent(estimatedRobotPose -> {
+              var estimatedPose = estimatedRobotPose.estimatedPose;
+              // Make sure the measurement is on the field
+              if (estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FIELD_LENGTH_METERS
+                  && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FIELD_WIDTH_METERS) {
+                    poseConsumer.accept(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
+              }
+            });
         }
       }
     }
