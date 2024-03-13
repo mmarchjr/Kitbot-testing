@@ -68,8 +68,8 @@ public class SUBShooter extends SubsystemBase {
     return this.startEnd(
       // When the command is initialized, set the wheels to the intake speed values
       () -> {
-        setFeedWheel(kIntakeFeederSpeed);
-        setLaunchWheel(kIntakeLauncherSpeed);
+        setFeedWheel(0.7);
+        setLaunchWheel(0);
       },
       // When the command stops, stop the wheels
       () -> {

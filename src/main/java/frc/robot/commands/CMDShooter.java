@@ -4,21 +4,27 @@
 
 package frc.robot.commands;
 
+import org.photonvision.common.hardware.VisionLEDMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SUBShooter;
+import frc.robot.subsystems.SUBVision;
 
 public class CMDShooter extends Command {
   private SUBShooter subShooter;
+  private SUBVision subVision;
   private static CommandXboxController xbox = RobotContainer.getDriverController2();
   /** Creates a new CMDShooter. */
-  public CMDShooter(SUBShooter sub) {
+  public CMDShooter(SUBShooter sub,SUBVision vision) {
     // addRequirements(RobotContainer.m_SUBShooter);
     // Use addRequirements() here to declare subsystem dependencies.\
     addRequirements(sub);
+    addRequirements(vision);
     this.subShooter = sub;
+    this.subVision = vision;
   }
 
   // Called when the command is initially scheduled.
@@ -33,8 +39,8 @@ public class CMDShooter extends Command {
     if (xbox.leftTrigger().getAsBoolean()) {feedvalue=0.7;}
     if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5; launchvalue =-.25;}
     //if (xbox.rightTrigger().getAsBoolean()) {launchvalue=1;}
-    if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.1;feedvalue=0.5;}// else {
-    //launchvalue = xbox.rightTrigger().getAsBoolean() ? 1 : 0;}
+    if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.1;feedvalue=0.5; subVision.setLights(VisionLEDMode.kOff);} else {
+    subVision.setLights(VisionLEDMode.kOff);}
     subShooter.setLaunchWheel(launchvalue);
     subShooter.setFeedWheel(feedvalue);
     SmartDashboard.putNumber("shooter speed", subShooter.getRPM());

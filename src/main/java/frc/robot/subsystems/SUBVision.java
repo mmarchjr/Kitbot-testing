@@ -42,6 +42,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
@@ -182,5 +183,8 @@ public class SUBVision extends SubsystemBase{
   }
   public boolean HasTargets() {
     return getEstimatedGlobalPose().isPresent();
+  }
+  public void setLights(VisionLEDMode mode){
+    camera.setLED(mode);
   }
 }

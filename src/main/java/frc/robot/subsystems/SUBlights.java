@@ -23,6 +23,7 @@ public class SUBlights extends SubsystemBase {
 
     lightStrand.setLength(Constants.kStrandLength);
     lightStrand.start();
+    
   }
 
   public void set_full_strand(int R,int G,int B){

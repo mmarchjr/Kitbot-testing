@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,8 +32,8 @@ public class CMDlights extends Command {
     loadingNotifier = //Based on https://github.com/Mechanical-Advantage/RobotCode2023/blob/f0c26dc20e0f324a2093a4c81c687d41a120a07d/src/main/java/org/littletonrobotics/frc2023/subsystems/leds/Leds.java#L90-L103
         new Notifier(
             () -> {
-              //subGlow.set_full_strand((getBreatheColor(Constants.kblueRGB, Constants.kyellowRGB, System.currentTimeMillis()/1000)));
-              subGlow.set_full_strand(getBlinkColor(1.5, 1));
+              subGlow.set_full_strand((getBreatheColor(Constants.kblueRGB, Constants.kyellowRGB, System.currentTimeMillis()/1000)));
+              //subGlow.set_full_strand(getBlinkColor(1.5, 1));
             }
         );
     loadingNotifier.startPeriodic(0.02);
@@ -53,10 +54,15 @@ public class CMDlights extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (DriverStation.isEnabled()) {
+      subGlow.set_full_strand(0,0,0);
+    lightTimer.stop();
+    loadingNotifier.stop();
+    }
     //loadingNotifier.stop(); //ensure the breath effect for early view stops when anything else is ready
 
-    int[] breatheRGB = getBreatheColor(Constants.kyellowRGB, Constants.kblueRGB, lightTimer.get());
-    subGlow.set_full_strand(breatheRGB[0], breatheRGB[1], breatheRGB[2]); //pass the color to the strand
+    //int[] breatheRGB = getBreatheColor(Constants.kyellowRGB, Constants.kblueRGB, lightTimer.get());
+    //subGlow.set_full_strand(breatheRGB[0], breatheRGB[1], breatheRGB[2]); //pass the color to the strand
     //sweep( (int) (lightTimer.get()*Constants.kStrandLength) );
     if(RobotContainer.kSUBShooter.getRPM() > 5000 && ShooterLightChooser.getSelected()){
       subGlow.set_full_strand(0,255,0);
@@ -65,7 +71,7 @@ public class CMDlights extends Command {
   }
 
   int[] getBreatheColor(int[] yellow, int[] blue, double time){
-    double controlValue = Math.sin(time); 
+    double controlValue = Math.sin(time*2); 
     double yellowness = MathUtil.clamp(controlValue,0,1);
     double blueness = MathUtil.clamp(-controlValue,0,1);
     //SmartDashboard.putNumber("blueness",blueness);

@@ -53,9 +53,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.6;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 3; // radians per second
-    public static final double kMagnitudeSlewRate = 3; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 3.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 5; // radians per second
+    public static final double kMagnitudeSlewRate = 5; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 5; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26);
@@ -220,7 +220,7 @@ public final class Constants {
 
   public static final int kstrandPort = 0;
   public static final int kStrandLength = 72;
-  
+
   //public static int[] kyellowRGB = {255, 150, 0};
   public static int[] kyellowRGB = {64,38,0};
   //public static int[] kblueRGB = {0,100,255};

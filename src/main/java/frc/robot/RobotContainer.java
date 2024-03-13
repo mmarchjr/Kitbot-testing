@@ -44,12 +44,13 @@ import frc.robot.subsystems.SUBlights;
 public class RobotContainer {
   public static final SUBlights m_lights = new SUBlights();
     public static final CMDlights m_lightCommand = new CMDlights(m_lights);
+    public static final SUBVision kSUBVision = new SUBVision();
+
   //The robot's subsystems
   private static final SUBDrive kRobotDrive = new SUBDrive();
   private static final CMDDrive kDriveRobotCommand = new CMDDrive(kRobotDrive);
   public static final SUBShooter kSUBShooter = new SUBShooter();
-  private static final CMDShooter kCMDShooter = new CMDShooter(kSUBShooter);
-  private static final SUBVision kSUBVision = new SUBVision();
+  private static final CMDShooter kCMDShooter = new CMDShooter(kSUBShooter,kSUBVision);
   private static final SUBArm kSUBArm = new SUBArm();
   private static final CMDArm kCMDArm = new CMDArm(kSUBArm);
   private static final SUBClimb kSUBClimb = new SUBClimb();
@@ -110,7 +111,7 @@ public class RobotContainer {
 
     // Configure the button bindings
 
-    NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().withTimeout(1));
+    NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().repeatedly());
     NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
     NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
     NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
