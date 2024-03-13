@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.0
+      "x": 0.6769900265464248,
+      "y": 7.315776578455812
     },
     "rotation": 0
   },
@@ -12,9 +12,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "testing"
+            "pathName": "leave"
           }
         }
       ]
