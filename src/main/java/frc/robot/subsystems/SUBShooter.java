@@ -24,35 +24,34 @@ import frc.robot.Constants.LauncherConstants;
 
 public class SUBShooter extends SubsystemBase {
 
-  CANSparkMax m_launchWheel1;
-  CANSparkMax m_launchWheel2;
+  private CANSparkMax launchWheel1;
+  private CANSparkMax launchWheel2;
 
-  CANSparkMax m_feedWheel;
-  PIDController pid = new PIDController(LauncherConstants.kP, LauncherConstants.kI, LauncherConstants.kD);
-  RelativeEncoder encoder;
-  Double velocity;
+  private CANSparkMax feedWheel;
+  private PIDController pid = new PIDController(LauncherConstants.kP, LauncherConstants.kI, LauncherConstants.kD);
+  private RelativeEncoder encoder;
+  private Double velocity;
 
   /** Creates a new Launcher. */
   public SUBShooter() {
-    m_launchWheel1 = new CANSparkMax(kLauncherID1, MotorType.kBrushless);
-    m_launchWheel2 = new CANSparkMax(kLauncherID2, MotorType.kBrushless);
-    m_feedWheel = new CANSparkMax(kFeederID, MotorType.kBrushless);
+    launchWheel1 = new CANSparkMax(kLauncherID1, MotorType.kBrushless);
+    launchWheel2 = new CANSparkMax(kLauncherID2, MotorType.kBrushless);
+    feedWheel = new CANSparkMax(kFeederID, MotorType.kBrushless);
 
     pid.setP(LauncherConstants.kP);
     pid.setI(LauncherConstants.kI);
     pid.setD(LauncherConstants.kD);
     
-    encoder = m_launchWheel1.getEncoder();
-      
+    encoder = launchWheel1.getEncoder();
   }
 
   public void init () {
-    m_launchWheel1.setSmartCurrentLimit(kLauncherCurrentLimit);
-    m_feedWheel.setSmartCurrentLimit(kFeedCurrentLimit);
-    m_feedWheel.setIdleMode(IdleMode.kBrake);
-    m_launchWheel1.setIdleMode(IdleMode.kCoast);
-    m_launchWheel2.setIdleMode(IdleMode.kCoast);
-    encoder = m_launchWheel1.getEncoder();
+    launchWheel1.setSmartCurrentLimit(kLauncherCurrentLimit);
+    feedWheel.setSmartCurrentLimit(kFeedCurrentLimit);
+    feedWheel.setIdleMode(IdleMode.kBrake);
+    launchWheel1.setIdleMode(IdleMode.kCoast);
+    launchWheel2.setIdleMode(IdleMode.kCoast);
+    encoder = launchWheel1.getEncoder();
   }
 
   /**
@@ -109,16 +108,18 @@ public Command getIdleCommand() {
       }
     );
   }
+
   // An accessor method to set the speed (technically the output percentage) of the launch wheel
   public void setLaunchWheel(double speed) {
-    m_launchWheel1.set(speed);
-    m_launchWheel2.set(speed);
+    launchWheel1.set(speed);
+    launchWheel2.set(speed);
   }
 
   // An accessor method to set the speed (technically the output percentage) of the feed wheel
   public void setFeedWheel(double speed) {
-    m_feedWheel.set(speed);
+    feedWheel.set(speed);
   }
+
   public void setWheels(Double feed, Double Launch) {
     setFeedWheel(feed);
     setLaunchWheel(Launch);
@@ -127,9 +128,10 @@ public Command getIdleCommand() {
   // A helper method to stop both wheels. You could skip having a method like this and call the
   // individual accessors with speed = 0 instead
   public void stop() {
-    m_launchWheel1.set(0);
-    m_feedWheel.set(0);
+    launchWheel1.set(0);
+    feedWheel.set(0);
   }
+  
   public double getRPM() {
     return encoder.getVelocity();
   }

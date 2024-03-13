@@ -85,10 +85,10 @@ public class SUBDrive extends SubsystemBase {
     swerveDriveOdometry.update(
       Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)),
       new SwerveModulePosition[] {
-          kFrontLeft.getPosition(),
-          kFrontRight.getPosition(),
-          kRearLeft.getPosition(),
-          kRearRight.getPosition()
+        kFrontLeft.getPosition(),
+        kFrontRight.getPosition(),
+        kRearLeft.getPosition(),
+        kRearRight.getPosition()
       }
     );
   }
@@ -111,10 +111,10 @@ public class SUBDrive extends SubsystemBase {
     swerveDriveOdometry.resetPosition(
       Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)),
       new SwerveModulePosition[] {
-          kFrontLeft.getPosition(),
-          kFrontRight.getPosition(),
-          kRearLeft.getPosition(),
-          kRearRight.getPosition()
+        kFrontLeft.getPosition(),
+        kFrontRight.getPosition(),
+        kRearLeft.getPosition(),
+        kRearRight.getPosition()
       },
       pose
     );
@@ -157,7 +157,7 @@ public class SUBDrive extends SubsystemBase {
       else if (angleDif > 0.85*Math.PI) {
         if (currentTranslationMag > 1e-4) {// some small number to avoid floating-point errors with equality checking
           // keep currentTranslationDir unchanged
-           currentTranslationMag = magLimiter.calculate(0.0);
+          currentTranslationMag = magLimiter.calculate(0.0);
         }
         else {
           currentTranslationDir = SwerveUtils.WrapAngle(currentTranslationDir + Math.PI);
@@ -245,9 +245,11 @@ public class SUBDrive extends SubsystemBase {
   public double getHeading() {
     return Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)).getDegrees();
   }
+
   public void resetGyro() {
     kGyro.reset();
   }
+
   public ChassisSpeeds getspeed() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(getStates());
   }
@@ -264,13 +266,12 @@ public class SUBDrive extends SubsystemBase {
   }
   
   public SwerveModulePosition[] getPosition() {
-    SwerveModulePosition[] modulePositions =
-      new SwerveModulePosition[] {
-        kFrontLeft.getPosition(),
-        kFrontRight.getPosition(),
-        kRearLeft.getPosition(),
-        kRearRight.getPosition()
-      };
+    SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {
+      kFrontLeft.getPosition(),
+      kFrontRight.getPosition(),
+      kRearLeft.getPosition(),
+      kRearRight.getPosition()
+    };
 
     return modulePositions;
   }

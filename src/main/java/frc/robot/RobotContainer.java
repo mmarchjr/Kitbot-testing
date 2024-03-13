@@ -76,7 +76,6 @@ public class RobotContainer {
 
     // kRobotDrive.resetOdometry(new Pose2d(8.25,4.1, Rotation2d.fromDegrees(0)));
     //kRobotDrive.resetOdometry(PathPlannerPath.fromPathFile("2 note auto").getPreviewStartingHolonomicPose());
-    
 
     AutoBuilder.configureHolonomic(
       kPoseEstimator::getCurrentPose,  //Robot pose supplier

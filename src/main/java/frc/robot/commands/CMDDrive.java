@@ -34,7 +34,6 @@ public class CMDDrive extends Command {
   private static final double kP = 0.015;
   private static final double kI = 0.00;
   private static final double kD = 0.00;
-  private static final double kF = 0.00;
   private static final double kToleranceDegrees = 5.0f;
   private boolean rotateToAngle;
 
