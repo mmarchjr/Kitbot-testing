@@ -117,10 +117,10 @@ m_turningPIDController.setReference(encoder.getPosition(), CANSparkMax.ControlTy
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("armP", Constants.ArmConstants.kP);
-    SmartDashboard.putNumber("armI", Constants.ArmConstants.kI);
-    SmartDashboard.putNumber("armD", Constants.ArmConstants.kD);
-    SmartDashboard.putNumber("pos", encoder.getPosition());
+    //SmartDashboard.putNumber("armP", Constants.ArmConstants.kP);
+    //SmartDashboard.putNumber("armI", Constants.ArmConstants.kI);
+    //SmartDashboard.putNumber("armD", Constants.ArmConstants.kD);
+    //SmartDashboard.putNumber("pos", encoder.getPosition());
     m_turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
 
   }

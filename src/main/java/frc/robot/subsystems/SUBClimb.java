@@ -106,9 +106,9 @@ public class SUBClimb extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.setDefaultNumber("hookP", Constants.HookConstants.kP);
-        SmartDashboard.setDefaultNumber("hookI", Constants.HookConstants.kI);
-        SmartDashboard.setDefaultNumber("hookD", Constants.HookConstants.kD);
+        //SmartDashboard.setDefaultNumber("hookP", Constants.HookConstants.kP);
+        //SmartDashboard.setDefaultNumber("hookI", Constants.HookConstants.kI);
+        //SmartDashboard.setDefaultNumber("hookD", Constants.HookConstants.kD);
     }
 
 

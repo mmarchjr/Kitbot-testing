@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4107523041410366,
-      "y": 7.7
+      "x": 1.4088711363263433,
+      "y": 7.1373805579469565
     },
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp shot"
+            "pathName": "Move to Amp 1st Note"
           }
         },
         {

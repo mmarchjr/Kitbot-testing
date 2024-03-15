@@ -69,13 +69,13 @@ public class CMDDrive extends Command {
 
     //Get joystick input values and apply deadband
     if (RobotContainer.getControlMode() == ControlMode.Drone) {
-      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightY(), 0.15);
-      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
-      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
+      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightY(), 0.17);
+      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.17);
+      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.17);
     } else {
-      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftY(), 0.15);
-      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.15);
-      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.15);
+      y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftY(), 0.17);
+      x = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getLeftX(), 0.17);
+      turn = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightX(), 0.17);
     }
 
     // Determine if robot is at setpoint and needs to rotate to angle
@@ -164,6 +164,6 @@ public class CMDDrive extends Command {
   public boolean isFinished() {
     return false;
   }
-
+  
 }
 

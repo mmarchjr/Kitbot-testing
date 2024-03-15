@@ -116,7 +116,7 @@ public class CMDlights extends Command {
       }
     }
     else{ //sweep back
-      SmartDashboard.putString("sweepdir", "back");
+      //SmartDashboard.putString("sweepdir", "back");
       for (var i = 0;i<Constants.kStrandLength;i++){
         if(i<Constants.kStrandLength - position){
           subGlow.set_pos_RGB(i, Constants.kblueRGB);

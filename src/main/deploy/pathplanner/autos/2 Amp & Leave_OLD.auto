@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4107523041410366,
-      "y": 7.7
+      "x": 1.4408909348792147,
+      "y": 7.292905293775189
     },
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp shot"
+            "pathName": "Move to Amp 1st Note"
           }
         },
         {
@@ -38,23 +38,35 @@
         {
           "type": "named",
           "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "pick up amp note prep"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Arm Intake"
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Take Note"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "note pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Take Note"
                 }
               }
             ]
@@ -69,7 +81,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp shot"
+            "pathName": "Move to Amp 1st Note"
           }
         },
         {

@@ -53,9 +53,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.6;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 5; // radians per second
-    public static final double kMagnitudeSlewRate = 5; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 5; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 5.5; // radians per second
+    public static final double kMagnitudeSlewRate = 5.5; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 5.5; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26);
@@ -252,7 +252,7 @@ public final class Constants {
     public static final int kArmMotor1 = 9;
     public static final int kArmMotor2 = 10;
     public static final double kAmpPosition = Units.degreesToRotations(78);//80 is top
-    public static final double kIntakePosition = Units.degreesToRotations(-3);
+    public static final double kIntakePosition = Units.degreesToRotations(-1);
     public static final double kIntakeUpPosition = kIntakePosition + Units.degreesToRotations(5);
     public static final double kSpeakerPosition = Units.degreesToRotations(13);
     public static final double kInsidePosition = Units.degreesToRotations(65);

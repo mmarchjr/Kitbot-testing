@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4408909348792147,
+      "y": 7.292905293775189
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Amp 1st Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Up"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

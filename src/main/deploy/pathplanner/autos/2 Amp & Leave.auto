@@ -1,0 +1,99 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4088711363263433,
+      "y": 7.1373805579469565
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Amp 1st Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "pick up amp note prep"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Intake"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "note pickup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Take Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Move to Amp 2nd Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Arm Up"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

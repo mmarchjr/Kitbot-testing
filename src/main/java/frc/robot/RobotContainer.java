@@ -113,8 +113,8 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().repeatedly());
     NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
-    NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
-    NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
+    NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
+    NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(2));//.until(()->kSUBArm.isAtSetpoint()));
     NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
     NamedCommands.registerCommand("Speaker Note", new RunCommand(
       ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>5000))
@@ -135,7 +135,7 @@ public class RobotContainer {
     SmartDashboard.putData("Rate limit",rateLimitChooser);
     SmartDashboard.putData("Field oriented",fieldOrientedChooser);
     SmartDashboard.putData("Controls", controlChooser);
-    SmartDashboard.putData("Robot Select", robotChooser);
+    //SmartDashboard.putData("Robot Select", robotChooser);
 
     // Configure default commands
     kSUBShooter.setDefaultCommand(kCMDShooter);
@@ -176,7 +176,7 @@ public class RobotContainer {
     //OIDriverController1.rightTrigger(0.1)
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));
-    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
+    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).repeatedly().withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
     OIDriverController2.x().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm));
     OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm));
     OIDriverController1.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kInsidePosition), kSUBArm));
