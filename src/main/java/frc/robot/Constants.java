@@ -254,7 +254,7 @@ public final class Constants {
     public static final double kAmpPosition = Units.degreesToRotations(78);//80 is top
     public static final double kIntakePosition = Units.degreesToRotations(-1);
     public static final double kIntakeUpPosition = kIntakePosition + Units.degreesToRotations(5);
-    public static final double kSpeakerPosition = Units.degreesToRotations(13);
+    public static final double kSpeakerPosition = Units.degreesToRotations(12);
     public static final double kInsidePosition = Units.degreesToRotations(65);
     public static final double kHoldPosition = Units.degreesToRotations(6.5);
     public static final double kP = 2.7;
