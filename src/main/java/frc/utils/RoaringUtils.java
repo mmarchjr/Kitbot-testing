@@ -136,4 +136,14 @@ public class RoaringUtils {
             }
           }
     }
+    public class POVDirections {
+      public static final int POVTop = 0;
+      public static final int POVTopRight = 45;
+      public static final int POVRight = 90;
+      public static final int POVBottomRight = 135;
+      public static final int POVBottom = 180;
+      public static final int POVBottomLeft = 225;
+      public static final int POVLeft = 270;
+      public static final int POVTopLeft = 315;
+    }
 }

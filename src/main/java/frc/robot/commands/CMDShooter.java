@@ -36,10 +36,10 @@ public class CMDShooter extends Command {
   public void execute() {
     double feedvalue = 0;
     double launchvalue= 0;
-    if (xbox.leftTrigger().getAsBoolean()) {feedvalue=0.7;}
-    if (xbox.leftBumper().getAsBoolean()) {feedvalue=-0.5; launchvalue =-.25;}
+    if (xbox.getHID().getLeftTriggerAxis()==1) {feedvalue=0.7;}
+    if (xbox.getHID().getLeftBumper()) {feedvalue=-0.5; launchvalue =-.25;}
     //if (xbox.rightTrigger().getAsBoolean()) {launchvalue=1;}
-    if (xbox.rightTrigger().getAsBoolean()) {launchvalue=0.1;feedvalue=0.5; subVision.setLights(VisionLEDMode.kOff);} else {
+    if (xbox.getHID().getRightTriggerAxis()==1) {launchvalue=0.1;feedvalue=0.5; subVision.setLights(VisionLEDMode.kOff);} else {
     subVision.setLights(VisionLEDMode.kOff);}
     subShooter.setLaunchWheel(launchvalue);
     subShooter.setFeedWheel(feedvalue);

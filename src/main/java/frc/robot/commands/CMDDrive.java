@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -13,6 +14,7 @@ import frc.robot.RobotContainer.ControlMode;
 import frc.robot.subsystems.SUBDrive;
 import frc.robot.RobotContainer;
 import frc.utils.RoaringUtils;
+import frc.utils.RoaringUtils.POVDirections;
 
 public class CMDDrive extends Command {
   /** Creates a new driveRobot. */
@@ -94,21 +96,21 @@ public class CMDDrive extends Command {
     }
 
     //Adjust setpoint if "B" button is pressed
-    if (OIDriver1Controller.b().getAsBoolean()) {
+    if (OIDriver1Controller.getHID().getBButton()) {
       turnController.setSetpoint(kSubDrive.getHeading());
     }
 
     //Adjust setpoint based on POV input
-    if (OIDriver1Controller.povUp().getAsBoolean()) {
+    if (OIDriver1Controller.getHID().getPOV()== POVDirections.POVTop) {
       turnController.setSetpoint(0.0f);
       rotateToAngle = true;
-    } else if (OIDriver1Controller.povRight().getAsBoolean()) {
+    } else if (OIDriver1Controller.getHID().getPOV()== POVDirections.POVRight) {
       turnController.setSetpoint(-90.0f);
       rotateToAngle = true;
-    } else if (OIDriver1Controller.povDown().getAsBoolean()) {
+    } else if (OIDriver1Controller.getHID().getPOV()== POVDirections.POVBottom) {
       turnController.setSetpoint(179.9f);
       rotateToAngle = true;
-    } else if (OIDriver1Controller.povLeft().getAsBoolean()) {
+    } else if (OIDriver1Controller.getHID().getPOV()== POVDirections.POVLeft) {
       turnController.setSetpoint(90.0f);
       rotateToAngle = true;
     }
@@ -144,7 +146,7 @@ public class CMDDrive extends Command {
     pastTurn = turn;
 
     //Reset gyro, adjust setpoint, and set rumble if "Y" button is pressed
-    if (OIDriver1Controller.y().getAsBoolean()) {
+    if (OIDriver1Controller.getHID().getAButton()) {
       kSubDrive.resetGyro();
       turnController.setSetpoint(kSubDrive.getHeading());
       OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble, 0.5);
