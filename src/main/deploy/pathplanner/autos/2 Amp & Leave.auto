@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4088711363263433,
-      "y": 7.1373805579469565
+      "x": 1.4271681640708413,
+      "y": 7.297479550711314
     },
     "rotation": 0.0
   },
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Arm Up"
+            "name": "Arm Amp"
           }
         },
         {
@@ -24,27 +24,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Arm Amp"
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Amp Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Arm Up"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pick up amp note prep"
           }
         },
         {
@@ -73,22 +61,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Move to Amp 2nd Note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Arm Up"
-                }
-              }
-            ]
+            "pathName": "Move to Amp 1st Note closer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Note"
           }
         }
       ]

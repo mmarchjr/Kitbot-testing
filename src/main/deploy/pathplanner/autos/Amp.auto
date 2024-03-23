@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4408909348792147,
-      "y": 7.292905293775189
+      "x": 1.4271681640708413,
+      "y": 7.297479550711314
     },
     "rotation": 0.0
   },
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Arm Up"
+            "name": "Arm Amp"
           }
         },
         {
@@ -24,9 +24,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Arm Amp"
+            "waitTime": 1.0
           }
         },
         {
