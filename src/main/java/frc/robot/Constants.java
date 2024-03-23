@@ -231,7 +231,7 @@ public final class Constants {
     public static final int kLauncherID1 = 12;
     public static final int kLauncherID2 = 13;
     public static final int kLauncherCurrentLimit = 30;
-    public static final int kFeedCurrentLimit =;
+    public static final int kFeedCurrentLimit =30;
 
     // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
     // in reverse
