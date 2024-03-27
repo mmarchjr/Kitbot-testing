@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SUBClimb;
-import frc.utils.RoaringUtils.DeadzoneUtils;
 
 public class CMDClimb extends Command {
   /** Creates a new CMDClimb. */

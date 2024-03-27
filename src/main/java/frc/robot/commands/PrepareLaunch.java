@@ -12,24 +12,24 @@ import frc.robot.subsystems.SUBShooter;
 // import frc.robot.subsystems.CANLauncher;
 
 public class PrepareLaunch extends Command {
-  SUBShooter m_launcher;
+  SUBShooter subShooter;
 
-  // CANLauncher m_launcher;
+  // CANLauncher subShooter;
 
   /** Creates a new PrepareLaunch. */
   public PrepareLaunch(SUBShooter launcher) {
     // save the launcher system internally
-    m_launcher = launcher;
+    subShooter = launcher;
 
     // indicate that this command requires the launcher system
-    addRequirements(m_launcher);
+    addRequirements(subShooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     // Set launch wheel to speed, keep feed wheel at 0 to let launch wheel spin up.
-    m_launcher.setLaunchWheel(kLauncherSpeed);
+    subShooter.setLaunchWheel(kLauncherSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
