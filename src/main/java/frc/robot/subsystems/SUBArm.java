@@ -43,9 +43,9 @@ public class SUBArm extends SubsystemBase {
     armMotor2.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
-    m_turningPIDController = armMotor1.sparkMax.getPIDController();
-    m_turningPIDController.setFeedbackDevice(encoder);
-    m_turningPIDController.setOutputRange(-1,1);
+    turningPIDController = armMotor1.sparkMax.getPIDController();
+    turningPIDController.setFeedbackDevice(encoder);
+    turningPIDController.setOutputRange(-1,1);
 
     turningPIDController = armMotor1.sparkMax.getPIDController();
     turningPIDController.setFeedbackDevice(encoder);
@@ -122,7 +122,7 @@ public class SUBArm extends SubsystemBase {
     //SmartDashboard.putNumber("armI", Constants.ArmConstants.kI);
     //SmartDashboard.putNumber("armD", Constants.ArmConstants.kD);
     //SmartDashboard.putNumber("pos", encoder.getPosition());
-    m_turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
+    turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
 
 
   }

@@ -109,7 +109,7 @@ public class SUBMAXSwerveModule {
     kDrivingSparkMax.burnFlash();
     kTurningSparkMax.burnFlash();
 
-    chassisAngularOffset = chassisAngularOffset;
+    this.chassisAngularOffset = chassisAngularOffset;
     desiredState.angle = new Rotation2d(kTurningEncoder.getPosition());
     kDrivingEncoder.setPosition(0);
   }
