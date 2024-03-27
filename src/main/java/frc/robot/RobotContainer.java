@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.CMDArm;
 import frc.robot.commands.CMDClimb;
@@ -42,6 +43,7 @@ import frc.robot.subsystems.SUBlights;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private static final int kShooterRPM = LauncherConstants.kShooterRPM;
   public static final SUBlights m_lights = new SUBlights();
     public static final CMDlights m_lightCommand = new CMDlights(m_lights);
     public static final SUBVision kSUBVision = new SUBVision();
@@ -117,8 +119,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(2));//.until(()->kSUBArm.isAtSetpoint()));
     NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
     NamedCommands.registerCommand("Speaker Note", new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>5000))
-      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0),kSUBShooter).repeatedly().withTimeout(1)));
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>kShooterRPM))
+      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0),kSUBShooter).repeatedly().withTimeout(1)));
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
     NamedCommands.registerCommand("Arm Up", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm).withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
@@ -171,8 +173,8 @@ public class RobotContainer {
     ));
       
     OIDriverController2.rightBumper().whileTrue(new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM() >5000)).withTimeout(3)
-      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0)).repeatedly().withTimeout(1)));
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM() >kShooterRPM)).withTimeout(3)
+      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0)).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));

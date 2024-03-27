@@ -39,7 +39,8 @@ public class SUBArm extends SubsystemBase {
   public SUBArm(
   ) {
 
-    pid.setTolerance(Units.degreesToRotations(2));
+    pid.setTolerance(Units.degreesToRotations(0.5));
+    
     armMotor1.sparkMax.restoreFactoryDefaults();
     armMotor1.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
     armMotor2.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
@@ -48,6 +49,7 @@ public class SUBArm extends SubsystemBase {
     m_turningPIDController = armMotor1.sparkMax.getPIDController();
     m_turningPIDController.setFeedbackDevice(encoder);
     m_turningPIDController.setOutputRange(-1,1);
+    
 
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,
