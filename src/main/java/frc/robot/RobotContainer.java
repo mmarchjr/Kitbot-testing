@@ -21,17 +21,20 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.CMDArm;
 import frc.robot.commands.CMDClimb;
 import frc.robot.commands.CMDDrive;
 import frc.robot.commands.CMDShooter;
+import frc.robot.commands.CMDlights;
 import frc.robot.subsystems.SUBArm;
 import frc.robot.subsystems.SUBClimb;
 import frc.robot.subsystems.SUBDrive;
 import frc.robot.subsystems.SUBPoseEstimator;
 import frc.robot.subsystems.SUBShooter;
 import frc.robot.subsystems.SUBVision;
+import frc.robot.subsystems.SUBlights;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,12 +43,16 @@ import frc.robot.subsystems.SUBVision;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private static final int kShooterRPM = LauncherConstants.kShooterRPM;
+  public static final SUBlights m_lights = new SUBlights();
+    public static final CMDlights m_lightCommand = new CMDlights(m_lights);
+    public static final SUBVision kSUBVision = new SUBVision();
+
   //The robot's subsystems
   private static final SUBDrive kRobotDrive = new SUBDrive();
   private static final CMDDrive kDriveRobotCommand = new CMDDrive(kRobotDrive);
-  private static final SUBShooter kSUBShooter = new SUBShooter();
-  private static final CMDShooter kCMDShooter = new CMDShooter(kSUBShooter);
-  private static final SUBVision kSUBVision = new SUBVision();
+  public static final SUBShooter kSUBShooter = new SUBShooter();
+  private static final CMDShooter kCMDShooter = new CMDShooter(kSUBShooter,kSUBVision);
   private static final SUBArm kSUBArm = new SUBArm();
   private static final CMDArm kCMDArm = new CMDArm(kSUBArm);
   private static final SUBClimb kSUBClimb = new SUBClimb();
@@ -83,9 +90,9 @@ public class RobotContainer {
       kRobotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       kRobotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-        new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-        new PIDConstants(12, 0.0, 0.0),//  Rotation PID constants
-        3,//  Max module speed, in m/s
+        new PIDConstants(10, 0.0, 0.0), // Translation PID constants
+        new PIDConstants(10, 0.0, 0.0),//  Rotation PID constants
+        2,//  Max module speed, in m/s
         Units.inchesToMeters(18.2), // Drive base radius in meters. Distance from robot center to furthest module.
         new ReplanningConfig() // Default path replanning config. See the API for the options here
       ),
@@ -105,14 +112,14 @@ public class RobotContainer {
 
     // Configure the button bindings
 
-    NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().withTimeout(1));
+    NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().repeatedly());
     NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
-    NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
-    NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(3));//.until(()->kSUBArm.isAtSetpoint()));
+    NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
+    NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(2));//.until(()->kSUBArm.isAtSetpoint()));
     NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
     NamedCommands.registerCommand("Speaker Note", new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>5000))
-      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0),kSUBShooter).repeatedly().withTimeout(1)));
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>kShooterRPM))
+      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0),kSUBShooter).repeatedly().withTimeout(1)));
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
     NamedCommands.registerCommand("Arm Up", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm).withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
@@ -124,10 +131,12 @@ public class RobotContainer {
     robotChooser.setDefaultOption("Main Comp", RobotMode.CompBot);
     robotChooser.addOption("KitBot", RobotMode.KitBot);
 
+   
+
     SmartDashboard.putData("Rate limit",rateLimitChooser);
     SmartDashboard.putData("Field oriented",fieldOrientedChooser);
     SmartDashboard.putData("Controls", controlChooser);
-    SmartDashboard.putData("Robot Select", robotChooser);
+    //SmartDashboard.putData("Robot Select", robotChooser);
 
     // Configure default commands
     kSUBShooter.setDefaultCommand(kCMDShooter);
@@ -138,6 +147,8 @@ public class RobotContainer {
     kSUBVision.periodic();
     kPoseEstimator.periodic();
     kSUBClimb.setDefaultCommand(kCMDClimb);
+    m_lights.setDefaultCommand(m_lightCommand);
+
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("auto", autoChooser);
@@ -161,12 +172,12 @@ public class RobotContainer {
     ));
       
     OIDriverController2.rightBumper().whileTrue(new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM() >5000)).withTimeout(2)
-      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.5,1.0)).repeatedly().withTimeout(1)));
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM() >kShooterRPM)).withTimeout(3)
+      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0)).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));
-    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
+    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).repeatedly().withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
     OIDriverController2.x().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm));
     OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm));
     OIDriverController1.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kInsidePosition), kSUBArm));

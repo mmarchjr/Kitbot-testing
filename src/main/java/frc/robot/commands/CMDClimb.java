@@ -26,8 +26,8 @@ public class CMDClimb extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climb.changeLeftHookPosition(-((xbox.leftBumper().getAsBoolean() ? 0.5 : 0)-(xbox.leftTrigger().getAsBoolean() ? 0.5 : 0)));
-    climb.changeRightHookPosition(-((xbox.rightBumper().getAsBoolean() ? 0.5 : 0)-(xbox.rightTrigger().getAsBoolean() ? 0.5 : 0)));
+    climb.changeLeftHookPosition(-((xbox.getHID().getLeftBumper() ? 0.5 : 0)-((xbox.getHID().getLeftTriggerAxis()==1) ? 0.5 : 0)));
+    climb.changeRightHookPosition(-((xbox.getHID().getRightBumper() ? 0.5 : 0)-((xbox.getHID().getRightTriggerAxis()==1) ? 0.5 : 0)));
 
   }
 

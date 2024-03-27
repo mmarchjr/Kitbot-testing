@@ -1,0 +1,80 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.35,
+      "y": 5.6
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "speaker align note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Intake"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Take Note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "speaker note intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Arm Speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "speaker move to speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

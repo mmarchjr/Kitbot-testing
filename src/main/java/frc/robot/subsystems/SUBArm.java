@@ -36,15 +36,21 @@ public class SUBArm extends SubsystemBase {
   public SUBArm(
   ) {
 
-    pid.setTolerance(Units.degreesToRotations(2));
+    pid.setTolerance(Units.degreesToRotations(0.5));
+    
     armMotor1.sparkMax.restoreFactoryDefaults();
     armMotor1.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
     armMotor2.setSmartCurrentLimit(ArmConstants.kMotorCurrentLimit);
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
+    m_turningPIDController = armMotor1.sparkMax.getPIDController();
+    m_turningPIDController.setFeedbackDevice(encoder);
+    m_turningPIDController.setOutputRange(-1,1);
+
     turningPIDController = armMotor1.sparkMax.getPIDController();
     turningPIDController.setFeedbackDevice(encoder);
     turningPIDController.setOutputRange(-1,1);
+
 
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,
@@ -111,11 +117,13 @@ public class SUBArm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("armP", Constants.ArmConstants.kP);
-    SmartDashboard.putNumber("armI", Constants.ArmConstants.kI);
-    SmartDashboard.putNumber("armD", Constants.ArmConstants.kD);
-    SmartDashboard.putNumber("pos", encoder.getPosition());
-    turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
+
+    //SmartDashboard.putNumber("armP", Constants.ArmConstants.kP);
+    //SmartDashboard.putNumber("armI", Constants.ArmConstants.kI);
+    //SmartDashboard.putNumber("armD", Constants.ArmConstants.kD);
+    //SmartDashboard.putNumber("pos", encoder.getPosition());
+    m_turningPIDController.setReference(setpoint, CANSparkMax.ControlType.kPosition);
+
 
   }
 

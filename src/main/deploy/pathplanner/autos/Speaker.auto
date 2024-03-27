@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3642077461334232,
-      "y": 5.57371082141172
+      "x": 1.38748002513723,
+      "y": 5.550438542407914
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Arm Up"
+            "name": "Arm Speaker"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "speaker shot"
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Speaker Note"
           }
         }
       ]
