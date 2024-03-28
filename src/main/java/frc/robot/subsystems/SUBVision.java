@@ -181,6 +181,7 @@ public class SUBVision extends SubsystemBase{
     }
     return visionSim.getDebugField();
   }
+  
   public boolean HasTargets() {
     return getEstimatedGlobalPose().isPresent();
   }
