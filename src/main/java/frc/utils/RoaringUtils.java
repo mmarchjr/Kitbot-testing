@@ -146,4 +146,9 @@ public class RoaringUtils {
       public static final int POVLeft = 270;
       public static final int POVTopLeft = 315;
     }
+    public class ToleranceChecker {
+      public static boolean isWithinTolerance(double value1, double value2, double range) {
+        return Math.abs(value1 - value2) <= range;
+      }
+    }
 }

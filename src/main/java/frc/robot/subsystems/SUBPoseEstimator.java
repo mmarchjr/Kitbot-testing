@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 
 import java.io.IOException;
 
-import org.photonvision.PhotonPoseEstimator;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -50,9 +48,6 @@ public class SUBPoseEstimator extends SubsystemBase {
   private final Field2d kField2d = new Field2d();
   ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 
-  private double previousPipelineTimestamp = 0;
-  private PhotonPoseEstimator poseEstimator2;
-
   public SUBPoseEstimator( SUBDrive drivetrainSubsystem, SUBVision photonCamera) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     AprilTagFieldLayout layout;
@@ -60,7 +55,7 @@ public class SUBPoseEstimator extends SubsystemBase {
 
     try {
       layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-      var alliance = DriverStation.getAlliance();
+      //var alliance = DriverStation.getAlliance();
       //layout.setOrigin(alliance.get() == Alliance.Blue ?
       //    OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
     } catch(IOException e) {

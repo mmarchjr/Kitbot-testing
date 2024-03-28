@@ -6,7 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathConstraints;
+//import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -58,7 +58,7 @@ public class RobotContainer {
   private static final SUBClimb kSUBClimb = new SUBClimb();
   private static final CMDClimb kCMDClimb = new CMDClimb(kSUBClimb);
 
-  private static final PathConstraints kPathConstraints = new PathConstraints(5, 3, 360, 15);
+  //private static final PathConstraints kPathConstraints = new PathConstraints(5, 3, 360, 15);
   private final SUBPoseEstimator kPoseEstimator = new SUBPoseEstimator( kRobotDrive,kSUBVision);
   public enum RobotMode {
     KitBot, CompBot
@@ -118,7 +118,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(2));//.until(()->kSUBArm.isAtSetpoint()));
     NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
     NamedCommands.registerCommand("Speaker Note", new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM()>kShooterRPM))
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.bothSetpointsReached()))
       .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0),kSUBShooter).repeatedly().withTimeout(1)));
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
     fieldOrientedChooser.addOption("Robot Oriented", false);
@@ -172,7 +172,7 @@ public class RobotContainer {
     ));
       
     OIDriverController2.rightBumper().whileTrue(new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.getRPM() >kShooterRPM)).withTimeout(3)
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.bothSetpointsReached())).withTimeout(3)
       .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0)).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));

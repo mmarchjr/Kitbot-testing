@@ -6,13 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.ControlMode;
 import frc.robot.subsystems.SUBDrive;
-import frc.robot.RobotContainer;
 import frc.utils.RoaringUtils;
 import frc.utils.RoaringUtils.POVDirections;
 
@@ -36,7 +35,6 @@ public class CMDDrive extends Command {
   private static final double kP = 0.015;
   private static final double kI = 0.00;
   private static final double kD = 0.00;
-  private static final double kF = 0.00;
   private static final double kToleranceDegrees = 5.0f;
   private boolean rotateToAngle;
 
