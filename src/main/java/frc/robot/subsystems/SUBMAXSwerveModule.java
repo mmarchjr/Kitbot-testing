@@ -158,7 +158,7 @@ public class SUBMAXSwerveModule {
     kDrivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     kTurningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
-    desiredState = desiredState;
+    this.desiredState = desiredState;
   }
 
   /** Zeroes all the SwerveModule encoders. */
