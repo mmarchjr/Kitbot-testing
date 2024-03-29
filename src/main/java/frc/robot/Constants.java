@@ -54,9 +54,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.6;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 3; // radians per second
-    public static final double kMagnitudeSlewRate = 3; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 3.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 5; // radians per second
+    public static final double kMagnitudeSlewRate = 5; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 5; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26);
@@ -218,13 +218,21 @@ public final class Constants {
     private NeoMotorConstants(){}
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final int kstrandPort = 0;
+  public static final int kStrandLength = 72;
+
+  //public static int[] kyellowRGB = {255, 150, 0};
+  public static int[] kyellowRGB = {64,38,0};
+  //public static int[] kblueRGB = {0,100,255};
+  public static int[] kblueRGB = {0,25,64};
   public static class LauncherConstants {
     // PWM ports/CAN IDs for motor controllers
     public static final int kFeederID = 11;
     public static final int kLauncherID1 = 12;
     public static final int kLauncherID2 = 13;
     public static final int kLauncherCurrentLimit = 30;
-    public static final int kFeedCurrentLimit = 30;
+    public static final int kFeedCurrentLimit =30;
 
     // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
     // in reverse
@@ -236,15 +244,17 @@ public final class Constants {
     public static final double kP = 1;
     public static final double kI = 0;
     public static final double kD = 0;
+
+	  public static final int kShooterRPM = 2500;
   }
 
   public static class ArmConstants {
     public static final int kArmMotor1 = 9;
     public static final int kArmMotor2 = 10;
     public static final double kAmpPosition = Units.degreesToRotations(78);//80 is top
-    public static final double kIntakePosition = Units.degreesToRotations(-3);
+    public static final double kIntakePosition = Units.degreesToRotations(-1);
     public static final double kIntakeUpPosition = kIntakePosition + Units.degreesToRotations(5);
-    public static final double kSpeakerPosition = Units.degreesToRotations(13);
+    public static final double kSpeakerPosition = Units.degreesToRotations(17);
     public static final double kInsidePosition = Units.degreesToRotations(65);
     public static final double kHoldPosition = Units.degreesToRotations(6.5);
     public static final double kP = 2.7;

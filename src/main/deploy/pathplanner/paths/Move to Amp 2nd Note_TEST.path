@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.38748002513723,
-        "y": 5.550438542407914
+        "x": 1.4107523041410366,
+        "y": 6.999137910394885
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3874800251372292,
-        "y": 5.550438542407914
+        "x": 1.510752304141037,
+        "y": 6.999137910394885
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9234504393884766,
-        "y": 5.550438542407914
+        "x": 1.870871086874917,
+        "y": 7.9
       },
       "prevControl": {
-        "x": 1.9234504393884766,
-        "y": 5.550438542407914
+        "x": 1.815964565788891,
+        "y": 7.707885620168689
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Arm Up"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 1.0,
@@ -57,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "rotation": -90.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -89.51008632462866,
     "velocity": 0
   },
   "useDefaultConstraints": true

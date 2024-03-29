@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4107523041410366,
-      "y": 7.279182522966815
+      "x": 1.4271681640708413,
+      "y": 7.297479550711314
     },
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Arm Up"
+            "name": "Arm Amp"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "amp shot"
+            "pathName": "Move to Amp 1st Note"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Arm Amp"
+            "waitTime": 1.0
           }
         },
         {
@@ -39,12 +39,6 @@
           "type": "named",
           "data": {
             "name": "Arm Up"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Leave"
           }
         }
       ]
