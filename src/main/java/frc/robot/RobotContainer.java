@@ -11,9 +11,11 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -143,7 +145,6 @@ public class RobotContainer {
     kRobotDrive.setDefaultCommand(kDriveRobotCommand);
     kSUBArm.setDefaultCommand(kCMDArm);
     kPoseEstimator.register();
-    kSUBVision.register();
     kSUBVision.periodic();
     kPoseEstimator.periodic();
     kSUBClimb.setDefaultCommand(kCMDClimb);
@@ -171,7 +172,6 @@ public class RobotContainer {
     //   () -> kRobotDrive.setX(),
     //   kRobotDrive
     // ));
-      
     OIDriverController2.rightBumper().whileTrue(new RunCommand(
       ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().withTimeout(2).andThen(new RunCommand(()->kSUBShooter.setFeedWheel(1),kSUBShooter).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
