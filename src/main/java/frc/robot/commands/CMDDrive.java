@@ -144,7 +144,7 @@ public class CMDDrive extends Command {
     pastTurn = turn;
 
     //Reset gyro, adjust setpoint, and set rumble if "Y" button is pressed
-    if (OIDriver1Controller.getHID().getAButton()) {
+    if (OIDriver1Controller.getHID().getYButton()) {
       kSubDrive.resetGyro();
       turnController.setSetpoint(kSubDrive.getHeading());
       OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble, 0.5);
