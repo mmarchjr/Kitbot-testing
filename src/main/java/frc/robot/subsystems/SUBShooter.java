@@ -60,12 +60,12 @@ public class SUBShooter extends SubsystemBase {
     upperPID.setP(LauncherConstants.kP);
     upperPID.setI(LauncherConstants.kI);
     upperPID.setD(LauncherConstants.kD);
-    upperPID.setFF(LauncherConstants.kF);
+    upperPID.setFF(LauncherConstants.kFTop);
 
     lowerPID.setP(LauncherConstants.kP);
     lowerPID.setI(LauncherConstants.kI);
     lowerPID.setD(LauncherConstants.kD);
-    lowerPID.setFF(LauncherConstants.kF);
+    lowerPID.setFF(LauncherConstants.kFbottom);
 
     upperPID.setPositionPIDWrappingMaxInput(1);
     upperPID.setPositionPIDWrappingMinInput(-1);

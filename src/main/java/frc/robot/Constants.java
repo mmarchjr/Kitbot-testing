@@ -241,12 +241,13 @@ public final class Constants {
     public static final double kIntakeLauncherSpeed = -1.5;
     public static final double kIntakeFeederSpeed = -.5;
     public static final double kLauncherDelay = 0.5;
-    public static final double kP = 0.001;
+    public static final double kP = 0.0001;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kF = 0.195;
+    public static final double kFTop = 0.00025;
+    public static final double kFbottom = 0.00018;
 
-	  public static final int kShooterRPM = 2500;
+	  public static final int kShooterRPM = 3500;
     public static final double kTolerance = 1;
   }
 

@@ -171,9 +171,9 @@ public class RobotContainer {
     // ));
       
     OIDriverController2.rightBumper().whileTrue(new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly());//.until(kSUBShooter::bothSetpointsReached)//.withTimeout(3)
-      //.andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0)).repeatedly().withTimeout(1)));
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().withTimeout(2).andThen(new RunCommand(()->kSUBShooter.setFeedWheel(1),kSUBShooter).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
+    OIDriverController2.rightStick().whileTrue(new RunCommand(()->kSUBShooter.setFeedWheel(1), kSUBShooter));
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));
     OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).repeatedly().withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
