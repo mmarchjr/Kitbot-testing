@@ -112,19 +112,20 @@ public class RobotContainer {
    // Configure the button bindings
 
     NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().repeatedly());
-    NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
+    NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1.25));//.andThen(new RunCommand(()->kSUBShooter.setWheels(0.0,0.0), kSUBShooter)).withTimeout(0.1));
     NamedCommands.registerCommand("Arm Intake", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakePosition), kSUBArm).repeatedly().withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
-    NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(2));//.until(()->kSUBArm.isAtSetpoint()));
-    NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm).repeatedly().withTimeout(1));
+    NamedCommands.registerCommand("Arm Amp", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm).repeatedly().withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
+    NamedCommands.registerCommand("Arm Speaker", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kSpeakerPosition+Units.degreesToRadians(0)), kSUBArm).withTimeout(1));
     NamedCommands.registerCommand("Speaker Note", new RunCommand(
       ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.bothSetpointsReached()))
       .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0),kSUBShooter).repeatedly().withTimeout(1)));
     fieldOrientedChooser.setDefaultOption("Field Oriented", true);
+    NamedCommands.registerCommand("Bring Note Back", new RunCommand(()->kSUBShooter.setWheels(-0.1,-0.1), kSUBShooter).repeatedly().alongWith(new RunCommand(()->kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm)).withTimeout(1.25).andThen(new RunCommand(()->kSUBShooter.setWheels(-0.0,-0.0), kSUBShooter).withTimeout(0.1)));
     fieldOrientedChooser.addOption("Robot Oriented", false);
     NamedCommands.registerCommand("Arm Up", new RunCommand(()->kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm).withTimeout(1));//.until(()->kSUBArm.isAtSetpoint()));
     rateLimitChooser.setDefaultOption("True", true);
     rateLimitChooser.addOption("False", false);
-    
+    NamedCommands.registerCommand("stop Motors", kSUBShooter.getIdleCommand().withTimeout(0.1));
     controlChooser.setDefaultOption("Drone", ControlMode.Drone);
     controlChooser.addOption("Game", ControlMode.Game);
     robotChooser.setDefaultOption("Main Comp", RobotMode.CompBot);
@@ -152,6 +153,7 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("auto", autoChooser);
     
+    
     configureButtonBindings();
   }
 
@@ -176,7 +178,7 @@ public class RobotContainer {
     OIDriverController2.rightStick().whileTrue(new RunCommand(()->kSUBShooter.setFeedWheel(1), kSUBShooter));
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));
-    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).repeatedly().withTimeout(0.5).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
+    OIDriverController2.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kIntakeUpPosition), kSUBArm).repeatedly().withTimeout(0.2).andThen(()-> kSUBArm.setPosition(ArmConstants.kIntakePosition)));
     OIDriverController2.x().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kHoldPosition), kSUBArm));
     OIDriverController2.b().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kSpeakerPosition), kSUBArm));
     OIDriverController1.a().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kInsidePosition), kSUBArm));

@@ -147,7 +147,7 @@ public class CMDDrive extends Command {
     if (OIDriver1Controller.getHID().getYButton()) {
       kSubDrive.resetGyro();
       turnController.setSetpoint(kSubDrive.getHeading());
-      OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble, 0.5);
+      OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble, 1);
     } else {
       OIDriver1Controller.getHID().setRumble(RumbleType.kBothRumble,0);
     }
