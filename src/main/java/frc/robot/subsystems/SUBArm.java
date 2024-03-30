@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.utils.RoaringUtils;
 import frc.utils.UniMotor;
+import frc.utils.RoaringUtils.ToleranceChecker;
 import frc.utils.UniMotor.UniMotorType;
 
 
@@ -128,6 +130,6 @@ public class SUBArm extends SubsystemBase {
   }
 
   public boolean isAtSetpoint() {
-    return pid.atSetpoint();
+    return ToleranceChecker.isWithinTolerance(encoder.getPosition(), setpoint, 1);
   }
 }

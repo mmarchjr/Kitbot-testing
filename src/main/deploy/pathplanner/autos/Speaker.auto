@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
+            "name": "Arm Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Arm Speaker"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 1.0
           }
         },
         {
