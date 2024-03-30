@@ -24,7 +24,23 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Vision.*;
+import static frc.robot.Constants.Vision.kCameraName;
+import static frc.robot.Constants.Vision.kMultiTagStdDevs;
+import static frc.robot.Constants.Vision.kRobotToCam;
+import static frc.robot.Constants.Vision.kSingleTagStdDevs;
+import static frc.robot.Constants.Vision.kTagLayout;
+
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.common.hardware.VisionLEDMode;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
+import org.photonvision.simulation.VisionSystemSim;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -35,18 +51,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.Constants.VisionConstants;
-
-import java.util.Optional;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.common.hardware.VisionLEDMode;
-import org.photonvision.simulation.PhotonCameraSim;
-import org.photonvision.simulation.SimCameraProperties;
-import org.photonvision.simulation.VisionSystemSim;
-import org.photonvision.targeting.PhotonPipelineResult;
  
 public class SUBVision extends SubsystemBase{
   private final PhotonCamera camera;
@@ -59,7 +63,7 @@ public class SUBVision extends SubsystemBase{
 
   public SUBVision() {
     camera = new PhotonCamera(kCameraName);
-    camera.setVersionCheckEnabled(false);
+    PhotonCamera.setVersionCheckEnabled(false);
 
     photonEstimator = new PhotonPoseEstimator(
       kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam
