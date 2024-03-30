@@ -36,15 +36,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Arm Up"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Amp Leave"
+            "pathName": "Amp Leave Far"
           }
         }
       ]

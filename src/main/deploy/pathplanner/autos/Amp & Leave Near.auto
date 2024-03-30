@@ -34,6 +34,12 @@
           "data": {
             "name": "Amp Note"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Leave"
+          }
         }
       ]
     }
