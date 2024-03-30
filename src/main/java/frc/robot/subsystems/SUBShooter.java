@@ -114,7 +114,7 @@ public Command getIdleCommand() {
       // When the command is initialized, set the wheels to the intake speed values
       () -> {
         setFeedWheel(0);
-        setLaunchWheel(1);
+        setLaunchWheel(0);
       },
       // When the command stops, stop the wheels
       () -> {

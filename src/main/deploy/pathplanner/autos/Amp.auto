@@ -34,12 +34,6 @@
           "data": {
             "name": "Amp Note"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Arm Up"
-          }
         }
       ]
     }
