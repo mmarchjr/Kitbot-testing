@@ -43,7 +43,7 @@ public class CMDShooter extends Command {
     subVision.setLights(VisionLEDMode.kOff);}
     subShooter.setLaunchWheel(launchvalue);
     subShooter.setFeedWheel(feedvalue);
-    SmartDashboard.putNumber("shooter speed", subShooter.getRPM());
+    //SmartDashboard.putNumber("shooter speed", subShooter.getRPM());
   }
 
   // Called once the command ends or is interrupted.

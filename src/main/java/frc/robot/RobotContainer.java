@@ -109,8 +109,7 @@ public class RobotContainer {
       },
       kRobotDrive // Reference to this subsystem to set requirements
     );
-
-    // Configure the button bindings
+   // Configure the button bindings
 
     NamedCommands.registerCommand("Take Note", kSUBShooter.getIntakeCommand().repeatedly());
     NamedCommands.registerCommand("Amp Note", new RunCommand(()->kSUBShooter.setWheels(0.5,0.1), kSUBShooter).repeatedly().withTimeout(1));
@@ -166,14 +165,14 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    OIDriverController1.x().whileTrue(new RunCommand(
-      () -> kRobotDrive.setX(),
-      kRobotDrive
-    ));
+    // OIDriverController1.x().whileTrue(new RunCommand(
+    //   () -> kRobotDrive.setX(),
+    //   kRobotDrive
+    // ));
       
     OIDriverController2.rightBumper().whileTrue(new RunCommand(
-      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly().until(()->(kSUBShooter.bothSetpointsReached())).withTimeout(3)
-      .andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0)).repeatedly().withTimeout(1)));
+      ()->kSUBShooter.setLaunchWheel(1), kSUBShooter).repeatedly());//.until(kSUBShooter::bothSetpointsReached)//.withTimeout(3)
+      //.andThen(new RunCommand(()->kSUBShooter.setWheels(0.6,1.0)).repeatedly().withTimeout(1)));
     //OIDriverController1.rightTrigger(0.1)
     //  .whileTrue(AutoBuilder.pathfindToPose(new Pose2d(1.75,5.5,Rotation2d.fromDegrees(180)), kPathConstraints));
     OIDriverController2.y().onTrue(new RunCommand(()-> kSUBArm.setPosition(ArmConstants.kAmpPosition), kSUBArm));
@@ -217,6 +216,6 @@ public class RobotContainer {
   }
 
   public static SUBDrive getDriveSubsystem() {
-    return kRobotDrive;
-  }
+     return kRobotDrive;
+   }
 }

@@ -50,7 +50,7 @@ public class SUBShooter extends SubsystemBase {
     launchWheel1.setIdleMode(IdleMode.kCoast);
     launchWheel2.setIdleMode(IdleMode.kCoast);
     upperEncoder = launchWheel1.getEncoder();
-    lowerEncoder = launchWheel1.getEncoder();
+    lowerEncoder = launchWheel2.getEncoder();
     upperPID.setFeedbackDevice(upperEncoder);
     lowerPID.setFeedbackDevice(lowerEncoder);
     upperPID.setOutputRange(-1,1);
@@ -148,7 +148,7 @@ public Command getIdleCommand() {
     lowerPID.setReference(velocity,ControlType.kVelocity);
 
   }
-
+         
   // An accessor method to set the speed (technically the output percentage) of the feed wheel
   public void setFeedWheel(double speed) {
     feedWheel.set(speed);
@@ -166,8 +166,11 @@ public Command getIdleCommand() {
     feedWheel.set(0);
   }
   
-  public double getRPM() {
+  public double getUpperRPM() {
     return upperEncoder.getVelocity();
+  }
+    public double getLowerRPM() {
+    return lowerEncoder.getVelocity();
   }
   public boolean upperSetpointReached() {
     return ToleranceChecker.isWithinTolerance(upperEncoder.getVelocity(),velocity , LauncherConstants.kTolerance);
