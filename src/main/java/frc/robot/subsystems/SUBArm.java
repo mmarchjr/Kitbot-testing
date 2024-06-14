@@ -16,9 +16,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.utils.RoaringUtils;
-import frc.utils.UniMotor;
 import frc.utils.RoaringUtils.ToleranceChecker;
+import frc.utils.UniMotor;
 import frc.utils.UniMotor.UniMotorType;
 
 
@@ -29,7 +28,7 @@ public class SUBArm extends SubsystemBase {
    private UniMotor armMotor1 = new UniMotor(Constants.ArmConstants.kArmMotor1, UniMotorType.SparkMAX);
    private UniMotor armMotor2 = new UniMotor(Constants.ArmConstants.kArmMotor2, UniMotorType.SparkMAX);
    private AbsoluteEncoder encoder = armMotor1.sparkMax.getAbsoluteEncoder(Type.kDutyCycle);
-   private double setpoint = ArmConstants.kIntakePosition;
+   private double setpoint = encoder.getPosition();
    private SparkPIDController turningPIDController;
 
    private PIDController pid = new PIDController(Constants.ArmConstants.kP, Constants.ArmConstants.kI, Constants.ArmConstants.kD);

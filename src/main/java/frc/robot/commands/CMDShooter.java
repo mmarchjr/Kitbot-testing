@@ -8,6 +8,7 @@ import org.photonvision.common.hardware.VisionLEDMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SUBShooter;
@@ -44,6 +45,8 @@ public class CMDShooter extends Command {
     subShooter.setLaunchWheel(launchvalue);
     subShooter.setFeedWheel(feedvalue);
     //SmartDashboard.putNumber("shooter speed", subShooter.getRPM());
+    SmartDashboard.putNumber("Upper Roller", subShooter.getUpperRPM());
+    SmartDashboard.putNumber("Lower Roller", subShooter.getLowerRPM());
   }
 
   // Called once the command ends or is interrupted.
@@ -54,8 +57,16 @@ public class CMDShooter extends Command {
     public boolean isFinished() {
       return false;
     }
+ 
+
+ public Command LaunchSequence() {
+  return new RunCommand(()->
+  subShooter.setLaunchWheel(1), subShooter).repeatedly().until(subShooter::bothSpeedsMAX).withTimeout(1).andThen(
+    new RunCommand(()->subShooter.setWheels(1.0, 1.0),subShooter).repeatedly().withTimeout(1)
+    );
  }
 
+}
   //  if (robotChooser.getSelected() == RobotMode.KitBot) {
     //  OIDriverController2
     //  .rightBumper()

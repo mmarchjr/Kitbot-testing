@@ -36,9 +36,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Amp Leave"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Arm Defence"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stop Motors"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Leave"
+                }
+              }
+            ]
           }
         }
       ]
