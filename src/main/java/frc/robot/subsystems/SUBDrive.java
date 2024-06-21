@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -80,7 +81,6 @@ public class SUBDrive extends SubsystemBase {
   @Override
   public void periodic() {
     field2D.setRobotPose(swerveDriveOdometry.getPoseMeters());
-
     //  Update the odometry in the periodic block
     swerveDriveOdometry.update(
       Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)),
@@ -207,6 +207,7 @@ public class SUBDrive extends SubsystemBase {
     kFrontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     kRearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     kRearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+
   }
 
   /**
@@ -290,9 +291,6 @@ public class SUBDrive extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(
       swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond
     );
-    kFrontLeft.setDesiredState(swerveModuleStates[0]);
-    kFrontRight.setDesiredState(swerveModuleStates[1]);
-    kRearLeft.setDesiredState(swerveModuleStates[2]);
-    kRearRight.setDesiredState(swerveModuleStates[3]);
+    setModuleStates(swerveModuleStates);
   }
 }

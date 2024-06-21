@@ -66,7 +66,6 @@ public class CMDDrive extends Command {
     x = 0;
     y = 0;
     turn = 0;
-
     //Get joystick input values and apply deadband
     if (RobotContainer.getControlMode() == ControlMode.Drone) {
       y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightY(), 0.17);
