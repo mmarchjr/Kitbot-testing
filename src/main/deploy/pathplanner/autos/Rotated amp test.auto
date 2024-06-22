@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38748002513723,
-      "y": 5.550438542407914
+      "x": 1.4271681640708413,
+      "y": 7.297479550711314
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -14,25 +14,32 @@
         {
           "type": "named",
           "data": {
-            "name": "Arm Up"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Arm Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Speaker Note"
+            "name": "Arm Amp"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "leave"
+            "pathName": "Move to Amp 1st Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Note"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Arm Defence"
+                }
+              }
+            ]
           }
         }
       ]

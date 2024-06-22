@@ -4,12 +4,6 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.LauncherConstants.kFeedCurrentLimit;
-import static frc.robot.Constants.LauncherConstants.kFeederID;
-import static frc.robot.Constants.LauncherConstants.kLauncherCurrentLimit;
-import static frc.robot.Constants.LauncherConstants.kLauncherID1;
-import static frc.robot.Constants.LauncherConstants.kLauncherID2;
-
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -17,11 +11,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LauncherConstants;
+import static frc.robot.Constants.LauncherConstants.kFeedCurrentLimit;
+import static frc.robot.Constants.LauncherConstants.kFeederID;
+import static frc.robot.Constants.LauncherConstants.kLauncherCurrentLimit;
+import static frc.robot.Constants.LauncherConstants.kLauncherID1;
+import static frc.robot.Constants.LauncherConstants.kLauncherID2;
 import frc.utils.RoaringUtils.ToleranceChecker;
 
 public class SUBShooter extends SubsystemBase {
@@ -36,6 +33,9 @@ public class SUBShooter extends SubsystemBase {
   private RelativeEncoder upperEncoder;
   private RelativeEncoder lowerEncoder;
   double velocity = 0;
+  double past=0;
+  double past2=0;
+
 
   /** Creates a new Launcher. */
   public SUBShooter() {
@@ -62,7 +62,7 @@ public class SUBShooter extends SubsystemBase {
     upperPID.setD(LauncherConstants.kD);
     upperPID.setFF(LauncherConstants.kFTop);
 
-    lowerPID.setP(LauncherConstants.kP);
+    lowerPID.setP(LauncherConstants.kPLow);
     lowerPID.setI(LauncherConstants.kI);
     lowerPID.setD(LauncherConstants.kD);
     lowerPID.setFF(LauncherConstants.kFbottom);
@@ -145,7 +145,7 @@ public Command getIdleCommand() {
     //launchWheel2.set(speed);
     velocity = speed * LauncherConstants.kShooterRPM;
     upperPID.setReference(velocity,ControlType.kVelocity);
-    lowerPID.setReference(velocity,ControlType.kVelocity);
+    lowerPID.setReference(speed*LauncherConstants.kShooterRPMLow,ControlType.kVelocity);
 
   }
          
@@ -180,5 +180,20 @@ public Command getIdleCommand() {
   }
   public boolean bothSetpointsReached() {
     return (upperSetpointReached() && lowerSetpointReached());
+  }
+  public boolean TopSpeedReached() {
+    double current = upperEncoder.getVelocity();
+    double oldpast = past;
+    double past = upperEncoder.getVelocity();
+    return ((oldpast == current) && (current > 1));
+  }
+  public boolean BottomSpeedReached() {
+    double current = upperEncoder.getVelocity();
+    double oldpast2 = past2;
+    double past2 = upperEncoder.getVelocity();
+    return ((oldpast2 == current) && (current > 1));
+  }
+  public boolean bothSpeedsMAX() {
+    return (BottomSpeedReached() && TopSpeedReached());
   }
 }

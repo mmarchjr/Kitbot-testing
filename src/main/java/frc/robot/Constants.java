@@ -128,7 +128,7 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 3.74;
+    public static final double kTurningP = 1.5;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
     public static final double kTurningFF = 0;
@@ -242,12 +242,15 @@ public final class Constants {
     public static final double kIntakeFeederSpeed = -.5;
     public static final double kLauncherDelay = 0.5;
     public static final double kP = 0.0001;
+    public static final double kPLow = 0.00008;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kFTop = 0.00025;
-    public static final double kFbottom = 0.00018;
+    public static final double kFTop = 0.0003;
+    public static final double kFbottom = 0.000225;
 
-	  public static final int kShooterRPM = 3500;
+    public static final int RPMReducer = 50;
+	  public static final int kShooterRPM = 5000 - RPMReducer;
+    public static final int kShooterRPMLow = 4900- RPMReducer;
     public static final double kTolerance = 1;
   }
 
@@ -257,7 +260,7 @@ public final class Constants {
     public static final double kAmpPosition = Units.degreesToRotations(78);//80 is top
     public static final double kIntakePosition = Units.degreesToRotations(-1);
     public static final double kIntakeUpPosition = kIntakePosition + Units.degreesToRotations(5);
-    public static final double kSpeakerPosition = Units.degreesToRotations(17);
+    public static final double kSpeakerPosition = Units.degreesToRotations(20);
     public static final double kInsidePosition = Units.degreesToRotations(65);
     public static final double kHoldPosition = Units.degreesToRotations(6.5);
     public static final double kP = 2.7;

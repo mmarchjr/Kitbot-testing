@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Arm Up"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Arm Speaker"
           }
         },
@@ -42,19 +48,26 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "race",
                 "data": {
-                  "name": "Take Note"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "speaker note intake"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "speaker note intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Take Note"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -63,13 +76,13 @@
         {
           "type": "named",
           "data": {
-            "name": "stop Motors"
+            "name": "Bring Note Back"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Bring Note Back"
+            "name": "stop Motors"
           }
         },
         {

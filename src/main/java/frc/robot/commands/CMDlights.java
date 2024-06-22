@@ -64,9 +64,9 @@ public class CMDlights extends Command {
     //int[] breatheRGB = getBreatheColor(Constants.kyellowRGB, Constants.kblueRGB, lightTimer.get());
     //subGlow.set_full_strand(breatheRGB[0], breatheRGB[1], breatheRGB[2]); //pass the color to the strand
     //sweep( (int) (lightTimer.get()*Constants.kStrandLength) );
-    if(RobotContainer.kSUBShooter.getUpperRPM() > 5000 && ShooterLightChooser.getSelected()){
-      subGlow.set_full_strand(0,255,0);
-    }
+    //if(RobotContainer.kSUBShooter.getUpperRPM() > 5000 && ShooterLightChooser.getSelected()){
+    //  subGlow.set_full_strand(0,255,0);
+    //}
     subGlow.update();
   }
 

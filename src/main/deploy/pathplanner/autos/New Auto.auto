@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4408909348792147,
-      "y": 7.292905293775189
+      "x": 1.4271681640708413,
+      "y": 7.297479550711314
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Arm Up"
-          }
-        },
         {
           "type": "path",
           "data": {
@@ -36,58 +30,60 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Arm Up"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pick up amp note prep"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Arm Intake"
-          }
-        },
-        {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "note pickup"
+                  "name": "Arm Up"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Take Note"
+                  "pathName": "pick up amp note prep"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Arm Up"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Take Note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "note pickup"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Move to Amp 1st Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Arm Amp"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Arm Amp"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Move to Amp 2nd Note"
+                }
+              }
+            ]
           }
         },
         {

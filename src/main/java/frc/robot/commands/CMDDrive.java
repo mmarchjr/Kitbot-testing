@@ -54,7 +54,7 @@ public class CMDDrive extends Command {
     turnController.enableContinuousInput(-180.0f,  180.0f);
     turnController.setTolerance(kToleranceDegrees);
     //angle = kSubDrive.getHeading();
-    //turnController.setSetpoint(kSubDrive.getHeading());
+    turnController.setSetpoint(kSubDrive.getHeading());
   }
 
   /**
@@ -66,7 +66,6 @@ public class CMDDrive extends Command {
     x = 0;
     y = 0;
     turn = 0;
-
     //Get joystick input values and apply deadband
     if (RobotContainer.getControlMode() == ControlMode.Drone) {
       y = RoaringUtils.DeadzoneUtils.LinearDeadband(OIDriver1Controller.getRightY(), 0.17);
@@ -132,8 +131,8 @@ public class CMDDrive extends Command {
       kSubDrive.setX();
     } else {
       kSubDrive.drive(
-        -y ,
-        -x ,
+        y ,
+        x ,
         currentRotationRate ,
         RobotContainer.isFieldOriented(),
         RobotContainer.isRateLimited()
@@ -157,6 +156,9 @@ public class CMDDrive extends Command {
   @Override
   public void end(boolean interrupted) {
     //nothing to end
+  }
+  public void resetRotation() {
+    turnController.setSetpoint(kSubDrive.getHeading());
   }
 
   //Returns true when the command should end.
