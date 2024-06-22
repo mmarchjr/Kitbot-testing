@@ -87,8 +87,8 @@ public class RobotContainer {
     //kRobotDrive.resetOdometry(PathPlannerPath.fromPathFile("2 note auto").getPreviewStartingHolonomicPose());
 
     AutoBuilder.configureHolonomic(
-      kPoseEstimator::getCurrentPose,  //Robot pose supplier
-      kPoseEstimator::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
+      kRobotDrive::getPose,  //Robot pose supplier
+      kRobotDrive::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
       kRobotDrive::getspeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       kRobotDrive::driveRobotRelative,//  Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class

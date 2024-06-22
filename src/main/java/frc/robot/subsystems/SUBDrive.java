@@ -187,7 +187,7 @@ public class SUBDrive extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
       fieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)))
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, swerveDriveOdometry.getPoseMeters().getRotation())
         : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
     );
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -244,7 +244,7 @@ public class SUBDrive extends SubsystemBase {
   * @return the robot's heading in degrees, from -180 to 180
   */
   public double getHeading() {
-    return Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)).getDegrees();
+    return swerveDriveOdometry.getPoseMeters().getRotation().getDegrees();
   }
 
   public void resetGyro() {
