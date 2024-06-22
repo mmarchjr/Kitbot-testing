@@ -5,7 +5,7 @@
       "x": 1.4271681640708413,
       "y": 7.297479550711314
     },
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -24,12 +24,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Amp Note"
@@ -43,18 +37,6 @@
                 "type": "named",
                 "data": {
                   "name": "Arm Defence"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "stop Motors"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Amp Leave"
                 }
               }
             ]

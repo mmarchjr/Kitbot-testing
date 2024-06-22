@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -80,7 +81,6 @@ public class SUBDrive extends SubsystemBase {
   @Override
   public void periodic() {
     field2D.setRobotPose(swerveDriveOdometry.getPoseMeters());
-
     //  Update the odometry in the periodic block
     swerveDriveOdometry.update(
       Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)),
@@ -187,7 +187,7 @@ public class SUBDrive extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
       fieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)))
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, swerveDriveOdometry.getPoseMeters().getRotation())
         : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
     );
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -207,6 +207,7 @@ public class SUBDrive extends SubsystemBase {
     kFrontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     kRearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     kRearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+
   }
 
   /**
@@ -243,7 +244,7 @@ public class SUBDrive extends SubsystemBase {
   * @return the robot's heading in degrees, from -180 to 180
   */
   public double getHeading() {
-    return Rotation2d.fromDegrees(kGyro.getAngle(IMUAxis.kZ)).getDegrees();
+    return swerveDriveOdometry.getPoseMeters().getRotation().getDegrees();
   }
 
   public void resetGyro() {
@@ -290,9 +291,6 @@ public class SUBDrive extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(
       swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond
     );
-    kFrontLeft.setDesiredState(swerveModuleStates[0]);
-    kFrontRight.setDesiredState(swerveModuleStates[1]);
-    kRearLeft.setDesiredState(swerveModuleStates[2]);
-    kRearRight.setDesiredState(swerveModuleStates[3]);
+    setModuleStates(swerveModuleStates);
   }
 }
