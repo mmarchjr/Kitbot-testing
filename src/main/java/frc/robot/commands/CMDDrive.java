@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,6 +27,7 @@ public class CMDDrive extends Command {
   double turn = 0;//;  variable for turning movement
   PIDController turnController;
   double pastTurn = 0;
+  int invertDriver;
 
   /* The following PID Controller coefficients will need to be tuned */
   /* to match the dynamics of your drive system.  Note that the      */
@@ -55,6 +58,14 @@ public class CMDDrive extends Command {
     turnController.setTolerance(kToleranceDegrees);
     //angle = kSubDrive.getHeading();
     turnController.setSetpoint(kSubDrive.getHeading());
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent() && !alliance.isEmpty()) {
+      if (alliance.get() == DriverStation.Alliance.Blue) {
+        invertDriver = -1;
+      } else {
+        invertDriver = 1;
+      }
+    }
   }
 
   /**
@@ -130,10 +141,11 @@ public class CMDDrive extends Command {
     if (y == 0 && x == 0 && turn == 0) { //&& isAtSetpoint) {
       kSubDrive.setX();
     } else {
+      
       kSubDrive.drive(
-        y *0.7,
-        x *0.7,
-        currentRotationRate *0.7,
+        invertDriver * y,
+        invertDriver * x,
+        currentRotationRate,
         RobotContainer.isFieldOriented(),
         RobotContainer.isRateLimited()
       );
