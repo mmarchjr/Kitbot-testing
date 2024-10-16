@@ -131,9 +131,9 @@ public class CMDDrive extends Command {
       kSubDrive.setX();
     } else {
       kSubDrive.drive(
-        y ,
-        x ,
-        currentRotationRate ,
+        y/2,
+        x/2,
+        currentRotationRate/2,
         RobotContainer.isFieldOriented(),
         RobotContainer.isRateLimited()
       );
